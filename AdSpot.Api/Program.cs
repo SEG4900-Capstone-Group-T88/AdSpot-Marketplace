@@ -1,7 +1,9 @@
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.Services.AddDbContext<AdSpotDbContext>(
+//    options => options.UseInMemoryDatabase("adspot"));
 builder.Services.AddDbContext<AdSpotDbContext>(
-    options => options.UseInMemoryDatabase("adspot"));
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
 
 var localReactEndpoint = "http://localhost:5173";
 var localReactCors = "local-react-app";
@@ -30,6 +32,11 @@ builder.Services
     .RegisterService<BookRepository>();
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.SeedDatabase();
+}
 
 app.UseCors(localReactCors);
 
