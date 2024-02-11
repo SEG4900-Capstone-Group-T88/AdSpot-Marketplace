@@ -21,6 +21,7 @@ builder.Services
 builder.Services
     .AddGraphQLServer()
     .AddQueryType()
+    .AddMutationConventions(applyToAllMutations: true)
     .AddAdSpotTypes()
     .AddProjections()
     .AddFiltering()
