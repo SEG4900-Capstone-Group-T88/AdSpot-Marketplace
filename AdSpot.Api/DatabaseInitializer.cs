@@ -30,6 +30,16 @@ public static class DatabaseInitializer
             }
         }
 
+        if (dbContext.Users.FirstOrDefault() is null)
+        {
+            var admin = new User
+            {
+                Email = "admin",
+                Password = "admin"
+            };
+            dbContext.Users.Add(admin);
+        }
+
         dbContext.SaveChanges();
     }
 }
