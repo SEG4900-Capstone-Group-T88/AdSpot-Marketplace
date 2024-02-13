@@ -9,7 +9,8 @@ var localReactEndpoint = "http://localhost:5173";
 var localReactCors = "local-react-app";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(localReactCors, policy => {
+    options.AddPolicy(localReactCors, policy =>
+    {
         policy.WithOrigins(localReactEndpoint);
         policy.AllowAnyMethod();
         policy.AllowAnyHeader();
