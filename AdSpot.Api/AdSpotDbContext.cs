@@ -6,5 +6,7 @@ public class AdSpotDbContext : DbContext
     public DbSet<Author> Authors { get; set; }
     public DbSet<User> Users { get; set; }
 
+    public DbSet<SocialMediaAccount> SocialMediaAccounts { get; set; }
+
     public AdSpotDbContext(DbContextOptions<AdSpotDbContext> options) : base(options) { }
 }
