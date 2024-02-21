@@ -20,7 +20,8 @@ builder.Services.AddCors(options =>
 builder.Services
     .AddScoped<AuthorRepository>()
     .AddScoped<BookRepository>()
-    .AddScoped<UserRepository>();
+    .AddScoped<UserRepository>()
+    .AddScoped<SocialMediaAccountRepository>();
 
 builder.Services
     .AddGraphQLServer()
@@ -32,7 +33,8 @@ builder.Services
     .AddSorting()
     .RegisterService<AuthorRepository>()
     .RegisterService<BookRepository>()
-    .RegisterService<UserRepository>();
+    .RegisterService<UserRepository>()
+    .RegisterService<SocialMediaAccountRepository>();
 
 var app = builder.Build();
 

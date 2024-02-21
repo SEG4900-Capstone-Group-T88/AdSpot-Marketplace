@@ -7,11 +7,11 @@ public class SocialMediaAccount {
     [Key]
     public string AccountPlatform { get; set; }
 
-    public string UserEmail { get; set; }
-
     public string AccountHandle { get; set; }
 
     public string APIToken { get; set; }
+
+    public string UserEmail { get; set; }
 
     [ForeignKey("UserEmail")]
     public virtual User user { get; set; }

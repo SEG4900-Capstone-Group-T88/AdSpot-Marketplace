@@ -9,11 +9,6 @@ public class SocialMediaAccountRepository
         this.context = context;
     }
 
-    public IQueryable<SocialMediaAccount> GetAllUsers()
-    {
-        return context.SocialMediaAccounts;
-    }
-
     public SocialMediaAccount AddSocialMediaAccount(SocialMediaAccount mediaAccount)
     {
         context.SocialMediaAccounts.Add(mediaAccount);
