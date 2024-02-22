@@ -21,7 +21,7 @@ builder.Services
     .AddScoped<AuthorRepository>()
     .AddScoped<BookRepository>()
     .AddScoped<UserRepository>()
-    .AddScoped<SocialMediaAccountRepository>();
+    .AddScoped<ConnectedAccountRepository>();
 
 builder.Services
     .AddGraphQLServer()
@@ -34,7 +34,7 @@ builder.Services
     .RegisterService<AuthorRepository>()
     .RegisterService<BookRepository>()
     .RegisterService<UserRepository>()
-    .RegisterService<SocialMediaAccountRepository>();
+    .RegisterService<ConnectedAccountRepository>();
 
 var app = builder.Build();
 
