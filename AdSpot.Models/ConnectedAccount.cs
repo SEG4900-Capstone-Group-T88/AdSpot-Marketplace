@@ -1,6 +1,7 @@
 namespace AdSpot.Models;
 
-public class ConnectedAccount {
+public class ConnectedAccount
+{
     public string Handle { get; set; }
     public string Token { get; set; }
 

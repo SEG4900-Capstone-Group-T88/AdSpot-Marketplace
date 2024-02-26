@@ -21,7 +21,8 @@ public class UserRepository
         return user;
     }
 
-    public User ValidateUser(String email, String password) {
+    public User ValidateUser(String email, String password)
+    {
         return context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
     }
 }

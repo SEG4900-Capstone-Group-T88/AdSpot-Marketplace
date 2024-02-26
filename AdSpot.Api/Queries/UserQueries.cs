@@ -8,10 +8,12 @@ public class UserQueries
         return repo.GetAllUsers();
     }
 
-    public User ValidateUser(UserRepository repo, String email, String password) {
+    public User ValidateUser(UserRepository repo, String email, String password)
+    {
         var user = repo.ValidateUser(email, password);
 
-        if (user is null) {
+        if (user is null)
+        {
             //throw new IncorrectPasswordError();
         }
 
