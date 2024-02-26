@@ -1,7 +1,5 @@
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddDbContext<AdSpotDbContext>(
-//    options => options.UseInMemoryDatabase("adspot"));
 builder.Services.AddDbContext<AdSpotDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
 
