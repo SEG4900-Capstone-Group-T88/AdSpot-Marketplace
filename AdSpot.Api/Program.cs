@@ -1,7 +1,5 @@
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddDbContext<AdSpotDbContext>(
-//    options => options.UseInMemoryDatabase("adspot"));
 builder.Services.AddDbContext<AdSpotDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
 
@@ -20,7 +18,8 @@ builder.Services.AddCors(options =>
 builder.Services
     .AddScoped<AuthorRepository>()
     .AddScoped<BookRepository>()
-    .AddScoped<UserRepository>();
+    .AddScoped<UserRepository>()
+    .AddScoped<ConnectedAccountRepository>();
 
 builder.Services
     .AddGraphQLServer()
@@ -32,7 +31,8 @@ builder.Services
     .AddSorting()
     .RegisterService<AuthorRepository>()
     .RegisterService<BookRepository>()
-    .RegisterService<UserRepository>();
+    .RegisterService<UserRepository>()
+    .RegisterService<ConnectedAccountRepository>();
 
 var app = builder.Build();
 

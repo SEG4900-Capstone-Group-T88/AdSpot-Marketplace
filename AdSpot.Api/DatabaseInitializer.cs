@@ -19,6 +19,7 @@ public static class DatabaseInitializer
                 var author = new Author { Name = $"Author {i}" };
                 dbContext.Authors.Add(author);
             }
+            dbContext.SaveChanges();
         }
 
         if (dbContext.Books.FirstOrDefault() is null)
@@ -28,6 +29,7 @@ public static class DatabaseInitializer
                 var book = new Book { Title = $"Book {i}", AuthorId = i % numAuthors + 1 };
                 dbContext.Books.Add(book);
             }
+            dbContext.SaveChanges();
         }
 
         if (dbContext.Users.FirstOrDefault() is null)
@@ -38,6 +40,31 @@ public static class DatabaseInitializer
                 Password = "admin"
             };
             dbContext.Users.Add(admin);
+            dbContext.SaveChanges();
+        }
+
+        if (dbContext.Platforms.FirstOrDefault() is null)
+        {
+            var platforms = new List<Platform>
+            {
+                new Platform { Name = "Facebook" },
+                new Platform { Name = "Twitter" },
+                new Platform { Name = "Instagram" }
+            };
+            dbContext.Platforms.AddRange(platforms);
+            dbContext.SaveChanges();
+        }
+
+        if (dbContext.ListingTypes.FirstOrDefault() is null)
+        {
+            var listingTypes = new List<ListingType>
+            {
+                new ListingType { Name = "Post", PlatformId = 1 },
+                new ListingType { Name = "Tweet", PlatformId = 2 },
+                new ListingType { Name = "Story", PlatformId = 3 }
+            };
+            dbContext.ListingTypes.AddRange(listingTypes);
+            dbContext.SaveChanges();
         }
 
         dbContext.SaveChanges();

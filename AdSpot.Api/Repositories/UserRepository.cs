@@ -20,4 +20,9 @@ public class UserRepository
         context.SaveChanges();
         return user;
     }
+
+    public User ValidateUser(String email, String password)
+    {
+        return context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
+    }
 }
