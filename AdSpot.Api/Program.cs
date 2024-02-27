@@ -16,10 +16,11 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services
-    .AddScoped<AuthorRepository>()
-    .AddScoped<BookRepository>()
-    .AddScoped<UserRepository>()
-    .AddScoped<ConnectedAccountRepository>();
+    .AddScoped<ConnectionRepository>()
+    .AddScoped<ListingRepository>()
+    .AddScoped<ListingTypeRepository>()
+    .AddScoped<PlatformRepository>()
+    .AddScoped<UserRepository>();
 
 builder.Services
     .AddGraphQLServer()
@@ -29,10 +30,11 @@ builder.Services
     .AddProjections()
     .AddFiltering()
     .AddSorting()
-    .RegisterService<AuthorRepository>()
-    .RegisterService<BookRepository>()
-    .RegisterService<UserRepository>()
-    .RegisterService<ConnectedAccountRepository>();
+    .RegisterService<ConnectionRepository>()
+    .RegisterService<ListingRepository>()
+    .RegisterService<ListingTypeRepository>()
+    .RegisterService<PlatformRepository>()
+    .RegisterService<UserRepository>();
 
 var app = builder.Build();
 

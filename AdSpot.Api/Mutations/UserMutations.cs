@@ -10,6 +10,7 @@ public class UserMutations
             Email = email,
             Password = password
         });
+
         return user;
     }
 }

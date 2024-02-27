@@ -6,5 +6,6 @@ public class User
     public string Email { get; set; }
     public string Password { get; set; }
 
-    public ICollection<ConnectedAccount> ConnectedAccounts { get; set; }
+    public ICollection<Connection> Connections { get; set; }
+    public ICollection<Listing> Listings { get; set; }
 }
