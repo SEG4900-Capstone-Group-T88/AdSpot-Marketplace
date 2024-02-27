@@ -25,6 +25,8 @@ builder.Services
 builder.Services
     .AddGraphQLServer()
     .AddQueryType()
+    .UsePersistedQueryPipeline()
+    .AddReadOnlyFileSystemQueryStorage("./PersistedQueries")
     .AddMutationConventions(applyToAllMutations: true)
     .AddAdSpotTypes()
     .AddProjections()

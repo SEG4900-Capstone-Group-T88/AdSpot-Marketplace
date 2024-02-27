@@ -1,0 +1,7 @@
+query ValidateUser($email: String!, $password: String!) {
+  validateUser(email: $email, password: $password) {
+    userId
+    email
+    password
+  }
+}
