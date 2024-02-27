@@ -2,6 +2,7 @@ namespace AdSpot.Models;
 
 public class Connection
 {
+    public int ConnectionId { get; set; }
     public string Handle { get; set; }
     public string Token { get; set; }
 
