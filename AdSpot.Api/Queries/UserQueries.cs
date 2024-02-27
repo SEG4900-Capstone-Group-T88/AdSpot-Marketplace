@@ -3,31 +3,42 @@ namespace AdSpot.Api.Queries;
 [QueryType]
 public class UserQueries
 {
+    [UseProjection]
     public IQueryable<User> GetUsers(UserRepository repo)
     {
         return repo.GetAllUsers();
     }
 
-    public User ValidateUser(UserRepository repo, String email, String password)
+    [UseFirstOrDefault]
+    [UseProjection]
+    public IQueryable<User> GetUserById(int userId, UserRepository repo)
     {
-        var user = repo.ValidateUser(email, password);
+        return repo.GetUserById(userId);
+    }
+
+    public User ValidateUser(string email, string password, UserRepository repo)
+    {
+        var user = repo.GetUserByEmail(email);
 
         if (user is null)
         {
-            //throw new IncorrectPasswordError();
+            var error = ErrorBuilder.New()
+                .SetCode("U01")
+                .SetMessage("Invalid email")
+                .Build();
+            throw new GraphQLException(error);
+        }
+
+        user = repo.ValidateUser(email, password);
+        if (user is null)
+        {
+            var error = ErrorBuilder.New()
+                .SetCode("U02")
+                .SetMessage("Invalid password")
+                .Build();
+            throw new GraphQLException(error);
         }
 
         return user;
     }
 }
-
-public record IncorrectPasswordError()
-{
-    public string Message => "Password did not match our records.";
-}
-
-public record IncorrectEmailError()
-{
-    public string Message => "Email did not match our records.";
-}
-

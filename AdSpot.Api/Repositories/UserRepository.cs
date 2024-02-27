@@ -14,6 +14,16 @@ public class UserRepository
         return context.Users;
     }
 
+    public User? GetUserByEmail(string email)
+    {
+        return context.Users.FirstOrDefault(u => u.Email == email);
+    }
+
+    public IQueryable<User> GetUserById(int userId)
+    {
+        return context.Users.Where(u => u.UserId == userId);
+    }
+
     public User AddUser(User user)
     {
         context.Users.Add(user);
@@ -21,7 +31,7 @@ public class UserRepository
         return user;
     }
 
-    public User ValidateUser(String email, String password)
+    public User? ValidateUser(string email, string password)
     {
         return context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
     }
