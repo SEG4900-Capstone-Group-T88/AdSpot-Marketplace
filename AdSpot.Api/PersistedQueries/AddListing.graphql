@@ -11,6 +11,8 @@ mutation AddListing($input: AddListingInput!) {
         }
       }
       price
+      startDate
+      endDate
     }
   }
 }
