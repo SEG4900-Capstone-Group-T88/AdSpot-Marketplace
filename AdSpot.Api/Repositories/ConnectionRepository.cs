@@ -9,10 +9,10 @@ public class ConnectionRepository
         this.context = context;
     }
 
-    public Connection AddConnection(Connection connection)
+    public IQueryable<Connection> AddConnection(Connection connection)
     {
         context.Connections.Add(connection);
-        context.SaveChanges();
-        return connection;
+        var id = context.SaveChanges();
+        return context.Connections.Where(x => x.ConnectionId == id);
     }
 }

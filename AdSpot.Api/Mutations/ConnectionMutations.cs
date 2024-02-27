@@ -3,7 +3,8 @@
 [MutationType]
 public class ConnectionMutations
 {
-    public Connection AddConnection(int platformId, string accountHandle, string apiToken, int userId,
+    [UseProjection]
+    public IQueryable<Connection> AddConnection(int platformId, string accountHandle, string apiToken, int userId,
         ConnectionRepository repo)
     {
         var account = repo.AddConnection(new Connection
