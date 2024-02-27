@@ -16,6 +16,7 @@
   <ItemGroup>
     <PackageReference Include="HotChocolate.AspNetCore" Version="13.8.1" />
     <PackageReference Include="HotChocolate.Data" Version="13.8.1" />
+    <PackageReference Include="HotChocolate.PersistedQueries.FileSystem" Version="13.9.0" />
     <PackageReference Include="HotChocolate.Types.Analyzers" Version="13.8.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
@@ -31,6 +32,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; nalyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="PersistedQueries\" />
   </ItemGroup>
 
 </Project>
