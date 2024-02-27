@@ -2,7 +2,7 @@ namespace AdSpot.Models;
 
 public class ListingType
 {
-    public int Id { get; set; }
+    public int ListingTypeId { get; set; }
     public string Name { get; set; }
 
     public int PlatformId { get; set; }
