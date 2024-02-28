@@ -13,5 +13,10 @@ public class UserMutations
 
         return user;
     }
+
+    public int DeleteUser(int userId, UserRepository repo) {
+        var deletedId = repo.DeleteUser(userId);
+        return deletedId;
+    }
 }
 
