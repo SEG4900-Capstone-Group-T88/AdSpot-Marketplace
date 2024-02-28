@@ -31,20 +31,11 @@ public class UserRepository
         return user;
     }
 
-    public User DeleteUser(int userId)
-    {
-        var user = context.Users.FirstOrDefault(u => u.UserId == userId);
+    public int DeleteUser(int userId) {
+        var user = new User { UserId = userId };
         context.Users.Remove(user);
         context.SaveChanges();
-        return user;
-    }
-
-    public User UpdatePassword(int userId, string password)
-    {
-        var user = context.Users.FirstOrDefault(u => u.UserId == userId);
-        user.Password = password;
-        context.SaveChanges();
-        return user;
+        return userId;
     }
 
     public User? ValidateUser(string email, string password)
