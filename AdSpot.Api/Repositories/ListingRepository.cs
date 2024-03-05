@@ -14,10 +14,10 @@ public class ListingRepository
         return context.Listings;
     }
 
-    public Listing AddListing(Listing listing)
+    public IQueryable<Listing> AddListing(Listing listing)
     {
         context.Listings.Add(listing);
-        context.SaveChanges();
-        return listing;
+        var id = context.SaveChanges();
+        return context.Listings.Where(x => x.ListingId == id);
     }
 }

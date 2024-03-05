@@ -7,4 +7,6 @@ public class ListingType
 
     public int PlatformId { get; set; }
     public Platform Platform { get; set; }
+
+    public ICollection<Listing> Listings { get; set; }
 }

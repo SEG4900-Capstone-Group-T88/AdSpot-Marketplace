@@ -1,0 +1,14 @@
+query GetUserById($userId: Int!) {
+  userById(userId: $userId) {
+    userId
+    email
+    listings {
+      listingType {
+        name
+      }
+      price
+      startDate
+      endDate
+    }
+  }
+}

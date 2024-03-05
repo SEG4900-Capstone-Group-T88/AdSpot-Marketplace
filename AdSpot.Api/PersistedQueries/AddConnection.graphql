@@ -1,0 +1,13 @@
+mutation AddConnection($input: AddConnectionInput!) {
+  addConnection(input: $input) {
+    connection {
+      userId
+      platform {
+        platformId
+        name
+      }
+      handle
+      token
+    }
+  }
+}

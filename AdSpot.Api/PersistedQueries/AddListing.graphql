@@ -1,0 +1,18 @@
+mutation AddListing($input: AddListingInput!) {
+  addListing(input: $input) {
+    listing {
+      listingId
+      listingType {
+        listingTypeId
+        name
+        platform {
+          platformId
+          name
+        }
+      }
+      price
+      startDate
+      endDate
+    }
+  }
+}
