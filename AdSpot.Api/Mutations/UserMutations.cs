@@ -26,4 +26,3 @@ public class UserMutations
         return user;
     }
 }
-
