@@ -3,7 +3,6 @@ mutation AddUser($input: AddUserInput!) {
     user {
       userId
       email
-      password
     }
   }
 }
