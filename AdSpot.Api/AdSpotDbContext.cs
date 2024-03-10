@@ -7,6 +7,7 @@ public class AdSpotDbContext : DbContext
     public DbSet<ListingType> ListingTypes { get; set; }
     public DbSet<Platform> Platforms { get; set; }
     public DbSet<Listing> Listings { get; set; }
+    public DbSet<Order> Orders { get; set; }
 
     public AdSpotDbContext(DbContextOptions<AdSpotDbContext> options) : base(options) { }
 
@@ -17,6 +18,8 @@ public class AdSpotDbContext : DbContext
         modelBuilder.Entity<Connection>()
             .HasAlternateKey(e => new { e.UserId, e.PlatformId });
 
+        modelBuilder.Entity<User>()
+            .HasAlternateKey(e => e.Email);
         modelBuilder.Entity<User>()
             .HasMany(e => e.Connections)
             .WithOne(e => e.User)
@@ -39,5 +42,10 @@ public class AdSpotDbContext : DbContext
             .HasOne(e => e.ListingType)
             .WithMany(e => e.Listings)
             .HasForeignKey(e => e.ListingTypeId);
+
+        modelBuilder.Entity<Order>()
+            .HasOne(e => e.User)
+            .WithMany(e => e.Orders)
+            .HasForeignKey(e => e.UserId);
     }
 }

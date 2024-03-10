@@ -14,7 +14,8 @@ public static class DatabaseInitializer
             var users = new List<User>
             {
                 new User { Email = "admin", Password = "admin" },
-                new User { Email = "matt", Password = "matt" }
+                new User { Email = "matt", Password = "matt" },
+                new User { Email = "akarsh", Password = "akarsh" }
             };
             dbContext.Users.AddRange(users);
             dbContext.SaveChanges();
@@ -36,9 +37,13 @@ public static class DatabaseInitializer
         {
             var connections = new List<Connection>
             {
-                new Connection { UserId = 2, PlatformId = 1, Handle = "matt-fb", Token = "fb-token" },
-                new Connection { UserId = 2, PlatformId = 2, Handle = "matt-twitter", Token = "twitter-token" },
-                new Connection { UserId = 2, PlatformId = 3, Handle = "matt-ig", Token = "ig-token" },
+                new Connection { UserId = 2, PlatformId = 1, Handle = "matt-fb", Token = "token" },
+                new Connection { UserId = 2, PlatformId = 2, Handle = "matt-twitter", Token = "token" },
+                new Connection { UserId = 2, PlatformId = 3, Handle = "matt-ig", Token = "token" },
+
+                new Connection { UserId = 3, PlatformId = 1, Handle = "akarsh-fb", Token = "token" },
+                new Connection { UserId = 3, PlatformId = 2, Handle = "akarsh-twitter", Token = "token" },
+                new Connection { UserId = 3, PlatformId = 3, Handle = "akarsh-ig", Token = "token" }
             };
             dbContext.Connections.AddRange(connections);
             dbContext.SaveChanges();
@@ -70,9 +75,38 @@ public static class DatabaseInitializer
                 new Listing { UserId = 2, ListingTypeId = 3, Price = 9.99M },
                 new Listing { UserId = 2, ListingTypeId = 4, Price = 9.99M },
                 new Listing { UserId = 2, ListingTypeId = 5, Price = 9.99M },
-                new Listing { UserId = 2, ListingTypeId = 6, Price = 9.99M }
+                new Listing { UserId = 2, ListingTypeId = 6, Price = 9.99M },
+
+                new Listing { UserId = 3, ListingTypeId = 1, Price = 9.99M },
+                new Listing { UserId = 3, ListingTypeId = 2, Price = 9.99M },
+                new Listing { UserId = 3, ListingTypeId = 3, Price = 9.99M },
+                new Listing { UserId = 3, ListingTypeId = 4, Price = 9.99M },
+                new Listing { UserId = 3, ListingTypeId = 5, Price = 9.99M },
+                new Listing { UserId = 3, ListingTypeId = 6, Price = 9.99M }
             };
             dbContext.Listings.AddRange(listings);
+            dbContext.SaveChanges();
+        }
+
+        if (dbContext.Orders.FirstOrDefault() is null)
+        {
+            var orders = new List<Order>
+            {
+                new Order { UserId = 2, ListingId = 7, Price = 9.99M },
+                new Order { UserId = 2, ListingId = 8, Price = 9.99M },
+                new Order { UserId = 2, ListingId = 9, Price = 9.99M },
+                new Order { UserId = 2, ListingId = 10, Price = 9.99M },
+                new Order { UserId = 2, ListingId = 11, Price = 9.99M },
+                new Order { UserId = 2, ListingId = 12, Price = 9.99M },
+
+                new Order { UserId = 3, ListingId = 1, Price = 9.99M },
+                new Order { UserId = 3, ListingId = 2, Price = 9.99M },
+                new Order { UserId = 3, ListingId = 3, Price = 9.99M },
+                new Order { UserId = 3, ListingId = 4, Price = 9.99M },
+                new Order { UserId = 3, ListingId = 5, Price = 9.99M },
+                new Order { UserId = 3, ListingId = 6, Price = 9.99M }
+            };
+            dbContext.Orders.AddRange(orders);
             dbContext.SaveChanges();
         }
 
