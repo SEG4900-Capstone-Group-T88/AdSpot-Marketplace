@@ -3,7 +3,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AdSpotDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
 
-var localReactEndpoint = "http://localhost:5173";
+var localReactEndpoint = "http://localhost:3000";
 var localReactCors = "local-react-app";
 builder.Services.AddCors(options =>
 {
@@ -19,6 +19,7 @@ builder.Services
     .AddScoped<ConnectionRepository>()
     .AddScoped<ListingRepository>()
     .AddScoped<ListingTypeRepository>()
+    .AddScoped<OrderRepository>()
     .AddScoped<PlatformRepository>()
     .AddScoped<UserRepository>();
 
@@ -35,6 +36,7 @@ builder.Services
     .RegisterService<ConnectionRepository>()
     .RegisterService<ListingRepository>()
     .RegisterService<ListingTypeRepository>()
+    .RegisterService<OrderRepository>()
     .RegisterService<PlatformRepository>()
     .RegisterService<UserRepository>();
 
