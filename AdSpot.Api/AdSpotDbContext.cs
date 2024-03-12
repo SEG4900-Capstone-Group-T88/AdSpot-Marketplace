@@ -8,4 +8,8 @@ public class AdSpotDbContext : DbContext
     public DbSet<SocialMediaAccount> SocialMediaAccounts { get; set; }
 
     public AdSpotDbContext(DbContextOptions<AdSpotDbContext> options) : base(options) { }
+
+    protected override void OnModelCreating(ModelBuilder builder) {
+        base.OnModelCreating(builder);
+    }
 }
