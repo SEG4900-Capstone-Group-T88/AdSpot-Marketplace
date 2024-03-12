@@ -16,6 +16,22 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters =
+            new TokenValidationParameters
+            {
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            };
+    });
+builder.Services.AddAuthorization();
+
+builder.Services
     .AddScoped<ConnectionRepository>()
     .AddScoped<ListingRepository>()
     .AddScoped<ListingTypeRepository>()
@@ -25,6 +41,7 @@ builder.Services
 
 builder.Services
     .AddGraphQLServer()
+    .AddAuthorization()
     .AddQueryType()
     .UsePersistedQueryPipeline()
     .AddReadOnlyFileSystemQueryStorage("./PersistedQueries")
@@ -48,6 +65,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(localReactCors);
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapGraphQL();
+});
 
 app.MapGraphQL("/");
 app.Run();
