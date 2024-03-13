@@ -19,15 +19,17 @@ builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.TokenValidationParameters =
-            new TokenValidationParameters
-            {
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                ValidAudience = builder.Configuration["Jwt:Audience"],
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-            };
+        options.Authority = builder.Configuration["Jwt:Issuer"];
+        options.Audience = builder.Configuration["Jwt:Audience"];
+        //options.TokenValidationParameters =
+        //    new TokenValidationParameters
+        //    {
+        //        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        //        ValidAudience = builder.Configuration["Jwt:Audience"],
+        //        ValidateIssuerSigningKey = true,
+        //        IssuerSigningKey = new SymmetricSecurityKey(
+        //            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        //    };
     });
 builder.Services.AddAuthorization();
 
