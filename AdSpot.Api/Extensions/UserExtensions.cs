@@ -3,8 +3,16 @@
 [ExtendObjectType<User>]
 public class UserExtensions
 {
-    public IQueryable<Order> GetPendingOrderRequests([Parent] User user, OrderRepository repo)
+    [UseProjection]
+    public IQueryable<Order> GetPendingRequests([Parent] User user, OrderRepository repo)
     {
-        return repo.GetPendingOrderRequestsForUser(user.UserId);
+        return repo.GetPendingRequests(user.UserId);
+    }
+
+    [UseProjection]
+    [UseFiltering]
+    public IQueryable<Order> GetPurchases([Parent] User user, OrderRepository repo)
+    {
+        return repo.GetAllPurchases(user.UserId);
     }
 }
