@@ -70,19 +70,19 @@ public static class DatabaseInitializer
         {
             var listings = new List<Listing>
             {
-                new Listing { UserId = 2, ListingTypeId = 1, Price = 9.99M },
-                new Listing { UserId = 2, ListingTypeId = 2, Price = 9.99M },
-                new Listing { UserId = 2, ListingTypeId = 3, Price = 9.99M },
-                new Listing { UserId = 2, ListingTypeId = 4, Price = 9.99M },
-                new Listing { UserId = 2, ListingTypeId = 5, Price = 9.99M },
-                new Listing { UserId = 2, ListingTypeId = 6, Price = 9.99M },
+                new Listing { UserId = 2, ListingTypeId = 1, Price = 10 },
+                new Listing { UserId = 2, ListingTypeId = 2, Price = 20 },
+                new Listing { UserId = 2, ListingTypeId = 3, Price = 30 },
+                new Listing { UserId = 2, ListingTypeId = 4, Price = 40 },
+                new Listing { UserId = 2, ListingTypeId = 5, Price = 50 },
+                new Listing { UserId = 2, ListingTypeId = 6, Price = 60 },
 
-                new Listing { UserId = 3, ListingTypeId = 1, Price = 9.99M },
-                new Listing { UserId = 3, ListingTypeId = 2, Price = 9.99M },
-                new Listing { UserId = 3, ListingTypeId = 3, Price = 9.99M },
-                new Listing { UserId = 3, ListingTypeId = 4, Price = 9.99M },
-                new Listing { UserId = 3, ListingTypeId = 5, Price = 9.99M },
-                new Listing { UserId = 3, ListingTypeId = 6, Price = 9.99M }
+                new Listing { UserId = 3, ListingTypeId = 1, Price = 70 },
+                new Listing { UserId = 3, ListingTypeId = 2, Price = 80 },
+                new Listing { UserId = 3, ListingTypeId = 3, Price = 90 },
+                new Listing { UserId = 3, ListingTypeId = 4, Price = 100 },
+                new Listing { UserId = 3, ListingTypeId = 5, Price = 110 },
+                new Listing { UserId = 3, ListingTypeId = 6, Price = 120 }
             };
             dbContext.Listings.AddRange(listings);
             dbContext.SaveChanges();

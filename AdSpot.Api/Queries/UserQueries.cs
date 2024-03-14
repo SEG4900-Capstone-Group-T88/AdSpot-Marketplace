@@ -4,6 +4,7 @@ namespace AdSpot.Api.Queries;
 public class UserQueries
 {
     [UseProjection]
+    [UseFiltering]
     public IQueryable<User> GetUsers(UserRepository repo)
     {
         return repo.GetAllUsers();
