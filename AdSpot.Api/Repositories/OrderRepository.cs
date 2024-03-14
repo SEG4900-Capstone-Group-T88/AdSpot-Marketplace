@@ -13,4 +13,9 @@ public class OrderRepository
     {
         return context.Orders;
     }
+
+    public IQueryable<Order> GetOrderById(int orderId)
+    {
+        return context.Orders.Where(o => o.OrderId == orderId);
+    }
 }

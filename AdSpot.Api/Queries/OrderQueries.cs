@@ -8,4 +8,10 @@ public class OrderQueries
     {
         return repo.GetAllOrders();
     }
+
+    [UseFirstOrDefault]
+    public IQueryable<Order> GetOrderById(int orderId, OrderRepository repo)
+    {
+        return repo.GetOrderById(orderId);
+    }
 }

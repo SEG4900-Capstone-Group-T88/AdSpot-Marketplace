@@ -1,4 +1,6 @@
-﻿namespace AdSpot.Api.Mutations;
+﻿using AdSpot.Api.Mutations.Errors;
+
+namespace AdSpot.Api.Mutations;
 
 [MutationType]
 public class UserMutations
@@ -24,5 +26,31 @@ public class UserMutations
     {
         var user = repo.UpdatePassword(userId, password);
         return user;
+    }
+
+    [Error<UserNotFoundError>]
+    [Error<UserInvalidCredentialsError>]
+    public MutationResult<LoginPayload> Login(string email, string password, UserRepository repo)
+    {
+        var user = repo.GetUserByEmail(email);
+
+        if (user is null)
+        {
+            return new(new UserNotFoundError(email));
+        }
+
+        user = repo.ValidateUser(email, password);
+        if (user is null)
+        {
+            return new(new UserInvalidCredentialsError());
+        }
+
+        //var token = JwtUtils.GenerateToken(user);
+
+        return new LoginPayload
+        {
+            User = user,
+            //Token = token
+        };
     }
 }
