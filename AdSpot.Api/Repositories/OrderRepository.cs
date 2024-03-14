@@ -18,4 +18,9 @@ public class OrderRepository
     {
         return context.Orders.Where(o => o.OrderId == orderId);
     }
+
+    public IQueryable<Order> GetPendingOrderRequestsForUser(int userId)
+    {
+        return context.Orders.Where(o => o.Listing.UserId == userId && o.OrderStatusId == OrderStatusEnum.Pending);
+    }
 }

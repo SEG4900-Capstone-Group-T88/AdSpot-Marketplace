@@ -3,7 +3,8 @@
 [ExtendObjectType<User>]
 public class UserExtensions
 {
-    public IQueryable<Order> GetSales([Parent] User user, OrderRepository repo)
+    public IQueryable<Order> GetPendingOrderRequests([Parent] User user, OrderRepository repo)
     {
+        return repo.GetPendingOrderRequestsForUser(user.UserId);
     }
 }

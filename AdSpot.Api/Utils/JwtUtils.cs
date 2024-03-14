@@ -2,7 +2,7 @@ namespace AdSpot.Api.Utils;
 
 public static class JwtUtils
 {
-    public static string GenerateJSONWebToken(IConfiguration config)
+    public static string GenerateToken(User user, IConfiguration config)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

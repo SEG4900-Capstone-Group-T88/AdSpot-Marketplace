@@ -104,19 +104,19 @@ public static class DatabaseInitializer
         {
             var orders = new List<Order>
             {
-                new Order { UserId = 2, ListingId = 7, Description = "Do something" },
-                new Order { UserId = 2, ListingId = 8, Description = "Do something" },
-                new Order { UserId = 2, ListingId = 9, Description = "Do something" },
-                new Order { UserId = 2, ListingId = 10, Description = "Do something" },
-                new Order { UserId = 2, ListingId = 11, Description = "Do something" },
-                new Order { UserId = 2, ListingId = 12, Description = "Do something" },
+                new Order { UserId = 2, ListingId = 7, Description = "Do something", OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 8, Description = "Do something", OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 9, Description = "Do something", OrderStatusId = OrderStatusEnum.Accepted },
+                new Order { UserId = 2, ListingId = 10, Description = "Do something", OrderStatusId = OrderStatusEnum.Rejected },
+                new Order { UserId = 2, ListingId = 11, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed },
+                new Order { UserId = 2, ListingId = 12, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed },
 
-                new Order { UserId = 3, ListingId = 1, Description = "Do something" },
-                new Order { UserId = 3, ListingId = 2, Description = "Do something" },
-                new Order { UserId = 3, ListingId = 3, Description = "Do something" },
-                new Order { UserId = 3, ListingId = 4, Description = "Do something" },
-                new Order { UserId = 3, ListingId = 5, Description = "Do something" },
-                new Order { UserId = 3, ListingId = 6, Description = "Do something" }
+                new Order { UserId = 3, ListingId = 1, Description = "Do something", OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 3, ListingId = 2, Description = "Do something", OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 3, ListingId = 3, Description = "Do something", OrderStatusId = OrderStatusEnum.Accepted },
+                new Order { UserId = 3, ListingId = 4, Description = "Do something", OrderStatusId = OrderStatusEnum.Rejected },
+                new Order { UserId = 3, ListingId = 5, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed },
+                new Order { UserId = 3, ListingId = 6, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed }
             };
             foreach (var order in orders)
             {

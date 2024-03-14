@@ -1,6 +1,4 @@
-﻿using AdSpot.Api.Mutations.Errors;
-
-namespace AdSpot.Api.Mutations;
+﻿namespace AdSpot.Api.Mutations;
 
 [MutationType]
 public class UserMutations
@@ -30,7 +28,7 @@ public class UserMutations
 
     [Error<UserNotFoundError>]
     [Error<UserInvalidCredentialsError>]
-    public MutationResult<LoginPayload> Login(string email, string password, UserRepository repo)
+    public MutationResult<LoginPayload> Login(string email, string password, UserRepository repo, [Service] IConfiguration config)
     {
         var user = repo.GetUserByEmail(email);
 
@@ -45,12 +43,12 @@ public class UserMutations
             return new(new UserInvalidCredentialsError());
         }
 
-        //var token = JwtUtils.GenerateToken(user);
+        var token = JwtUtils.GenerateToken(user, config);
 
         return new LoginPayload
         {
             User = user,
-            //Token = token
+            Token = token
         };
     }
 }
