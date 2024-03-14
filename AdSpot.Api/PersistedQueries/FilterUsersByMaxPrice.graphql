@@ -1,0 +1,6 @@
+query FilterUsersByMaxPrice($maxPrice: Decimal!) {
+  users(where: { listings: { some: { price: { lte: $maxPrice } } } }) {
+    userId
+    email
+  }
+}
