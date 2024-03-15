@@ -70,21 +70,37 @@ public static class DatabaseInitializer
         {
             var listings = new List<Listing>
             {
-                new Listing { UserId = 2, ListingTypeId = 1, Price = 9.99M },
-                new Listing { UserId = 2, ListingTypeId = 2, Price = 9.99M },
-                new Listing { UserId = 2, ListingTypeId = 3, Price = 9.99M },
-                new Listing { UserId = 2, ListingTypeId = 4, Price = 9.99M },
-                new Listing { UserId = 2, ListingTypeId = 5, Price = 9.99M },
-                new Listing { UserId = 2, ListingTypeId = 6, Price = 9.99M },
+                new Listing { UserId = 2, ListingTypeId = 1, Price = 10 },
+                new Listing { UserId = 2, ListingTypeId = 2, Price = 20 },
+                new Listing { UserId = 2, ListingTypeId = 3, Price = 30 },
+                new Listing { UserId = 2, ListingTypeId = 4, Price = 40 },
+                new Listing { UserId = 2, ListingTypeId = 5, Price = 50 },
+                new Listing { UserId = 2, ListingTypeId = 6, Price = 60 },
 
-                new Listing { UserId = 3, ListingTypeId = 1, Price = 9.99M },
-                new Listing { UserId = 3, ListingTypeId = 2, Price = 9.99M },
-                new Listing { UserId = 3, ListingTypeId = 3, Price = 9.99M },
-                new Listing { UserId = 3, ListingTypeId = 4, Price = 9.99M },
-                new Listing { UserId = 3, ListingTypeId = 5, Price = 9.99M },
-                new Listing { UserId = 3, ListingTypeId = 6, Price = 9.99M }
+                new Listing { UserId = 3, ListingTypeId = 1, Price = 70 },
+                new Listing { UserId = 3, ListingTypeId = 2, Price = 80 },
+                new Listing { UserId = 3, ListingTypeId = 3, Price = 90 },
+                new Listing { UserId = 3, ListingTypeId = 4, Price = 100 },
+                new Listing { UserId = 3, ListingTypeId = 5, Price = 110 },
+                new Listing { UserId = 3, ListingTypeId = 6, Price = 120 }
             };
+            foreach (var listing in listings)
+            {
+                listing.PlatformId = dbContext.ListingTypes.Find(listing.ListingTypeId).PlatformId;
+            }
             dbContext.Listings.AddRange(listings);
+            dbContext.SaveChanges();
+        }
+
+        if (dbContext.OrderStatuses.FirstOrDefault() is null)
+        {
+            var orderStatuses = Enum.GetValues<OrderStatusEnum>()
+                .Select(x => new OrderStatus
+                {
+                    OrderStatusId = x,
+                    Name = x.ToString()
+                });
+            dbContext.OrderStatuses.AddRange(orderStatuses);
             dbContext.SaveChanges();
         }
 
@@ -92,20 +108,25 @@ public static class DatabaseInitializer
         {
             var orders = new List<Order>
             {
-                new Order { UserId = 2, ListingId = 7, Price = 9.99M },
-                new Order { UserId = 2, ListingId = 8, Price = 9.99M },
-                new Order { UserId = 2, ListingId = 9, Price = 9.99M },
-                new Order { UserId = 2, ListingId = 10, Price = 9.99M },
-                new Order { UserId = 2, ListingId = 11, Price = 9.99M },
-                new Order { UserId = 2, ListingId = 12, Price = 9.99M },
+                new Order { UserId = 2, ListingId = 7, Description = "Do something", OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 8, Description = "Do something", OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 9, Description = "Do something", OrderStatusId = OrderStatusEnum.Accepted },
+                new Order { UserId = 2, ListingId = 10, Description = "Do something", OrderStatusId = OrderStatusEnum.Rejected },
+                new Order { UserId = 2, ListingId = 11, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed, Deliverable = "Link to deliverable" },
+                new Order { UserId = 2, ListingId = 12, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed, Deliverable = "Link to deliverable" },
 
-                new Order { UserId = 3, ListingId = 1, Price = 9.99M },
-                new Order { UserId = 3, ListingId = 2, Price = 9.99M },
-                new Order { UserId = 3, ListingId = 3, Price = 9.99M },
-                new Order { UserId = 3, ListingId = 4, Price = 9.99M },
-                new Order { UserId = 3, ListingId = 5, Price = 9.99M },
-                new Order { UserId = 3, ListingId = 6, Price = 9.99M }
+                new Order { UserId = 3, ListingId = 1, Description = "Do something", OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 3, ListingId = 2, Description = "Do something", OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 3, ListingId = 3, Description = "Do something", OrderStatusId = OrderStatusEnum.Accepted },
+                new Order { UserId = 3, ListingId = 4, Description = "Do something", OrderStatusId = OrderStatusEnum.Rejected },
+                new Order { UserId = 3, ListingId = 5, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed, Deliverable = "Link to deliverable" },
+                new Order { UserId = 3, ListingId = 6, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed, Deliverable = "Link to deliverable" }
             };
+            foreach (var order in orders)
+            {
+                var listing = dbContext.Listings.Find(order.ListingId);
+                order.Price = listing.Price;
+            }
             dbContext.Orders.AddRange(orders);
             dbContext.SaveChanges();
         }

@@ -1,19 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
 builder.Services.AddDbContext<AdSpotDbContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
-
-var localReactEndpoint = "http://localhost:3000";
-var localReactCors = "local-react-app";
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(localReactCors, policy =>
-    {
-        policy.WithOrigins(localReactEndpoint);
-        policy.AllowAnyMethod();
-        policy.AllowAnyHeader();
-    });
-});
+    options => options.UseNpgsql(config.GetConnectionString("Postgres")));
 
 builder.Services
     .AddScoped<ConnectionRepository>()
@@ -25,6 +14,7 @@ builder.Services
 
 builder.Services
     .AddGraphQLServer()
+    .AddAuthorization()
     .AddQueryType()
     .UsePersistedQueryPipeline()
     .AddReadOnlyFileSystemQueryStorage("./PersistedQueries")
@@ -33,12 +23,42 @@ builder.Services
     .AddProjections()
     .AddFiltering()
     .AddSorting()
+    .RegisterDbContext<AdSpotDbContext>()
     .RegisterService<ConnectionRepository>()
     .RegisterService<ListingRepository>()
     .RegisterService<ListingTypeRepository>()
-    .RegisterService<OrderRepository>()
+    .RegisterService<OrderRepository>(ServiceKind.Resolver)
     .RegisterService<PlatformRepository>()
     .RegisterService<UserRepository>();
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = config["Jwt:Issuer"];
+        options.Audience = config["Jwt:Audience"];
+
+        options.TokenValidationParameters =
+            new TokenValidationParameters
+            {
+                ValidIssuer = config["Jwt:Issuer"],
+                ValidAudience = config["Jwt:Audience"],
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(config["Jwt:Key"]))
+            };
+    });
+builder.Services.AddAuthorization();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("all", policy =>
+    {
+        policy.WithOrigins(config["Endpoints:AdSpotClient"]);
+        policy.AllowAnyMethod();
+        policy.AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
@@ -47,7 +67,11 @@ if (app.Environment.IsDevelopment())
     app.SeedDatabase();
 }
 
-app.UseCors(localReactCors);
+app.UseCors("all");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGraphQL("/");
+
 app.Run();

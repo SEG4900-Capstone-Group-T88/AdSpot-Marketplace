@@ -1,8 +1,17 @@
 ﻿namespace AdSpot.Models;
 
-public enum OrderStatus
+public class OrderStatus
 {
-    Pending,
-    Completed,
-    Cancelled
+    public OrderStatusEnum OrderStatusId { get; set; }
+    public string Name { get; set; }
+
+    public ICollection<Order> Orders { get; set; }
+}
+
+public enum OrderStatusEnum
+{
+    Pending = 0,
+    Accepted = 1,
+    Rejected = 2,
+    Completed = 3
 }

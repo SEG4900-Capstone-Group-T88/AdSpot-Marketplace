@@ -4,15 +4,17 @@ public class Order
 {
     public int OrderId { get; set; }
     public DateTime OrderDate { get; set; } = DateTime.UtcNow;
-    public decimal Price { get; set; }
 
-    public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
+    public OrderStatusEnum OrderStatusId { get; set; } = OrderStatusEnum.Pending;
+    public OrderStatus OrderStatus { get; set; }
 
-    // Seller
     public int ListingId { get; set; }
     public Listing Listing { get; set; }
 
-    // Buyer
     public int UserId { get; set; }
     public User User { get; set; }
+
+    public decimal Price { get; set; }
+    public string Description { get; set; }
+    public string? Deliverable { get; set; }
 }

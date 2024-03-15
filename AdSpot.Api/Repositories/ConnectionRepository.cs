@@ -12,7 +12,7 @@ public class ConnectionRepository
     public IQueryable<Connection> AddConnection(Connection connection)
     {
         context.Connections.Add(connection);
-        var id = context.SaveChanges();
-        return context.Connections.Where(x => x.ConnectionId == id);
+        context.SaveChanges();
+        return context.Connections.Where(x => x.UserId == connection.UserId && x.PlatformId == connection.PlatformId);
     }
 }
