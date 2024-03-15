@@ -15,9 +15,7 @@ public class AdSpotDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Connection>()
-            .HasKey(e => e.ConnectionId);
-        modelBuilder.Entity<Connection>()
-            .HasAlternateKey(e => new { e.UserId, e.PlatformId });
+            .HasKey(e => new { e.UserId, e.PlatformId });
 
         modelBuilder.Entity<User>()
             .HasAlternateKey(e => e.Email);
@@ -47,6 +45,10 @@ public class AdSpotDbContext : DbContext
             .HasMany(e => e.Orders)
             .WithOne(e => e.Listing)
             .HasForeignKey(e => e.ListingId);
+        modelBuilder.Entity<Listing>()
+            .HasOne(e => e.Connection)
+            .WithMany()
+            .HasForeignKey(e => new { e.UserId, e.PlatformId });
 
         modelBuilder.Entity<Order>()
             .HasOne(e => e.User)

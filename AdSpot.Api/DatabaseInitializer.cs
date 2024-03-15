@@ -84,6 +84,10 @@ public static class DatabaseInitializer
                 new Listing { UserId = 3, ListingTypeId = 5, Price = 110 },
                 new Listing { UserId = 3, ListingTypeId = 6, Price = 120 }
             };
+            foreach (var listing in listings)
+            {
+                listing.PlatformId = dbContext.ListingTypes.Find(listing.ListingTypeId).PlatformId;
+            }
             dbContext.Listings.AddRange(listings);
             dbContext.SaveChanges();
         }
