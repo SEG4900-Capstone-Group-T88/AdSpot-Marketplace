@@ -16,5 +16,7 @@ public class Order
 
     public decimal Price { get; set; }
     public string Description { get; set; }
+
     public string? Deliverable { get; set; }
+    public float? Rating { get; set; }
 }
