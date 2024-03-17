@@ -19,6 +19,7 @@ public class ListingMutations
 
     // Seems like we can't use projections here
     [Error<InvalidListingIdError>]
+    [Error<CannotOrderOwnListingError>]
     [Error<ListingPriceHasChangedError>]
     public MutationResult<Order> OrderListing(int listingId, int userId, decimal price, string description,
         ListingRepository listingRepo, OrderRepository orderRepo)
@@ -27,6 +28,11 @@ public class ListingMutations
         if (listing is null)
         {
             return new(new InvalidListingIdError(listingId));
+        }
+
+        if (userId == listing.UserId)
+        {
+            return new(new CannotOrderOwnListingError());
         }
 
         if (listing.Price != price)

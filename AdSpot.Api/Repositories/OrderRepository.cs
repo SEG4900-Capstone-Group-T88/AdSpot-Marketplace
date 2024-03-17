@@ -31,8 +31,28 @@ public class OrderRepository
         return context.Orders.Where(o => o.Listing.UserId == userId && o.OrderStatusId == OrderStatusEnum.Pending);
     }
 
-    public IQueryable<Order> GetAllPurchases(int userId)
+    public IQueryable<Order> GetAcceptedRequests(int userId)
     {
-        return context.Orders.Where(o => o.UserId == userId);
+        return context.Orders.Where(o => o.Listing.UserId == userId && o.OrderStatusId == OrderStatusEnum.Accepted);
+    }
+
+    public IQueryable<Order> GetRejectedRequests(int userId)
+    {
+        return context.Orders.Where(o => o.Listing.UserId == userId && o.OrderStatusId == OrderStatusEnum.Rejected);
+    }
+
+    public IQueryable<Order> GetPendingOrders(int userId)
+    {
+        return context.Orders.Where(o => o.UserId == userId && o.OrderStatusId == OrderStatusEnum.Pending);
+    }
+
+    public IQueryable<Order> GetAcceptedOrders(int userId)
+    {
+        return context.Orders.Where(o => o.UserId == userId && o.OrderStatusId == OrderStatusEnum.Accepted);
+    }
+
+    public IQueryable<Order> GetRejectedOrders(int userId)
+    {
+        return context.Orders.Where(o => o.UserId == userId && o.OrderStatusId == OrderStatusEnum.Rejected);
     }
 }
