@@ -14,6 +14,11 @@ public class ListingRepository
         return context.Listings;
     }
 
+    public IQueryable<Listing> GetListingById(int listingId)
+    {
+        return context.Listings.Where(l => l.ListingId == listingId);
+    }
+
     public IQueryable<Listing> AddListing(Listing listing)
     {
         context.Listings.Add(listing);
