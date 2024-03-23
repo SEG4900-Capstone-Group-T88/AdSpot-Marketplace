@@ -17,45 +17,67 @@ public class OrderQueries
         return repo.GetOrderById(orderId);
     }
 
+    [UsePaging]
     [UseProjection]
     [UseSorting]
     public IQueryable<Order> GetPendingRequests(int userId, OrderRepository repo)
     {
-        return repo.GetPendingRequests(userId);
+        return repo.GetRequestsByStatus(userId, OrderStatusEnum.Pending);
     }
 
+    [UsePaging]
     [UseProjection]
     [UseSorting]
     public IQueryable<Order> GetAcceptedRequests(int userId, OrderRepository repo)
     {
-        return repo.GetAcceptedRequests(userId);
+        return repo.GetRequestsByStatus(userId, OrderStatusEnum.Accepted);
     }
 
+    [UsePaging]
     [UseProjection]
     [UseSorting]
     public IQueryable<Order> GetRejectedRequests(int userId, OrderRepository repo)
     {
-        return repo.GetRejectedRequests(userId);
+        return repo.GetRequestsByStatus(userId, OrderStatusEnum.Rejected);
     }
 
+    [UsePaging]
+    [UseProjection]
+    [UseSorting]
+    public IQueryable<Order> GetCompletedRequests(int userId, OrderRepository repo)
+    {
+        return repo.GetRequestsByStatus(userId, OrderStatusEnum.Completed);
+    }
+
+    [UsePaging]
     [UseProjection]
     [UseSorting]
     public IQueryable<Order> GetPendingOrders(int userId, OrderRepository repo)
     {
-        return repo.GetPendingOrders(userId);
+        return repo.GetOrdersByStatus(userId, OrderStatusEnum.Pending);
     }
 
+    [UsePaging]
     [UseProjection]
     [UseSorting]
     public IQueryable<Order> GetAcceptedOrders(int userId, OrderRepository repo)
     {
-        return repo.GetAcceptedOrders(userId);
+        return repo.GetOrdersByStatus(userId, OrderStatusEnum.Accepted);
     }
 
+    [UsePaging]
     [UseProjection]
     [UseSorting]
     public IQueryable<Order> GetRejectedOrders(int userId, OrderRepository repo)
     {
-        return repo.GetRejectedOrders(userId);
+        return repo.GetOrdersByStatus(userId, OrderStatusEnum.Rejected);
+    }
+
+    [UsePaging]
+    [UseProjection]
+    [UseSorting]
+    public IQueryable<Order> GetCompletedOrders(int userId, OrderRepository repo)
+    {
+        return repo.GetOrdersByStatus(userId, OrderStatusEnum.Completed);
     }
 }
