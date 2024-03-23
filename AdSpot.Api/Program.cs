@@ -29,7 +29,11 @@ builder.Services
     .RegisterService<ListingTypeRepository>()
     .RegisterService<OrderRepository>(ServiceKind.Resolver)
     .RegisterService<PlatformRepository>()
-    .RegisterService<UserRepository>();
+    .RegisterService<UserRepository>()
+    .SetPagingOptions(new HotChocolate.Types.Pagination.PagingOptions
+    {
+        IncludeTotalCount = true,
+    });
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
