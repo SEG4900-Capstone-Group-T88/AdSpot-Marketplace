@@ -3,15 +3,30 @@
 [MutationType]
 public class UserMutations
 {
-    public User AddUser(string email, string password, UserRepository repo)
+    [Error<UserNotFoundError>]
+    public MutationResult<AddUserPayload> AddUser(string email, string password, string firstName, string lastName, UserRepository repo, [Service] IConfiguration config)
     {
-        var user = repo.AddUser(new User
+        var user = repo.GetUserByEmail(email);
+        if (user is not null)
+        {
+            return new(new UserNotFoundError(email));
+        }
+
+        user = repo.AddUser(new User
         {
             Email = email,
-            Password = password
+            Password = password,
+            FirstName = firstName,
+            LastName = lastName
         });
 
-        return user;
+        var token = JwtUtils.GenerateToken(user, config);
+
+        return new AddUserPayload
+        {
+            User = user,
+            Token = token
+        };
     }
 
     public User DeleteUser(int userId, UserRepository repo)

@@ -20,64 +20,16 @@ public class OrderQueries
     [UsePaging]
     [UseProjection]
     [UseSorting]
-    public IQueryable<Order> GetPendingRequests(int userId, OrderRepository repo)
+    public IQueryable<Order> GetOrdersByStatus(int userId, OrderStatusEnum status, OrderRepository repo)
     {
-        return repo.GetRequestsByStatus(userId, OrderStatusEnum.Pending);
+        return repo.GetOrdersByStatus(userId, status);
     }
 
     [UsePaging]
     [UseProjection]
     [UseSorting]
-    public IQueryable<Order> GetAcceptedRequests(int userId, OrderRepository repo)
+    public IQueryable<Order> GetRequestsByStatus(int userId, OrderStatusEnum status, OrderRepository repo)
     {
-        return repo.GetRequestsByStatus(userId, OrderStatusEnum.Accepted);
-    }
-
-    [UsePaging]
-    [UseProjection]
-    [UseSorting]
-    public IQueryable<Order> GetRejectedRequests(int userId, OrderRepository repo)
-    {
-        return repo.GetRequestsByStatus(userId, OrderStatusEnum.Rejected);
-    }
-
-    [UsePaging]
-    [UseProjection]
-    [UseSorting]
-    public IQueryable<Order> GetCompletedRequests(int userId, OrderRepository repo)
-    {
-        return repo.GetRequestsByStatus(userId, OrderStatusEnum.Completed);
-    }
-
-    [UsePaging]
-    [UseProjection]
-    [UseSorting]
-    public IQueryable<Order> GetPendingOrders(int userId, OrderRepository repo)
-    {
-        return repo.GetOrdersByStatus(userId, OrderStatusEnum.Pending);
-    }
-
-    [UsePaging]
-    [UseProjection]
-    [UseSorting]
-    public IQueryable<Order> GetAcceptedOrders(int userId, OrderRepository repo)
-    {
-        return repo.GetOrdersByStatus(userId, OrderStatusEnum.Accepted);
-    }
-
-    [UsePaging]
-    [UseProjection]
-    [UseSorting]
-    public IQueryable<Order> GetRejectedOrders(int userId, OrderRepository repo)
-    {
-        return repo.GetOrdersByStatus(userId, OrderStatusEnum.Rejected);
-    }
-
-    [UsePaging]
-    [UseProjection]
-    [UseSorting]
-    public IQueryable<Order> GetCompletedOrders(int userId, OrderRepository repo)
-    {
-        return repo.GetOrdersByStatus(userId, OrderStatusEnum.Completed);
+        return repo.GetRequestsByStatus(userId, status);
     }
 }
