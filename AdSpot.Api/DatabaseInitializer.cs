@@ -14,7 +14,8 @@ public static class DatabaseInitializer
             var users = new List<User>
             {
                 new User { Email = "matt", Password = "matt", FirstName = "Matthew", LastName = "Sia" },
-                new User { Email = "akarsh", Password = "akarsh", FirstName = "Akarsh", LastName = "Gharge" }
+                new User { Email = "akarsh", Password = "akarsh", FirstName = "Akarsh", LastName = "Gharge" },
+                new User { Email = "demian", Password = "demian", FirstName = "Demian", LastName = "Oportus" }
             };
             dbContext.Users.AddRange(users);
             dbContext.SaveChanges();
@@ -117,8 +118,19 @@ public static class DatabaseInitializer
         {
             var orders = new List<Order>
             {
-                new Order { UserId = 1, ListingId = 9, Description = "Do something", OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 1, ListingId = 10, Description = "Do something", OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 1, ListingId = 9, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-11), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 1, ListingId = 10, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-10), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 1, ListingId = 9, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-9), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 1, ListingId = 10, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-8), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 1, ListingId = 9, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-7), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 1, ListingId = 10, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-6), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 1, ListingId = 9, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-5), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 1, ListingId = 10, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-4), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 1, ListingId = 9, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-3), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 1, ListingId = 10, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-2), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 1, ListingId = 9, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-1), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 1, ListingId = 10, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(0), OrderStatusId = OrderStatusEnum.Pending },
+
                 new Order { UserId = 1, ListingId = 11, Description = "Do something", OrderStatusId = OrderStatusEnum.Accepted },
                 new Order { UserId = 1, ListingId = 12, Description = "Do something", OrderStatusId = OrderStatusEnum.Accepted },
                 new Order { UserId = 1, ListingId = 13, Description = "Do something", OrderStatusId = OrderStatusEnum.Rejected },
@@ -126,8 +138,19 @@ public static class DatabaseInitializer
                 new Order { UserId = 1, ListingId = 15, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed, Deliverable = "Link to deliverable", Rating = 5 },
                 new Order { UserId = 1, ListingId = 16, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed, Deliverable = "Link to deliverable", Rating = 4 },
 
-                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-11), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-10), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-9), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-8), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-7), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-6), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-5), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-4), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-3), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-2), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-1), OrderStatusId = OrderStatusEnum.Pending },
+                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(0), OrderStatusId = OrderStatusEnum.Pending },
+
                 new Order { UserId = 2, ListingId = 3, Description = "Do something", OrderStatusId = OrderStatusEnum.Accepted },
                 new Order { UserId = 2, ListingId = 4, Description = "Do something", OrderStatusId = OrderStatusEnum.Accepted },
                 new Order { UserId = 2, ListingId = 5, Description = "Do something", OrderStatusId = OrderStatusEnum.Rejected },
