@@ -3,21 +3,23 @@
 [MutationType]
 public class UserMutations
 {
-    [Error<UserNotFoundError>]
-    public MutationResult<AddUserPayload> AddUser(string email, string password, string firstName, string lastName, UserRepository repo, [Service] IConfiguration config)
+    [Error<AccountWithEmailAlreadyExistsError>]
+    public MutationResult<AddUserPayload> AddUser(
+        [UseFluentValidation, UseValidator<AddUserInputValidator>] AddUserInput input,
+        UserRepository repo, IConfiguration config)
     {
-        var user = repo.GetUserByEmail(email);
+        var user = repo.GetUserByEmail(input.Email);
         if (user is not null)
         {
-            return new(new UserNotFoundError(email));
+            return new(new AccountWithEmailAlreadyExistsError(input.Email));
         }
 
         user = repo.AddUser(new User
         {
-            Email = email,
-            Password = password,
-            FirstName = firstName,
-            LastName = lastName
+            Email = input.Email,
+            Password = input.Password,
+            FirstName = input.FirstName,
+            LastName = input.LastName
         });
 
         var token = JwtUtils.GenerateToken(user, config);

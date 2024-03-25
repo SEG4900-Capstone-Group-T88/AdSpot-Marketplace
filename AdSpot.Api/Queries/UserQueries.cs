@@ -1,4 +1,4 @@
-namespace AdSpot.Api.Queries;
+﻿namespace AdSpot.Api.Queries;
 
 [QueryType]
 public class UserQueries
