@@ -1,4 +1,4 @@
-var builder = WebApplication.CreateBuilder(args);
+﻿var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
 builder.Services.AddDbContext<AdSpotDbContext>(
@@ -10,11 +10,17 @@ builder.Services
     .AddScoped<ListingTypeRepository>()
     .AddScoped<OrderRepository>()
     .AddScoped<PlatformRepository>()
-    .AddScoped<UserRepository>();
+    .AddScoped<UserRepository>()
+    .AddScoped<AddUserInputValidator>();
+
+builder.Services
+    .AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters();
 
 builder.Services
     .AddGraphQLServer()
     .AddAuthorization()
+    .AddFluentValidation()
     .AddQueryType()
     .UsePersistedQueryPipeline()
     .AddReadOnlyFileSystemQueryStorage("./PersistedQueries")
@@ -24,6 +30,7 @@ builder.Services
     .AddFiltering()
     .AddSorting()
     .RegisterDbContext<AdSpotDbContext>()
+    .RegisterService<IConfiguration>()
     .RegisterService<ConnectionRepository>()
     .RegisterService<ListingRepository>()
     .RegisterService<ListingTypeRepository>()
