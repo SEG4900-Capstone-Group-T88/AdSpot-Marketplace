@@ -1,4 +1,4 @@
-namespace AdSpot.Api.Utils;
+﻿namespace AdSpot.Api.Utils;
 
 public static class JwtUtils
 {

@@ -1,4 +1,4 @@
-namespace AdSpot.Models;
+﻿namespace AdSpot.Models;
 
 public class ListingType
 {

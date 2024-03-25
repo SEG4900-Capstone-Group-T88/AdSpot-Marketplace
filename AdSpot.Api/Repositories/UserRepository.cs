@@ -1,4 +1,4 @@
-namespace AdSpot.Api.Repositories;
+﻿namespace AdSpot.Api.Repositories;
 
 public class UserRepository
 {
