@@ -2,6 +2,8 @@
 
 public class InstagramService
 {
+    // https://developers.facebook.com/docs/instagram-basic-display-api/guides/long-lived-access-tokens
+
     private readonly HttpClient apiClient;
     private readonly HttpClient graphClient;
     private readonly IConfiguration config;

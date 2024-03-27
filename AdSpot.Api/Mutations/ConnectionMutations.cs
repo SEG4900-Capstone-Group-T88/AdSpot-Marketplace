@@ -39,10 +39,18 @@ public class ConnectionMutations
         var token = tokenResponse["access_token"]?.ToString();
         if (token is not null)
         {
+            var user = await service.GetUser(token);
+            var handle = user["username"].ToString();
+
+            var expiresIn = tokenResponse.Value<int>("expires_in");
+            var expirationDate = DateTime.UtcNow.AddSeconds(expiresIn);
+
             var connection = repo.AddOrUpdateConnection(new Connection
             {
+                Handle = handle,
                 PlatformId = platformId,
                 Token = token,
+                TokenExpiration = expirationDate,
                 UserId = userId
             });
             return connection.FirstOrDefault();
