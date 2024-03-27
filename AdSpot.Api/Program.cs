@@ -4,7 +4,10 @@ var config = builder.Configuration;
 builder.Services.AddDbContext<AdSpotDbContext>(
     options => options.UseNpgsql(config.GetConnectionString("Postgres")));
 
+builder.Services.AddHttpClient();
+
 builder.Services
+    .AddScoped<InstagramService>()
     .AddScoped<ConnectionRepository>()
     .AddScoped<ListingRepository>()
     .AddScoped<ListingTypeRepository>()
@@ -31,6 +34,7 @@ builder.Services
     .AddSorting()
     .RegisterDbContext<AdSpotDbContext>()
     .RegisterService<IConfiguration>()
+    .RegisterService<InstagramService>()
     .RegisterService<ConnectionRepository>()
     .RegisterService<ListingRepository>()
     .RegisterService<ListingTypeRepository>()
