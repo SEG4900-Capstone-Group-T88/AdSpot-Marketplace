@@ -54,19 +54,19 @@ public static class DatabaseInitializer
         if (dbContext.Connections.FirstOrDefault() is null)
         {
             var connections = new List<Connection>();
-            for (var i = 1; i <= numUsers; i++)
+            dbContext.Users.ToList().ForEach(user =>
             {
                 dbContext.Platforms.ToList().ForEach(platform =>
                 {
                     connections.Add(new Connection
                     {
-                        UserId = i,
+                        UserId = user.UserId,
                         PlatformId = platform.PlatformId,
-                        Handle = $"user{i}-{platform.Name.ToLower()}",
+                        Handle = $"user{user.UserId}-{platform.Name.ToLower()}",
                         Token = "token"
                     });
                 });
-            }
+            });
 
             dbContext.Connections.AddRange(connections);
             dbContext.SaveChanges();
@@ -99,7 +99,7 @@ public static class DatabaseInitializer
             var maxPrice = 1000;
 
             var listings = new List<Listing>();
-            for (var i = 1; i <= numUsers; i++)
+            dbContext.Users.ToList().ForEach(user =>
             {
                 dbContext.Platforms.ToList().ForEach(platform =>
                 {
@@ -113,16 +113,15 @@ public static class DatabaseInitializer
                                 var price = (decimal)Math.Round(random.NextDouble() * (maxPrice - minPrice) + minPrice, 2);
                                 listings.Add(new Listing
                                 {
-                                    UserId = i,
+                                    UserId = user.UserId,
                                     PlatformId = platform.PlatformId,
                                     ListingTypeId = listingType.ListingTypeId,
                                     Price = price
                                 });
                             }
                         });
-
                 });
-            }
+            });
 
             dbContext.Listings.AddRange(listings);
             dbContext.SaveChanges();
