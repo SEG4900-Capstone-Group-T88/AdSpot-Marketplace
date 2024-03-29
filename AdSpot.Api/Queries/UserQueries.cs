@@ -3,8 +3,10 @@
 [QueryType]
 public class UserQueries
 {
+    [UsePaging]
     [UseProjection]
     [UseFiltering]
+    [UseSorting]
     public IQueryable<User> GetUsers(UserRepository repo)
     {
         return repo.GetAllUsers();

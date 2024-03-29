@@ -9,95 +9,121 @@ public static class DatabaseInitializer
 
         dbContext.Database.EnsureCreated();
 
+        var random = new Random();
+        var numUsers = 100;
+
         if (dbContext.Users.FirstOrDefault() is null)
         {
-            var users = new List<User>
+            var users = new List<User>();
+
+            for (var i = 1; i <= numUsers; i++)
+            {
+                users.Add(new User
+                {
+                    Email = $"user{i}",
+                    Password = $"user{i}",
+                    FirstName = $"User",
+                    LastName = $"{i}"
+                });
+            }
+            users.AddRange(new List<User>
             {
                 new User { Email = "matt", Password = "matt", FirstName = "Matthew", LastName = "Sia" },
                 new User { Email = "akarsh", Password = "akarsh", FirstName = "Akarsh", LastName = "Gharge" },
                 new User { Email = "demian", Password = "demian", FirstName = "Demian", LastName = "Oportus" }
-            };
+            });
+
             dbContext.Users.AddRange(users);
             dbContext.SaveChanges();
         }
 
+        var platforms = new List<Platform>
+        {
+            new Platform { Name = "Facebook" },
+            new Platform { Name = "Twitter" },
+            new Platform { Name = "Instagram" },
+            new Platform { Name = "Youtube" }
+        };
+
         if (dbContext.Platforms.FirstOrDefault() is null)
         {
-            var platforms = new List<Platform>
-            {
-                new Platform { Name = "Facebook" },
-                new Platform { Name = "Twitter" },
-                new Platform { Name = "Instagram" },
-                new Platform { Name = "Youtube" }
-            };
             dbContext.Platforms.AddRange(platforms);
             dbContext.SaveChanges();
         }
 
         if (dbContext.Connections.FirstOrDefault() is null)
         {
-            var connections = new List<Connection>
+            var connections = new List<Connection>();
+            for (var i = 1; i <= numUsers; i++)
             {
-                new Connection { UserId = 1, PlatformId = 1, Handle = "matt-fb", Token = "token" },
-                new Connection { UserId = 1, PlatformId = 2, Handle = "matt-twitter", Token = "token" },
-                new Connection { UserId = 1, PlatformId = 3, Handle = "matt-ig", Token = "token" },
-                new Connection { UserId = 1, PlatformId = 4, Handle = "matt-yt", Token = "token" },
+                dbContext.Platforms.ToList().ForEach(platform =>
+                {
+                    connections.Add(new Connection
+                    {
+                        UserId = i,
+                        PlatformId = platform.PlatformId,
+                        Handle = $"user{i}-{platform.Name.ToLower()}",
+                        Token = "token"
+                    });
+                });
+            }
 
-                new Connection { UserId = 2, PlatformId = 1, Handle = "akarsh-fb", Token = "token" },
-                new Connection { UserId = 2, PlatformId = 2, Handle = "akarsh-twitter", Token = "token" },
-                new Connection { UserId = 2, PlatformId = 3, Handle = "akarsh-ig", Token = "token" },
-                new Connection { UserId = 2, PlatformId = 4, Handle = "akarsh-yt", Token = "token" }
-            };
             dbContext.Connections.AddRange(connections);
             dbContext.SaveChanges();
         }
 
+        var listingTypes = new List<ListingType>
+        {
+            new ListingType { Name = "Post", PlatformId = 1 },
+            new ListingType { Name = "Share", PlatformId = 1 },
+
+            new ListingType { Name = "Tweet", PlatformId = 2 },
+            new ListingType { Name = "Retweet", PlatformId = 2 },
+
+            new ListingType { Name = "Story", PlatformId = 3 },
+            new ListingType { Name = "Post", PlatformId = 3 },
+
+            new ListingType { Name = "Video", PlatformId = 4 },
+            new ListingType { Name = "Stream", PlatformId = 4 }
+        };
+
         if (dbContext.ListingTypes.FirstOrDefault() is null)
         {
-            var listingTypes = new List<ListingType>
-            {
-                new ListingType { Name = "Post", PlatformId = 1 },
-                new ListingType { Name = "Share", PlatformId = 1 },
-
-                new ListingType { Name = "Tweet", PlatformId = 2 },
-                new ListingType { Name = "Reweet", PlatformId = 2 },
-
-                new ListingType { Name = "Story", PlatformId = 3 },
-                new ListingType { Name = "Post", PlatformId = 3 },
-
-                new ListingType { Name = "Video", PlatformId = 4 },
-                new ListingType { Name = "Stream", PlatformId = 4 }
-            };
             dbContext.ListingTypes.AddRange(listingTypes);
             dbContext.SaveChanges();
         }
 
         if (dbContext.Listings.FirstOrDefault() is null)
         {
-            var listings = new List<Listing>
-            {
-                new Listing { UserId = 1, ListingTypeId = 1, Price = 10 },
-                new Listing { UserId = 1, ListingTypeId = 2, Price = 20 },
-                new Listing { UserId = 1, ListingTypeId = 3, Price = 30 },
-                new Listing { UserId = 1, ListingTypeId = 4, Price = 40 },
-                new Listing { UserId = 1, ListingTypeId = 5, Price = 50 },
-                new Listing { UserId = 1, ListingTypeId = 6, Price = 60 },
-                new Listing { UserId = 1, ListingTypeId = 7, Price = 70 },
-                new Listing { UserId = 1, ListingTypeId = 8, Price = 80 },
+            var minPrice = 1;
+            var maxPrice = 1000;
 
-                new Listing { UserId = 2, ListingTypeId = 1, Price = 50 },
-                new Listing { UserId = 2, ListingTypeId = 2, Price = 60 },
-                new Listing { UserId = 2, ListingTypeId = 3, Price = 70 },
-                new Listing { UserId = 2, ListingTypeId = 4, Price = 80 },
-                new Listing { UserId = 2, ListingTypeId = 5, Price = 90 },
-                new Listing { UserId = 2, ListingTypeId = 6, Price = 100 },
-                new Listing { UserId = 2, ListingTypeId = 7, Price = 110 },
-                new Listing { UserId = 2, ListingTypeId = 8, Price = 120 },
-            };
-            foreach (var listing in listings)
+            var listings = new List<Listing>();
+            for (var i = 1; i <= numUsers; i++)
             {
-                listing.PlatformId = dbContext.ListingTypes.Find(listing.ListingTypeId).PlatformId;
+                dbContext.Platforms.ToList().ForEach(platform =>
+                {
+                    dbContext.ListingTypes.Where(x => x.PlatformId == platform.PlatformId)
+                        .ToList()
+                        .ForEach(listingType =>
+                        {
+                            var probability = random.NextDouble();
+                            if (probability < 0.5)
+                            {
+                                var price = (decimal)Math.Round(random.NextDouble() * (maxPrice - minPrice) + minPrice, 2);
+                                listings.Add(new Listing
+                                {
+                                    UserId = i,
+                                    PlatformId = platform.PlatformId,
+                                    ListingTypeId = listingType.ListingTypeId,
+                                    Price = price
+                                });
+                            }
+                        });
+
+                });
             }
+
             dbContext.Listings.AddRange(listings);
             dbContext.SaveChanges();
         }
@@ -116,48 +142,38 @@ public static class DatabaseInitializer
 
         if (dbContext.Orders.FirstOrDefault() is null)
         {
-            var orders = new List<Order>
+            var numStatus = Enum.GetValues(typeof(OrderStatusEnum)).Length;
+            var orders = new List<Order>();
+            dbContext.Users.ToList().ForEach(user =>
             {
-                new Order { UserId = 1, ListingId = 9, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-11), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 1, ListingId = 10, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-10), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 1, ListingId = 9, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-9), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 1, ListingId = 10, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-8), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 1, ListingId = 9, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-7), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 1, ListingId = 10, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-6), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 1, ListingId = 9, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-5), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 1, ListingId = 10, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-4), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 1, ListingId = 9, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-3), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 1, ListingId = 10, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-2), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 1, ListingId = 9, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(-1), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 1, ListingId = 10, Description = "Do something",  OrderDate = DateTime.UtcNow.AddDays(0), OrderStatusId = OrderStatusEnum.Pending },
+                dbContext.Listings.ToList().ForEach(listing =>
+                {
+                    var probability = random.NextDouble();
+                    if (probability < 0.1 && listing.UserId != user.UserId)
+                    {
+                        var status = (OrderStatusEnum)random.Next(numStatus);
+                        orders.Add(new Order
+                        {
+                            UserId = user.UserId,
+                            ListingId = listing.ListingId,
+                            Description = @"Hey, everyone! Today, I'm super excited to talk to you about something that's been a game-changer for me as an influencer, and I think it's going to be huge for you too!
 
-                new Order { UserId = 1, ListingId = 11, Description = "Do something", OrderStatusId = OrderStatusEnum.Accepted },
-                new Order { UserId = 1, ListingId = 12, Description = "Do something", OrderStatusId = OrderStatusEnum.Accepted },
-                new Order { UserId = 1, ListingId = 13, Description = "Do something", OrderStatusId = OrderStatusEnum.Rejected },
-                new Order { UserId = 1, ListingId = 14, Description = "Do something", OrderStatusId = OrderStatusEnum.Rejected },
-                new Order { UserId = 1, ListingId = 15, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed, Deliverable = "Link to deliverable", Rating = 5 },
-                new Order { UserId = 1, ListingId = 16, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed, Deliverable = "Link to deliverable", Rating = 4 },
+It's called AdSpot! 🌟 Now, if you're anything like me, you're always looking for new and innovative ways to connect with brands that align with your values and your audience's interests. And let me tell you, AdSpot is the answer to that!
 
-                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-11), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-10), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-9), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-8), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-7), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-6), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-5), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-4), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-3), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-2), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 2, ListingId = 1, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(-1), OrderStatusId = OrderStatusEnum.Pending },
-                new Order { UserId = 2, ListingId = 2, Description = "Do something", OrderDate = DateTime.UtcNow.AddDays(0), OrderStatusId = OrderStatusEnum.Pending },
+AdSpot is this incredible online platform that brings influencers like us together with advertisers in a seamless and intuitive way. Whether you're into fashion, beauty, fitness, or whatever your niche may be, AdSpot has got you covered!
 
-                new Order { UserId = 2, ListingId = 3, Description = "Do something", OrderStatusId = OrderStatusEnum.Accepted },
-                new Order { UserId = 2, ListingId = 4, Description = "Do something", OrderStatusId = OrderStatusEnum.Accepted },
-                new Order { UserId = 2, ListingId = 5, Description = "Do something", OrderStatusId = OrderStatusEnum.Rejected },
-                new Order { UserId = 2, ListingId = 6, Description = "Do something", OrderStatusId = OrderStatusEnum.Rejected },
-                new Order { UserId = 2, ListingId = 7, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed, Deliverable = "Link to deliverable", Rating = 5 },
-                new Order { UserId = 2, ListingId = 8, Description = "Do something", OrderStatusId = OrderStatusEnum.Completed, Deliverable = "Link to deliverable", Rating = 4 }
-            };
+One of the things I love most about AdSpot is how easy it is to use. With advanced search filters, you can quickly find campaigns that match your style and preferences. And the best part? You get to set your own rates and terms, giving you full control over your collaborations!
+
+But wait, there's more! AdSpot also offers a secure payment system, ensuring that you get compensated fairly and on time for your hard work. Plus, their dedicated support team is always there to assist you every step of the way.
+
+So, if you're ready to take your influencer game to the next level and connect with amazing brands, then head over to AdSpot today! I've left the link in the description below so you can check it out for yourself. Trust me, you won't regret it!
+
+Thanks for watching, guys! And remember, the opportunities are endless with AdSpot. Let's make some magic happen together! 💫",
+                            OrderStatusId = status
+                        });
+                    }
+                });
+            });
 
             foreach (var order in orders)
             {
