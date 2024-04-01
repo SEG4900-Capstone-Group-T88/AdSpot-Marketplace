@@ -114,8 +114,8 @@ public static class DatabaseInitializer
                                 listings.Add(new Listing
                                 {
                                     UserId = user.UserId,
-                                    PlatformId = platform.PlatformId,
                                     ListingTypeId = listingType.ListingTypeId,
+                                    PlatformId = listingType.PlatformId,
                                     Price = price
                                 });
                             }
