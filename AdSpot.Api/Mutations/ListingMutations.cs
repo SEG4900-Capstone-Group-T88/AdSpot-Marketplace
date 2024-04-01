@@ -4,11 +4,14 @@
 public class ListingMutations
 {
     [UseProjection]
-    public IQueryable<Listing> AddListing(int platformId, int listingTypeId, int userId, decimal price, ListingRepository repo)
+    public IQueryable<Listing> AddListing(int listingTypeId, int userId, decimal price,
+        ListingRepository listingRepo, ListingTypeRepository listingTypesRepo)
     {
-        var listing = repo.AddListing(new Listing
+        var listingType = listingTypesRepo.GetListingTypeById(listingTypeId).FirstOrDefault();
+
+        var listing = listingRepo.AddListing(new Listing
         {
-            PlatformId = platformId,
+            PlatformId = listingType.PlatformId,
             ListingTypeId = listingTypeId,
             UserId = userId,
             Price = price

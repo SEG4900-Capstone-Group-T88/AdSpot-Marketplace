@@ -13,4 +13,9 @@ public class ListingTypeRepository
     {
         return context.ListingTypes;
     }
+
+    public IQueryable<ListingType> GetListingTypeById(int listingTypeId)
+    {
+        return context.ListingTypes.Where(x => x.ListingTypeId == listingTypeId);
+    }
 }
