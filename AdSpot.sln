@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdSpot.Models", "AdSpot.Mod
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{77909683-2752-4C60-B846-950469B0404D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdSpot.Test", "AdSpot.Test\AdSpot.Test.csproj", "{ECE3CB62-452D-4518-A12A-9547BEED6836}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdSpot.Test", "AdSpot.Test\AdSpot.Test.csproj", "{ECE3CB62-452D-4518-A12A-9547BEED6836}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdSpot.Extensions", "AdSpot.Extensions\AdSpot.Extensions.csproj", "{63C1D29C-D766-4E76-A23A-A2A32937EA90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{ECE3CB62-452D-4518-A12A-9547BEED6836}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECE3CB62-452D-4518-A12A-9547BEED6836}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECE3CB62-452D-4518-A12A-9547BEED6836}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63C1D29C-D766-4E76-A23A-A2A32937EA90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63C1D29C-D766-4E76-A23A-A2A32937EA90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63C1D29C-D766-4E76-A23A-A2A32937EA90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63C1D29C-D766-4E76-A23A-A2A32937EA90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

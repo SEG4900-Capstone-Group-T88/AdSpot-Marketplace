@@ -6,9 +6,9 @@ public class InstagramService
 
     private readonly HttpClient apiClient;
     private readonly HttpClient graphClient;
-    private readonly IConfiguration config;
+    private readonly IOptions<OAuthOptions> oauthOptions;
 
-    public InstagramService(IHttpClientFactory httpClientFactory, IConfiguration config)
+    public InstagramService(IHttpClientFactory httpClientFactory, IOptions<OAuthOptions> oauthOptions)
     {
         apiClient = httpClientFactory.CreateClient();
         apiClient.BaseAddress = new Uri("https://api.instagram.com/");
@@ -16,17 +16,17 @@ public class InstagramService
         graphClient = httpClientFactory.CreateClient();
         graphClient.BaseAddress = new Uri("https://graph.instagram.com/");
 
-        this.config = config;
+        this.oauthOptions = oauthOptions;
     }
 
     public async Task<HttpResponseMessage> ExchangeAuthCodeForAccessToken(string code)
     {
         var body = new FormUrlEncodedContent(new Dictionary<string, string>
         {
-            { "client_id", config["OAuth:Instagram:ClientId"] },
-            { "client_secret", config["OAuth:Instagram:ClientSecret"] },
+            { "client_id", oauthOptions.Value.Instagram.ClientId },
+            { "client_secret", oauthOptions.Value.Instagram.ClientSecret },
             { "grant_type", "authorization_code" },
-            { "redirect_uri", config["OAuth:Instagram:RedirectUri"] },
+            { "redirect_uri", oauthOptions.Value.Instagram.RedirectUri },
             { "code", code }
         });
 
@@ -34,7 +34,7 @@ public class InstagramService
         return response;
     }
 
-    public async Task<JObject> GetUser(string accessToken)
+    public async Task<JObject?> GetUser(string accessToken)
     {
         var parameters = new FormUrlEncodedContent(new Dictionary<string, string>
         {
@@ -48,12 +48,12 @@ public class InstagramService
         return obj;
     }
 
-    public async Task<JObject> GetLongLivedToken(string accessToken)
+    public async Task<JObject?> GetLongLivedToken(string accessToken)
     {
         var parameters = new FormUrlEncodedContent(new Dictionary<string, string>
         {
             { "grant_type", "ig_exchange_token" },
-            { "client_secret", config["OAuth:Instagram:ClientSecret"] },
+            { "client_secret", oauthOptions.Value.Instagram.ClientSecret },
             { "access_token", accessToken }
         });
         var query = await parameters.ReadAsStringAsync();
@@ -63,7 +63,7 @@ public class InstagramService
         return obj;
     }
 
-    public async Task<JObject> RefreshToken(string accessToken)
+    public async Task<JObject?> RefreshToken(string accessToken)
     {
         var parameters = new FormUrlEncodedContent(new Dictionary<string, string>
         {

@@ -174,7 +174,7 @@ Thanks for watching, guys! And remember, the opportunities are endless with AdSp
             foreach (var order in orders)
             {
                 var listing = dbContext.Listings.Find(order.ListingId);
-                order.Price = listing.Price;
+                order.Price = listing!.Price;
             }
             dbContext.Orders.AddRange(orders);
             dbContext.SaveChanges();

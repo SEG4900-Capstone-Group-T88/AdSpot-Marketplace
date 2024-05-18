@@ -1,6 +1,10 @@
 ﻿var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
+var jwtOptions = builder.Services.AddAndValidateOptions<JwtOptions>(config);
+var endpointsOptions = builder.Services.AddAndValidateOptions<EndpointsOptions>(config);
+var oauthOptions = builder.Services.AddAndValidateOptions<OAuthOptions>(config);
+
 builder.Services.AddDbContext<AdSpotDbContext>(
     options => options.UseNpgsql(config.GetConnectionString("Postgres")));
 
@@ -56,17 +60,17 @@ builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = config["Jwt:Issuer"];
-        options.Audience = config["Jwt:Audience"];
+        options.Authority = jwtOptions.Issuer;
+        options.Audience = jwtOptions.Audience;
 
         options.TokenValidationParameters =
             new TokenValidationParameters
             {
-                ValidIssuer = config["Jwt:Issuer"],
-                ValidAudience = config["Jwt:Audience"],
+                ValidIssuer = jwtOptions.Issuer,
+                ValidAudience = jwtOptions.Audience,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(config["Jwt:Key"]))
+                    Encoding.UTF8.GetBytes(jwtOptions.Key))
             };
     });
 builder.Services.AddAuthorization();
@@ -75,7 +79,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("all", policy =>
     {
-        policy.WithOrigins(config["Endpoints:AdSpotClient"]);
+        policy.WithOrigins(endpointsOptions.AdSpotClient);
         policy.AllowAnyMethod();
         policy.AllowAnyHeader();
     });

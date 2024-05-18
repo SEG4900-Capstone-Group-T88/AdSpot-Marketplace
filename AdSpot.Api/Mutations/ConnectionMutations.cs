@@ -32,28 +32,31 @@ public class ConnectionMutations
         {
             var content = await response.Content.ReadAsStringAsync();
             var error = JsonConvert.DeserializeObject<JObject>(content);
-            return new(new InstagramOauthError(error));
+            return new(new InstagramOauthError(error!));
         }
 
         var tokenResponse = await service.GetLongLivedToken(json.AccessToken);
-        var token = tokenResponse["access_token"]?.ToString();
-        if (token is not null)
+        var token = tokenResponse?.Value<string>("access_token");
+        if (tokenResponse is not null && token is not null)
         {
             var user = await service.GetUser(token);
-            var handle = user["username"].ToString();
+            var handle = user?.Value<string>("username");
 
-            var expiresIn = tokenResponse.Value<int>("expires_in");
-            var expirationDate = DateTime.UtcNow.AddSeconds(expiresIn);
-
-            var connection = repo.AddOrUpdateConnection(new Connection
+            if (handle is not null)
             {
-                Handle = handle,
-                PlatformId = platformId,
-                Token = token,
-                TokenExpiration = expirationDate,
-                UserId = userId
-            });
-            return connection.FirstOrDefault();
+                var expiresIn = tokenResponse.Value<int>("expires_in");
+                var expirationDate = DateTime.UtcNow.AddSeconds(expiresIn);
+
+                var connection = repo.AddOrUpdateConnection(new Connection
+                {
+                    Handle = handle,
+                    PlatformId = platformId,
+                    Token = token,
+                    TokenExpiration = expirationDate,
+                    UserId = userId
+                });
+                return connection.FirstOrDefault();
+            }
         }
 
         return null;

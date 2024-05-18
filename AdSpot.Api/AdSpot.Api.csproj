@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AdSpot.Extensions\AdSpot.Extensions.csproj" />
     <ProjectReference Include="..\AdSpot.Models\AdSpot.Models.csproj" />
   </ItemGroup>
 
