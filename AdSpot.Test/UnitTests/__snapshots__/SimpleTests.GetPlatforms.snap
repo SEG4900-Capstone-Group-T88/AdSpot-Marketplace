@@ -1,0 +1,62 @@
+{
+  "data": {
+    "platforms": [
+      {
+        "platformId": 4,
+        "name": "Youtube",
+        "listingTypes": [
+          {
+            "listingTypeId": 8,
+            "name": "Stream"
+          },
+          {
+            "listingTypeId": 7,
+            "name": "Video"
+          }
+        ]
+      },
+      {
+        "platformId": 3,
+        "name": "Instagram",
+        "listingTypes": [
+          {
+            "listingTypeId": 6,
+            "name": "Post"
+          },
+          {
+            "listingTypeId": 5,
+            "name": "Story"
+          }
+        ]
+      },
+      {
+        "platformId": 2,
+        "name": "Twitter",
+        "listingTypes": [
+          {
+            "listingTypeId": 4,
+            "name": "Retweet"
+          },
+          {
+            "listingTypeId": 3,
+            "name": "Tweet"
+          }
+        ]
+      },
+      {
+        "platformId": 1,
+        "name": "Facebook",
+        "listingTypes": [
+          {
+            "listingTypeId": 2,
+            "name": "Share"
+          },
+          {
+            "listingTypeId": 1,
+            "name": "Post"
+          }
+        ]
+      }
+    ]
+  }
+}

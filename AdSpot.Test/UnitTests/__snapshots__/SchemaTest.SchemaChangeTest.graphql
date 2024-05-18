@@ -1,0 +1,544 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+interface Error {
+  message: String!
+}
+
+type AccountWithEmailAlreadyExistsError implements Error {
+  message: String!
+}
+
+type AddConnectionPayload {
+  connection: [Connection!]
+}
+
+type AddListingPayload {
+  listing: [Listing!]
+}
+
+type AddUserPayload {
+  user: User
+  token: String
+  errors: [AddUserError!]
+}
+
+type CannotOrderOwnListingError implements Error {
+  message: String!
+}
+
+type Connection {
+  handle: String!
+  token: String!
+  tokenExpiration: DateTime!
+  userId: Int!
+  user: User!
+  platformId: Int!
+  platform: Platform!
+}
+
+type DeleteUserPayload {
+  user: User
+}
+
+type ExchangeInstagramAuthCodeForTokenPayload {
+  connection: Connection
+  errors: [ExchangeInstagramAuthCodeForTokenError!]
+}
+
+type InstagramOauthError implements Error {
+  message: String!
+}
+
+type InvalidListingIdError implements Error {
+  message: String!
+}
+
+type Listing {
+  listingId: Int!
+  platformId: Int!
+  platform: Platform!
+  listingTypeId: Int!
+  listingType: ListingType!
+  userId: Int!
+  user: User!
+  price: Decimal!
+  connection: Connection!
+  orders: [Order!]!
+}
+
+type ListingPriceHasChangedError implements Error {
+  message: String!
+}
+
+type ListingType {
+  listingTypeId: Int!
+  name: String!
+  platformId: Int!
+  platform: Platform!
+  listings: [Listing!]!
+}
+
+type LoginPayload {
+  user: User
+  token: String
+  errors: [LoginError!]
+}
+
+type Mutation {
+  addConnection(input: AddConnectionInput!): AddConnectionPayload!
+  exchangeInstagramAuthCodeForToken(input: ExchangeInstagramAuthCodeForTokenInput!): ExchangeInstagramAuthCodeForTokenPayload!
+  addListing(input: AddListingInput!): AddListingPayload!
+  orderListing(input: OrderListingInput!): OrderListingPayload!
+  addUser(input: AddUserInput!): AddUserPayload!
+  deleteUser(input: DeleteUserInput!): DeleteUserPayload!
+  updatePassword(input: UpdatePasswordInput!): UpdatePasswordPayload!
+  login(input: LoginInput!): LoginPayload!
+}
+
+type Order {
+  orderId: Int!
+  orderDate: DateTime!
+  orderStatusId: OrderStatusEnum!
+  orderStatus: OrderStatus!
+  listingId: Int!
+  listing: Listing!
+  userId: Int!
+  user: User!
+  price: Decimal!
+  description: String!
+}
+
+type OrderListingPayload {
+  order: Order
+  errors: [OrderListingError!]
+}
+
+type OrderStatus {
+  orderStatusId: OrderStatusEnum!
+  name: String!
+  orders: [Order!]!
+}
+
+"A connection to a list of items."
+type OrdersByStatusConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [OrdersByStatusEdge!]
+  "A flattened list of the nodes."
+  nodes: [Order!]
+  "Identifies the total count of items in the connection."
+  totalCount: Int!
+}
+
+"An edge in a connection."
+type OrdersByStatusEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Order!
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+  "Indicates whether more edges exist following the set defined by the clients arguments."
+  hasNextPage: Boolean!
+  "Indicates whether more edges exist prior the set defined by the clients arguments."
+  hasPreviousPage: Boolean!
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
+}
+
+type Platform {
+  platformId: Int!
+  name: String!
+  listingTypes: [ListingType!]!
+}
+
+type Query {
+  connection(userId: Int! platformId: Int!): [Connection!]!
+  orders(where: OrderFilterInput): [Order!]!
+  orderById(orderId: Int!): Order
+  ordersByStatus(userId: Int! status: OrderStatusEnum! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [OrderSortInput!]): OrdersByStatusConnection
+  requestsByStatus(userId: Int! status: OrderStatusEnum! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [OrderSortInput!]): RequestsByStatusConnection
+  platforms: [Platform!]!
+  users("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: UserFilterInput order: [UserSortInput!]): UsersConnection
+  userById(userId: Int!): User
+}
+
+"A connection to a list of items."
+type RequestsByStatusConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [RequestsByStatusEdge!]
+  "A flattened list of the nodes."
+  nodes: [Order!]
+  "Identifies the total count of items in the connection."
+  totalCount: Int!
+}
+
+"An edge in a connection."
+type RequestsByStatusEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Order!
+}
+
+type UpdatePasswordPayload {
+  user: User
+}
+
+type User {
+  userId: Int!
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  connections: [Connection!]!
+  listings: [Listing!]!
+  orders: [Order!]!
+}
+
+type UserInvalidCredentialsError implements Error {
+  message: String!
+}
+
+type UserNotFoundError implements Error {
+  message: String!
+}
+
+"A connection to a list of items."
+type UsersConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [UsersEdge!]
+  "A flattened list of the nodes."
+  nodes: [User!]
+  "Identifies the total count of items in the connection."
+  totalCount: Int!
+}
+
+"An edge in a connection."
+type UsersEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: User!
+}
+
+union AddUserError = AccountWithEmailAlreadyExistsError
+
+union ExchangeInstagramAuthCodeForTokenError = InstagramOauthError
+
+union LoginError = UserNotFoundError | UserInvalidCredentialsError
+
+union OrderListingError = InvalidListingIdError | CannotOrderOwnListingError | ListingPriceHasChangedError
+
+input AddConnectionInput {
+  platformId: Int!
+  accountHandle: String!
+  apiToken: String!
+  userId: Int!
+}
+
+input AddListingInput {
+  listingTypeId: Int!
+  userId: Int!
+  price: Decimal!
+}
+
+input AddUserInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+}
+
+input ConnectionFilterInput {
+  and: [ConnectionFilterInput!]
+  or: [ConnectionFilterInput!]
+  handle: StringOperationFilterInput
+  token: StringOperationFilterInput
+  tokenExpiration: DateTimeOperationFilterInput
+  userId: IntOperationFilterInput
+  user: UserFilterInput
+  platformId: IntOperationFilterInput
+  platform: PlatformFilterInput
+}
+
+input ConnectionSortInput {
+  handle: SortEnumType
+  token: SortEnumType
+  tokenExpiration: SortEnumType
+  userId: SortEnumType
+  user: UserSortInput
+  platformId: SortEnumType
+  platform: PlatformSortInput
+}
+
+input DateTimeOperationFilterInput {
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime]
+  nin: [DateTime]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+input DecimalOperationFilterInput {
+  eq: Decimal
+  neq: Decimal
+  in: [Decimal]
+  nin: [Decimal]
+  gt: Decimal
+  ngt: Decimal
+  gte: Decimal
+  ngte: Decimal
+  lt: Decimal
+  nlt: Decimal
+  lte: Decimal
+  nlte: Decimal
+}
+
+input DeleteUserInput {
+  userId: Int!
+}
+
+input ExchangeInstagramAuthCodeForTokenInput {
+  userId: Int!
+  platformId: Int!
+  authCode: String!
+}
+
+input IntOperationFilterInput {
+  eq: Int
+  neq: Int
+  in: [Int]
+  nin: [Int]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
+}
+
+input ListFilterInputTypeOfConnectionFilterInput {
+  all: ConnectionFilterInput
+  none: ConnectionFilterInput
+  some: ConnectionFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfListingFilterInput {
+  all: ListingFilterInput
+  none: ListingFilterInput
+  some: ListingFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfListingTypeFilterInput {
+  all: ListingTypeFilterInput
+  none: ListingTypeFilterInput
+  some: ListingTypeFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfOrderFilterInput {
+  all: OrderFilterInput
+  none: OrderFilterInput
+  some: OrderFilterInput
+  any: Boolean
+}
+
+input ListingFilterInput {
+  and: [ListingFilterInput!]
+  or: [ListingFilterInput!]
+  listingId: IntOperationFilterInput
+  platformId: IntOperationFilterInput
+  platform: PlatformFilterInput
+  listingTypeId: IntOperationFilterInput
+  listingType: ListingTypeFilterInput
+  userId: IntOperationFilterInput
+  user: UserFilterInput
+  price: DecimalOperationFilterInput
+  connection: ConnectionFilterInput
+  orders: ListFilterInputTypeOfOrderFilterInput
+}
+
+input ListingSortInput {
+  listingId: SortEnumType
+  platformId: SortEnumType
+  platform: PlatformSortInput
+  listingTypeId: SortEnumType
+  listingType: ListingTypeSortInput
+  userId: SortEnumType
+  user: UserSortInput
+  price: SortEnumType
+  connection: ConnectionSortInput
+}
+
+input ListingTypeFilterInput {
+  and: [ListingTypeFilterInput!]
+  or: [ListingTypeFilterInput!]
+  listingTypeId: IntOperationFilterInput
+  name: StringOperationFilterInput
+  platformId: IntOperationFilterInput
+  platform: PlatformFilterInput
+  listings: ListFilterInputTypeOfListingFilterInput
+}
+
+input ListingTypeSortInput {
+  listingTypeId: SortEnumType
+  name: SortEnumType
+  platformId: SortEnumType
+  platform: PlatformSortInput
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input OrderFilterInput {
+  and: [OrderFilterInput!]
+  or: [OrderFilterInput!]
+  orderId: IntOperationFilterInput
+  orderDate: DateTimeOperationFilterInput
+  orderStatusId: OrderStatusEnumOperationFilterInput
+  orderStatus: OrderStatusFilterInput
+  listingId: IntOperationFilterInput
+  listing: ListingFilterInput
+  userId: IntOperationFilterInput
+  user: UserFilterInput
+  price: DecimalOperationFilterInput
+  description: StringOperationFilterInput
+}
+
+input OrderListingInput {
+  listingId: Int!
+  userId: Int!
+  price: Decimal!
+  description: String!
+}
+
+input OrderSortInput {
+  orderId: SortEnumType
+  orderDate: SortEnumType
+  orderStatusId: SortEnumType
+  orderStatus: OrderStatusSortInput
+  listingId: SortEnumType
+  listing: ListingSortInput
+  userId: SortEnumType
+  user: UserSortInput
+  price: SortEnumType
+  description: SortEnumType
+}
+
+input OrderStatusEnumOperationFilterInput {
+  eq: OrderStatusEnum
+  neq: OrderStatusEnum
+  in: [OrderStatusEnum!]
+  nin: [OrderStatusEnum!]
+}
+
+input OrderStatusFilterInput {
+  and: [OrderStatusFilterInput!]
+  or: [OrderStatusFilterInput!]
+  orderStatusId: OrderStatusEnumOperationFilterInput
+  name: StringOperationFilterInput
+  orders: ListFilterInputTypeOfOrderFilterInput
+}
+
+input OrderStatusSortInput {
+  orderStatusId: SortEnumType
+  name: SortEnumType
+}
+
+input PlatformFilterInput {
+  and: [PlatformFilterInput!]
+  or: [PlatformFilterInput!]
+  platformId: IntOperationFilterInput
+  name: StringOperationFilterInput
+  listingTypes: ListFilterInputTypeOfListingTypeFilterInput
+}
+
+input PlatformSortInput {
+  platformId: SortEnumType
+  name: SortEnumType
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+  endsWith: String
+  nendsWith: String
+}
+
+input UpdatePasswordInput {
+  userId: Int!
+  password: String!
+}
+
+input UserFilterInput {
+  and: [UserFilterInput!]
+  or: [UserFilterInput!]
+  userId: IntOperationFilterInput
+  email: StringOperationFilterInput
+  password: StringOperationFilterInput
+  firstName: StringOperationFilterInput
+  lastName: StringOperationFilterInput
+  connections: ListFilterInputTypeOfConnectionFilterInput
+  listings: ListFilterInputTypeOfListingFilterInput
+  orders: ListFilterInputTypeOfOrderFilterInput
+}
+
+input UserSortInput {
+  userId: SortEnumType
+  email: SortEnumType
+  password: SortEnumType
+  firstName: SortEnumType
+  lastName: SortEnumType
+}
+
+enum OrderStatusEnum {
+  PENDING
+  ACCEPTED
+  REJECTED
+  COMPLETED
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")
+
+"The built-in `Decimal` scalar type."
+scalar Decimal
