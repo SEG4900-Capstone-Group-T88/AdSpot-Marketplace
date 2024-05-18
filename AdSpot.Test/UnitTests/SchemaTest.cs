@@ -1,6 +1,4 @@
-﻿using CookieCrumble;
-
-namespace AdSpot.Test.UnitTests;
+﻿namespace AdSpot.Test.UnitTests;
 
 public class SchemaTest
 {

@@ -21,4 +21,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UnitTests\__snapshots__\__MISMATCH__\" />
+  </ItemGroup>
+
 </Project>

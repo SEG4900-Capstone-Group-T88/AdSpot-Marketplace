@@ -5,6 +5,10 @@ public static class TestServices
     static TestServices()
     {
         Services = new ServiceCollection()
+            // Database
+            .AddDbContext<AdSpotDbContext>(
+                o => o.UseInMemoryDatabase("adspot-inmemory-db"))
+
             // Services
             .AddScoped<InstagramService>()
 
@@ -57,6 +61,8 @@ public static class TestServices
             .BuildServiceProvider();
 
         Executor = Services.GetRequiredService<RequestExecutorProxy>();
+
+        Services.GetRequiredService<AdSpotDbContext>().SeedDatabase();
     }
 
     public static IServiceProvider Services { get; }

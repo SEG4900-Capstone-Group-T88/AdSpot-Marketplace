@@ -2,14 +2,11 @@
 
 public static class DatabaseInitializer
 {
-    public static void SeedDatabase(this IApplicationBuilder app)
+    public static void SeedDatabase(this AdSpotDbContext dbContext)
     {
-        using var scope = app.ApplicationServices.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<AdSpotDbContext>();
-
         dbContext.Database.EnsureCreated();
 
-        var random = new Random();
+        var random = new Random(0);
         var numUsers = 100;
 
         if (dbContext.Users.FirstOrDefault() is null)
@@ -184,5 +181,13 @@ Thanks for watching, guys! And remember, the opportunities are endless with AdSp
         }
 
         dbContext.SaveChanges();
+    }
+
+    public static void SeedDatabase(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+        using var dbContext = scope.ServiceProvider.GetRequiredService<AdSpotDbContext>();
+
+        dbContext.SeedDatabase();
     }
 }
