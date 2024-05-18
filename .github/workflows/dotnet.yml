@@ -23,7 +23,7 @@ jobs:
         run: dotnet restore ./AdSpot.sln
       - name: Build
         run: dotnet build --no-restore ./AdSpot.sln
-      - name: Test
-        run: dotnet test --no-build --verbosity normal ./AdSpot.sln
       - name: Lint
         run: dotnet format --verify-no-changes ./AdSpot.sln
+      - name: Test
+        run: dotnet test --no-build --verbosity normal ./AdSpot.sln

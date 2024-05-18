@@ -6,7 +6,7 @@ public class UserMutations
     [Error<AccountWithEmailAlreadyExistsError>]
     public MutationResult<AddUserPayload> AddUser(
         [UseFluentValidation, UseValidator<AddUserInputValidator>] AddUserInput input,
-        UserRepository repo, IConfiguration config)
+        UserRepository repo, [Service] IOptions<JwtOptions> jwtOptions)
     {
         var user = repo.GetUserByEmail(input.Email);
         if (user is not null)
@@ -22,7 +22,7 @@ public class UserMutations
             LastName = input.LastName
         });
 
-        var token = JwtUtils.GenerateToken(user, config);
+        var token = JwtUtils.GenerateToken(user, jwtOptions);
 
         return new AddUserPayload
         {
@@ -45,7 +45,8 @@ public class UserMutations
 
     [Error<UserNotFoundError>]
     [Error<UserInvalidCredentialsError>]
-    public MutationResult<LoginPayload> Login(string email, string password, UserRepository repo, [Service] IConfiguration config)
+    public MutationResult<LoginPayload> Login(string email, string password, UserRepository repo,
+        [Service] IOptions<JwtOptions> jwtOptions)
     {
         var user = repo.GetUserByEmail(email);
 
@@ -60,7 +61,7 @@ public class UserMutations
             return new(new UserInvalidCredentialsError());
         }
 
-        var token = JwtUtils.GenerateToken(user, config);
+        var token = JwtUtils.GenerateToken(user, jwtOptions);
 
         return new LoginPayload
         {

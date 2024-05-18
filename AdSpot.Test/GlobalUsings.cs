@@ -1,4 +1,5 @@
-﻿global using AdSpot.Api;
+﻿global using System.Collections.ObjectModel;
+global using AdSpot.Api;
 global using AdSpot.Api.Repositories;
 global using AdSpot.Api.Services;
 global using AdSpot.Api.Validators;

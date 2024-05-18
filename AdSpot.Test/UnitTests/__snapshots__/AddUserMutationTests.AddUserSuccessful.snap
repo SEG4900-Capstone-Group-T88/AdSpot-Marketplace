@@ -1,0 +1,13 @@
+{
+  "data": {
+    "addUser": {
+      "user": {
+        "userId": 104,
+        "email": "newuser",
+        "firstName": "new",
+        "lastName": "user"
+      },
+      "errors": null
+    }
+  }
+}
