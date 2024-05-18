@@ -1,0 +1,13 @@
+{
+  "data": {
+    "login": {
+      "user": null,
+      "errors": [
+        {
+          "__typename": "UserNotFoundError",
+          "message": "User with email `userdoesnotexist` not found"
+        }
+      ]
+    }
+  }
+}

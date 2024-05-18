@@ -1,11 +1,25 @@
-﻿namespace AdSpot.Test;
+﻿using AdSpot.Extensions;
+
+namespace AdSpot.Test;
 
 public static class TestServices
 {
     static TestServices()
     {
-        Services = new ServiceCollection()
-            // Database
+        var serviceCollection = new ServiceCollection();
+
+        var config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Development.json")
+            .Build();
+
+        serviceCollection.AddAndValidateOptions<JwtOptions>(config);
+        serviceCollection.AddAndValidateOptions<EndpointsOptions>(config);
+        serviceCollection.AddAndValidateOptions<OAuthOptions>(config);
+
+        ServiceProvider = serviceCollection
+            .AddScoped<IConfiguration>(sp => config)
+
             .AddDbContext<AdSpotDbContext>(
                 o => o.UseInMemoryDatabase("adspot-inmemory-db"))
 
@@ -60,12 +74,12 @@ public static class TestServices
                     Schema.DefaultName))
             .BuildServiceProvider();
 
-        Executor = Services.GetRequiredService<RequestExecutorProxy>();
+        Executor = ServiceProvider.GetRequiredService<RequestExecutorProxy>();
 
-        Services.GetRequiredService<AdSpotDbContext>().SeedDatabase();
+        ServiceProvider.GetRequiredService<AdSpotDbContext>().SeedDatabase();
     }
 
-    public static IServiceProvider Services { get; }
+    public static IServiceProvider ServiceProvider { get; }
 
     public static RequestExecutorProxy Executor { get; }
 
@@ -73,7 +87,7 @@ public static class TestServices
         Action<IQueryRequestBuilder> configureRequest,
         CancellationToken cancellationToken = default)
     {
-        var scope = Services.CreateAsyncScope();
+        var scope = ServiceProvider.CreateAsyncScope();
 
         var requestBuilder = new QueryRequestBuilder();
         requestBuilder.SetServices(scope.ServiceProvider);

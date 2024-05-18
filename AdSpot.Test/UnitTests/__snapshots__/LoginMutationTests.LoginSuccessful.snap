@@ -1,0 +1,13 @@
+{
+  "data": {
+    "login": {
+      "user": {
+        "userId": 1,
+        "email": "user1",
+        "firstName": "User",
+        "lastName": "1"
+      },
+      "errors": null
+    }
+  }
+}
