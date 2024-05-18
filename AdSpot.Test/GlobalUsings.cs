@@ -1,0 +1,10 @@
+﻿global using AdSpot.Api;
+global using AdSpot.Api.Repositories;
+global using AdSpot.Api.Services;
+global using AdSpot.Api.Validators;
+global using FluentValidation.AspNetCore;
+global using HotChocolate;
+global using HotChocolate.Execution;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Xunit;

@@ -7,13 +7,18 @@ builder.Services.AddDbContext<AdSpotDbContext>(
 builder.Services.AddHttpClient();
 
 builder.Services
+    // Services
     .AddScoped<InstagramService>()
+
+    // Repositories
     .AddScoped<ConnectionRepository>()
     .AddScoped<ListingRepository>()
     .AddScoped<ListingTypeRepository>()
     .AddScoped<OrderRepository>()
     .AddScoped<PlatformRepository>()
     .AddScoped<UserRepository>()
+
+    // Validators
     .AddScoped<AddUserInputValidator>();
 
 builder.Services
@@ -24,7 +29,6 @@ builder.Services
     .AddGraphQLServer()
     .AddAuthorization()
     .AddFluentValidation()
-    .AddQueryType()
     .UsePersistedQueryPipeline()
     .AddReadOnlyFileSystemQueryStorage("./PersistedQueries")
     .AddMutationConventions(applyToAllMutations: true)
@@ -32,6 +36,7 @@ builder.Services
     .AddProjections()
     .AddFiltering()
     .AddSorting()
+
     .RegisterDbContext<AdSpotDbContext>()
     .RegisterService<IConfiguration>()
     .RegisterService<InstagramService>()
@@ -41,6 +46,7 @@ builder.Services
     .RegisterService<OrderRepository>(ServiceKind.Resolver)
     .RegisterService<PlatformRepository>()
     .RegisterService<UserRepository>()
+
     .SetPagingOptions(new HotChocolate.Types.Pagination.PagingOptions
     {
         IncludeTotalCount = true,
