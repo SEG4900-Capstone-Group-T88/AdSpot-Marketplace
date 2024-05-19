@@ -1,4 +1,6 @@
-﻿namespace AdSpot.Api.Mutations;
+﻿using HotChocolate.Subscriptions;
+
+namespace AdSpot.Api.Mutations;
 
 [MutationType]
 public class ConnectionMutations
@@ -24,7 +26,8 @@ public class ConnectionMutations
     public async Task<MutationResult<Connection?>> ExchangeInstagramAuthCodeForToken(
         int userId, int platformId, string authCode,
         InstagramService service,
-        ConnectionRepository repo)
+        ConnectionRepository repo,
+        [Service] ITopicEventSender topicEventSender)
     {
         var response = await service.ExchangeAuthCodeForAccessToken(authCode);
         var json = await response.Content.ReadFromJsonAsync<ExchangeInstagramAuthCodeForTokenPayload>();
@@ -54,8 +57,12 @@ public class ConnectionMutations
                     Token = token,
                     TokenExpiration = expirationDate,
                     UserId = userId
-                });
-                return connection.FirstOrDefault();
+                }).FirstOrDefault();
+
+                var topicName = $"{userId}_{nameof(Subscription.OnAccountConnected)}";
+                await topicEventSender.SendAsync(topicName, connection);
+
+                return connection;
             }
         }
 
