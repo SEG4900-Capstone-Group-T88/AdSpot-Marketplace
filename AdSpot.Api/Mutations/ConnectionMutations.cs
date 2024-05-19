@@ -3,8 +3,10 @@
 [MutationType]
 public class ConnectionMutations
 {
+    [UseFirstOrDefault]
     [UseProjection]
-    public IQueryable<Connection> AddConnection(int platformId, string accountHandle, string apiToken, int userId,
+    public IQueryable<Connection> AddConnection(
+        int userId, int platformId, string accountHandle, string apiToken,
         ConnectionRepository repo)
     {
         var account = repo.AddConnection(new Connection
@@ -20,9 +22,7 @@ public class ConnectionMutations
 
     [Error<InstagramOauthError>]
     public async Task<MutationResult<Connection?>> ExchangeInstagramAuthCodeForToken(
-        int userId,
-        int platformId,
-        string authCode,
+        int userId, int platformId, string authCode,
         InstagramService service,
         ConnectionRepository repo)
     {

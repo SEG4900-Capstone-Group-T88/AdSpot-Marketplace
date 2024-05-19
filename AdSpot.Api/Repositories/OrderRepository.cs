@@ -14,11 +14,11 @@ public class OrderRepository
         return context.Orders;
     }
 
-    public Order AddOrder(Order order)
+    public IQueryable<Order> AddOrder(Order order)
     {
         context.Orders.Add(order);
         context.SaveChanges();
-        return order;
+        return context.Orders.Where(o => o.OrderId == order.OrderId);
     }
 
     public IQueryable<Order> GetOrderById(int orderId)

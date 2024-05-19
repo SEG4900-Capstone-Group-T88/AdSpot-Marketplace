@@ -3,11 +3,27 @@
 [MutationType]
 public class ListingMutations
 {
-    [UseProjection]
-    public IQueryable<Listing> AddListing(int listingTypeId, int userId, decimal price,
-        ListingRepository listingRepo, ListingTypeRepository listingTypesRepo)
+    //Seems like we can't use projections here
+    //[UseProjection]
+    [Error<InvalidListingTypeIdError>]
+    [Error<AccountHasNotBeenConnectedError>]
+    public MutationResult<IQueryable<Listing>> AddListing(
+        int listingTypeId, int userId, decimal price,
+        ConnectionRepository connectionRepo,
+        ListingRepository listingRepo,
+        ListingTypeRepository listingTypesRepo)
     {
         var listingType = listingTypesRepo.GetListingTypeById(listingTypeId).FirstOrDefault();
+        if (listingType is null)
+        {
+            return new(new InvalidListingTypeIdError(listingTypeId));
+        }
+
+        var connection = connectionRepo.GetConnection(userId, listingType.PlatformId).FirstOrDefault();
+        if (connection is null)
+        {
+            return new(new AccountHasNotBeenConnectedError(userId, listingType.PlatformId));
+        }
 
         var listing = listingRepo.AddListing(new Listing
         {
@@ -17,14 +33,15 @@ public class ListingMutations
             Price = price
         });
 
-        return listing;
+        return new(listing);
     }
 
-    // Seems like we can't use projections here
+    //Seems like we can't use projections here
+    //[UseProjection]
     [Error<InvalidListingIdError>]
     [Error<CannotOrderOwnListingError>]
     [Error<ListingPriceHasChangedError>]
-    public MutationResult<Order> OrderListing(int listingId, int userId, decimal price, string description,
+    public MutationResult<IQueryable<Order>> OrderListing(int listingId, int userId, decimal price, string description,
         ListingRepository listingRepo, OrderRepository orderRepo)
     {
         var listing = listingRepo.GetListingById(listingId).FirstOrDefault();
@@ -43,13 +60,14 @@ public class ListingMutations
             return new(new ListingPriceHasChangedError(price, listing.Price));
         }
 
-        var order = new Order
+        var order = orderRepo.AddOrder(new Order
         {
             ListingId = listingId,
             UserId = userId,
             Price = price,
             Description = description
-        };
-        return orderRepo.AddOrder(order);
+        });
+
+        return new(order);
     }
 }

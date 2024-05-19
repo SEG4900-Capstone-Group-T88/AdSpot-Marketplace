@@ -1,0 +1,13 @@
+{
+  "data": {
+    "addListing": {
+      "listing": null,
+      "errors": [
+        {
+          "__typename": "InvalidListingTypeIdError",
+          "message": "Listing type with id `-1` does not exist."
+        }
+      ]
+    }
+  }
+}
