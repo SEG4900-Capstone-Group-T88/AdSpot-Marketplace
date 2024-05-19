@@ -37,6 +37,7 @@ builder.Services
     .UsePersistedQueryPipeline()
     .AddReadOnlyFileSystemQueryStorage("./PersistedQueries")
     .AddMutationConventions(applyToAllMutations: true)
+    .AddInMemorySubscriptions()
     .AddAdSpotTypes()
     .AddProjections()
     .AddFiltering()
@@ -98,6 +99,7 @@ app.UseCors("all");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseWebSockets();
 app.MapGraphQL("/");
 
 app.Run();
