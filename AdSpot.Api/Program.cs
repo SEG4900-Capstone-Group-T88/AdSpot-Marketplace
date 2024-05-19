@@ -1,16 +1,17 @@
 ﻿var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
-var jwtOptions = builder.Services.AddAndValidateOptions<JwtOptions>(config);
-var endpointsOptions = builder.Services.AddAndValidateOptions<EndpointsOptions>(config);
-var oauthOptions = builder.Services.AddAndValidateOptions<OAuthOptions>(config);
-
 builder.Services.AddDbContext<AdSpotDbContext>(
     options => options.UseNpgsql(config.GetConnectionString("Postgres")));
 
 builder.Services.AddHttpClient();
 
 builder.Services
+    // Options
+    .AddAndValidateOptions<JwtOptions>(config, out var jwtOptions)
+    .AddAndValidateOptions<EndpointsOptions>(config, out var endpointsOptions)
+    .AddAndValidateOptions<OAuthOptions>()
+
     // Services
     .AddScoped<InstagramService>()
 

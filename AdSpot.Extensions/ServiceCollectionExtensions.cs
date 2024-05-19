@@ -5,7 +5,8 @@ namespace AdSpot.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static T AddAndValidateOptions<T>(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddAndValidateOptions<T>(this IServiceCollection services,
+        IConfiguration config, out T options)
         where T : class
     {
         var configSectionPath = typeof(T).Name.Replace("Options", "");
@@ -14,9 +15,20 @@ public static class ServiceCollectionExtensions
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        var options = config.GetSection(configSectionPath).Get<T>()
+        options = config.GetSection(configSectionPath).Get<T>()
             ?? throw new Exception($"Could not bind configuration for {typeof(T).Name}");
 
-        return options;
+        return services;
+    }
+    public static IServiceCollection AddAndValidateOptions<T>(this IServiceCollection services)
+        where T : class
+    {
+        var configSectionPath = typeof(T).Name.Replace("Options", "");
+        services.AddOptions<T>()
+            .BindConfiguration(configSectionPath)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        return services;
     }
 }
