@@ -1,6 +1,7 @@
 schema {
   query: Query
   mutation: Mutation
+  subscription: Subscription
 }
 
 interface Error {
@@ -198,6 +199,10 @@ type RequestsByStatusEdge {
   cursor: String!
   "The item at the end of the edge."
   node: Order!
+}
+
+type Subscription {
+  onAccountConnected(userId: Int!): Connection!
 }
 
 type UpdatePasswordPayload {
