@@ -2,7 +2,7 @@
   "data": {
     "addUser": {
       "user": {
-        "userId": 104,
+        "userId": 105,
         "email": "newuser",
         "firstName": "new",
         "lastName": "user"

@@ -22,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="UnitTests\ListingMutationsTests\__snapshots__\__MISMATCH__\" />
+    <Folder Include="UnitTests\UserMutationsTests\__snapshots__\__MISMATCH__\" />
     <Folder Include="UnitTests\__snapshots__\__MISMATCH__\" />
   </ItemGroup>
 

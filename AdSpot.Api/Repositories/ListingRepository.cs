@@ -22,7 +22,7 @@ public class ListingRepository
     public IQueryable<Listing> AddListing(Listing listing)
     {
         context.Listings.Add(listing);
-        var id = context.SaveChanges();
-        return context.Listings.Where(x => x.ListingId == id);
+        context.SaveChanges();
+        return context.Listings.Where(x => x.ListingId == listing.ListingId);
     }
 }

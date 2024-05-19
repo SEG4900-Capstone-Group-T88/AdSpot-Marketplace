@@ -5,7 +5,7 @@
       "errors": [
         {
           "__typename": "AccountWithEmailAlreadyExistsError",
-          "message": "An account with the email user1 already exists."
+          "message": "An account with the email `user1` already exists."
         }
       ]
     }

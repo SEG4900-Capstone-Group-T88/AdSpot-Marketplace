@@ -7,16 +7,21 @@ interface Error {
   message: String!
 }
 
+type AccountHasNotBeenConnectedError implements Error {
+  message: String!
+}
+
 type AccountWithEmailAlreadyExistsError implements Error {
   message: String!
 }
 
 type AddConnectionPayload {
-  connection: [Connection!]
+  connection: Connection
 }
 
 type AddListingPayload {
   listing: [Listing!]
+  errors: [AddListingError!]
 }
 
 type AddUserPayload {
@@ -53,6 +58,10 @@ type InstagramOauthError implements Error {
 }
 
 type InvalidListingIdError implements Error {
+  message: String!
+}
+
+type InvalidListingTypeIdError implements Error {
   message: String!
 }
 
@@ -112,7 +121,7 @@ type Order {
 }
 
 type OrderListingPayload {
-  order: Order
+  order: [Order!]
   errors: [OrderListingError!]
 }
 
@@ -234,6 +243,8 @@ type UsersEdge {
   node: User!
 }
 
+union AddListingError = InvalidListingTypeIdError | AccountHasNotBeenConnectedError
+
 union AddUserError = AccountWithEmailAlreadyExistsError
 
 union ExchangeInstagramAuthCodeForTokenError = InstagramOauthError
@@ -243,10 +254,10 @@ union LoginError = UserNotFoundError | UserInvalidCredentialsError
 union OrderListingError = InvalidListingIdError | CannotOrderOwnListingError | ListingPriceHasChangedError
 
 input AddConnectionInput {
+  userId: Int!
   platformId: Int!
   accountHandle: String!
   apiToken: String!
-  userId: Int!
 }
 
 input AddListingInput {

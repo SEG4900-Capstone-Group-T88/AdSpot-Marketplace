@@ -1,0 +1,13 @@
+{
+  "data": {
+    "addListing": {
+      "listing": null,
+      "errors": [
+        {
+          "__typename": "AccountHasNotBeenConnectedError",
+          "message": "User with id `106` has no connected account for platform with id `1`."
+        }
+      ]
+    }
+  }
+}
