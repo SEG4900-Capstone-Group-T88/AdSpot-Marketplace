@@ -6,19 +6,19 @@ public static class TestServices
 {
     static TestServices()
     {
-        var serviceCollection = new ServiceCollection();
-
         var config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .AddJsonFile("appsettings.Development.json")
             .Build();
 
-        serviceCollection.AddAndValidateOptions<JwtOptions>(config);
-        serviceCollection.AddAndValidateOptions<EndpointsOptions>(config);
-        serviceCollection.AddAndValidateOptions<OAuthOptions>(config);
-
-        ServiceProvider = serviceCollection
+        ServiceProvider = new ServiceCollection()
             .AddScoped<IConfiguration>(sp => config)
+
+            // Options
+            .AddAndValidateOptions<JwtOptions>()
+            .AddAndValidateOptions<EndpointsOptions>()
+            .AddAndValidateOptions<OAuthOptions>()
+
 
             .AddDbContext<AdSpotDbContext>(
                 o => o.UseInMemoryDatabase("adspot-inmemory-db"))
