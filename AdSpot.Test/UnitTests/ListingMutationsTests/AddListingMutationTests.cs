@@ -5,22 +5,23 @@ namespace AdSpot.Test.UnitTests.ListingMutationsTests;
 public class AddListingMutationTests
 {
     private const string AddListingMutation = """
-    mutation AddListing($input: AddListingInput!) {
-        addListing(input: $input) {
-            listing {
-                listingId
-            }
-            errors {
-                ... on Error {
-                    __typename
-                    message
+        mutation AddListing($input: AddListingInput!) {
+            addListing(input: $input) {
+                listing {
+                    listingId
+                }
+                errors {
+                    ... on Error {
+                        __typename
+                        message
+                    }
                 }
             }
         }
-    }
-    """;
+        """;
 
     private readonly ITestOutputHelper output;
+
     public AddListingMutationTests(ITestOutputHelper output)
     {
         this.output = output;
@@ -33,14 +34,18 @@ public class AddListingMutationTests
         var userId = await AddUserAsync(nameof(AddListingSuccessful));
         await AddConnectionAsync(userId, 1);
 
-        var result = await TestServices.ExecuteRequestAsync(
-            b => b.SetQuery(AddListingMutation)
-                .SetVariableValue("input", new Dictionary<string, object?>
-                {
-                    { "listingTypeId", 1 },
-                    { "userId", userId },
-                    { "price", (decimal)9.99 }
-                }.AsReadOnly()));
+        var result = await TestServices.ExecuteRequestAsync(b =>
+            b.SetQuery(AddListingMutation)
+                .SetVariableValue(
+                    "input",
+                    new Dictionary<string, object?>
+                    {
+                        { "listingTypeId", 1 },
+                        { "userId", userId },
+                        { "price", (decimal)9.99 }
+                    }.AsReadOnly()
+                )
+        );
 
         result.MatchSnapshot();
     }
@@ -49,14 +54,18 @@ public class AddListingMutationTests
     [Trait("Category", "Unit")]
     public async Task AddListingInvalidListingTypeId()
     {
-        var result = await TestServices.ExecuteRequestAsync(
-            b => b.SetQuery(AddListingMutation)
-                .SetVariableValue("input", new Dictionary<string, object?>
-                {
-                    { "listingTypeId", -1 },
-                    { "userId", 1 },
-                    { "price", (decimal)9.99 }
-                }.AsReadOnly()));
+        var result = await TestServices.ExecuteRequestAsync(b =>
+            b.SetQuery(AddListingMutation)
+                .SetVariableValue(
+                    "input",
+                    new Dictionary<string, object?>
+                    {
+                        { "listingTypeId", -1 },
+                        { "userId", 1 },
+                        { "price", (decimal)9.99 }
+                    }.AsReadOnly()
+                )
+        );
 
         result.MatchSnapshot();
     }
@@ -67,22 +76,27 @@ public class AddListingMutationTests
     {
         var userId = await AddUserAsync(nameof(AddListingAccountHasNotBeenConnected));
 
-        var result = await TestServices.ExecuteRequestAsync(
-            b => b.SetQuery(AddListingMutation)
-                .SetVariableValue("input", new Dictionary<string, object?>
-                {
-                    { "listingTypeId", 1 },
-                    { "userId", userId },
-                    { "price", (decimal)9.99 }
-                }.AsReadOnly()));
+        var result = await TestServices.ExecuteRequestAsync(b =>
+            b.SetQuery(AddListingMutation)
+                .SetVariableValue(
+                    "input",
+                    new Dictionary<string, object?>
+                    {
+                        { "listingTypeId", 1 },
+                        { "userId", userId },
+                        { "price", (decimal)9.99 }
+                    }.AsReadOnly()
+                )
+        );
 
         result.MatchSnapshot();
     }
 
     private async Task<int> AddUserAsync(string email)
     {
-        var addUserResult = await TestServices.ExecuteRequestAsync(
-            b => b.SetQuery("""
+        var addUserResult = await TestServices.ExecuteRequestAsync(b =>
+            b.SetQuery(
+                """
                 mutation {
                     addUser(input: {
                         email: "EMAIL_VARIABLE",
@@ -101,7 +115,9 @@ public class AddListingMutationTests
                         }
                     }
                 }
-                """.Replace("EMAIL_VARIABLE", email)));
+                """.Replace("EMAIL_VARIABLE", email)
+            )
+        );
         var json = addUserResult.ToJson();
         output.WriteLine(json);
         var obj = JsonConvert.DeserializeObject<JObject>(json);
@@ -110,25 +126,32 @@ public class AddListingMutationTests
         Assert.NotNull(userIdToken);
         return (int)userIdToken;
     }
+
     private async Task AddConnectionAsync(int userId, int platformId)
     {
-        var addUserResult = await TestServices.ExecuteRequestAsync(
-            b => b.SetQuery("""
-                mutation AddConnection($input: AddConnectionInput!) {
-                    addConnection(input: $input) {
-                        connection {
-                            platformId
+        var addUserResult = await TestServices.ExecuteRequestAsync(b =>
+            b.SetQuery(
+                    """
+                    mutation AddConnection($input: AddConnectionInput!) {
+                        addConnection(input: $input) {
+                            connection {
+                                platformId
+                            }
                         }
                     }
-                }
-                """)
-            .SetVariableValue("input", new Dictionary<string, object?>
-            {
-                { "userId", userId },
-                { "platformId", platformId },
-                { "accountHandle", "testHandle" },
-                { "apiToken", "testToken" }
-            }.AsReadOnly()));
+                    """
+                )
+                .SetVariableValue(
+                    "input",
+                    new Dictionary<string, object?>
+                    {
+                        { "userId", userId },
+                        { "platformId", platformId },
+                        { "accountHandle", "testHandle" },
+                        { "apiToken", "testToken" }
+                    }.AsReadOnly()
+                )
+        );
         var json = addUserResult.ToJson();
         var obj = JsonConvert.DeserializeObject<JObject>(json);
         var platformIdToken = obj?["data"]?["addConnection"]?["connection"]?["platformId"];

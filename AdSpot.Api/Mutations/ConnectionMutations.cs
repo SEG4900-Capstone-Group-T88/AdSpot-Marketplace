@@ -8,29 +8,39 @@ public class ConnectionMutations
     [UseFirstOrDefault]
     [UseProjection]
     public IQueryable<Connection> AddConnection(
-        int userId, int platformId, string accountHandle, string apiToken,
-        ConnectionRepository repo)
+        int userId,
+        int platformId,
+        string accountHandle,
+        string apiToken,
+        ConnectionRepository repo
+    )
     {
-        var account = repo.AddConnection(new Connection
-        {
-            PlatformId = platformId,
-            Handle = accountHandle,
-            Token = apiToken,
-            UserId = userId
-        });
+        var account = repo.AddConnection(
+            new Connection
+            {
+                PlatformId = platformId,
+                Handle = accountHandle,
+                Token = apiToken,
+                UserId = userId
+            }
+        );
 
         return account;
     }
 
     [Error<InstagramOauthError>]
     public async Task<MutationResult<Connection?>> ExchangeInstagramAuthCodeForToken(
-        int userId, int platformId, string authCode,
+        int userId,
+        int platformId,
+        string authCode,
         InstagramService service,
         ConnectionRepository repo,
-        [Service] ITopicEventSender topicEventSender)
+        [Service] ITopicEventSender topicEventSender
+    )
     {
         var response = await service.ExchangeAuthCodeForAccessToken(authCode);
-        var json = await response.Content.ReadFromJsonAsync<ExchangeInstagramAuthCodeForTokenPayload>();
+        var json =
+            await response.Content.ReadFromJsonAsync<ExchangeInstagramAuthCodeForTokenPayload>();
         if (json?.AccessToken is null)
         {
             var content = await response.Content.ReadAsStringAsync();
@@ -50,14 +60,17 @@ public class ConnectionMutations
                 var expiresIn = tokenResponse.Value<int>("expires_in");
                 var expirationDate = DateTime.UtcNow.AddSeconds(expiresIn);
 
-                var connection = repo.AddOrUpdateConnection(new Connection
-                {
-                    Handle = handle,
-                    PlatformId = platformId,
-                    Token = token,
-                    TokenExpiration = expirationDate,
-                    UserId = userId
-                }).FirstOrDefault();
+                var connection = repo.AddOrUpdateConnection(
+                        new Connection
+                        {
+                            Handle = handle,
+                            PlatformId = platformId,
+                            Token = token,
+                            TokenExpiration = expirationDate,
+                            UserId = userId
+                        }
+                    )
+                    .FirstOrDefault();
 
                 var topicName = $"{userId}_{nameof(Subscription.OnAccountConnected)}";
                 await topicEventSender.SendAsync(topicName, connection);

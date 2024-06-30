@@ -6,7 +6,9 @@ public class UserMutations
     [Error<AccountWithEmailAlreadyExistsError>]
     public MutationResult<AddUserPayload> AddUser(
         [UseFluentValidation, UseValidator<AddUserInputValidator>] AddUserInput input,
-        UserRepository repo, [Service] IOptions<JwtOptions> jwtOptions)
+        UserRepository repo,
+        [Service] IOptions<JwtOptions> jwtOptions
+    )
     {
         var user = repo.GetUserByEmail(input.Email);
         if (user is not null)
@@ -14,21 +16,19 @@ public class UserMutations
             return new(new AccountWithEmailAlreadyExistsError(input.Email));
         }
 
-        user = repo.AddUser(new User
-        {
-            Email = input.Email,
-            Password = input.Password,
-            FirstName = input.FirstName,
-            LastName = input.LastName
-        });
+        user = repo.AddUser(
+            new User
+            {
+                Email = input.Email,
+                Password = input.Password,
+                FirstName = input.FirstName,
+                LastName = input.LastName
+            }
+        );
 
         var token = JwtUtils.GenerateToken(user, jwtOptions);
 
-        return new AddUserPayload
-        {
-            User = user,
-            Token = token
-        };
+        return new AddUserPayload { User = user, Token = token };
     }
 
     public User DeleteUser(int userId, UserRepository repo)
@@ -45,8 +45,12 @@ public class UserMutations
 
     [Error<UserNotFoundError>]
     [Error<UserInvalidCredentialsError>]
-    public MutationResult<LoginPayload> Login(string email, string password, UserRepository repo,
-        [Service] IOptions<JwtOptions> jwtOptions)
+    public MutationResult<LoginPayload> Login(
+        string email,
+        string password,
+        UserRepository repo,
+        [Service] IOptions<JwtOptions> jwtOptions
+    )
     {
         var user = repo.GetUserByEmail(email);
 
@@ -63,10 +67,6 @@ public class UserMutations
 
         var token = JwtUtils.GenerateToken(user, jwtOptions);
 
-        return new LoginPayload
-        {
-            User = user,
-            Token = token
-        };
+        return new LoginPayload { User = user, Token = token };
     }
 }

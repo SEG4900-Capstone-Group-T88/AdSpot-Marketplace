@@ -15,20 +15,42 @@ public static class DatabaseInitializer
 
             for (var i = 1; i <= numUsers; i++)
             {
-                users.Add(new User
-                {
-                    Email = $"user{i}",
-                    Password = $"user{i}",
-                    FirstName = $"User",
-                    LastName = $"{i}"
-                });
+                users.Add(
+                    new User
+                    {
+                        Email = $"user{i}",
+                        Password = $"user{i}",
+                        FirstName = $"User",
+                        LastName = $"{i}"
+                    }
+                );
             }
-            users.AddRange(new List<User>
-            {
-                new User { Email = "matt", Password = "matt", FirstName = "Matthew", LastName = "Sia" },
-                new User { Email = "akarsh", Password = "akarsh", FirstName = "Akarsh", LastName = "Gharge" },
-                new User { Email = "demian", Password = "demian", FirstName = "Demian", LastName = "Oportus" }
-            });
+            users.AddRange(
+                new List<User>
+                {
+                    new User
+                    {
+                        Email = "matt",
+                        Password = "matt",
+                        FirstName = "Matthew",
+                        LastName = "Sia"
+                    },
+                    new User
+                    {
+                        Email = "akarsh",
+                        Password = "akarsh",
+                        FirstName = "Akarsh",
+                        LastName = "Gharge"
+                    },
+                    new User
+                    {
+                        Email = "demian",
+                        Password = "demian",
+                        FirstName = "Demian",
+                        LastName = "Oportus"
+                    }
+                }
+            );
 
             dbContext.Users.AddRange(users);
             dbContext.SaveChanges();
@@ -51,19 +73,25 @@ public static class DatabaseInitializer
         if (dbContext.Connections.FirstOrDefault() is null)
         {
             var connections = new List<Connection>();
-            dbContext.Users.ToList().ForEach(user =>
-            {
-                dbContext.Platforms.ToList().ForEach(platform =>
+            dbContext
+                .Users.ToList()
+                .ForEach(user =>
                 {
-                    connections.Add(new Connection
-                    {
-                        UserId = user.UserId,
-                        PlatformId = platform.PlatformId,
-                        Handle = $"user{user.UserId}-{platform.Name.ToLower()}",
-                        Token = "token"
-                    });
+                    dbContext
+                        .Platforms.ToList()
+                        .ForEach(platform =>
+                        {
+                            connections.Add(
+                                new Connection
+                                {
+                                    UserId = user.UserId,
+                                    PlatformId = platform.PlatformId,
+                                    Handle = $"user{user.UserId}-{platform.Name.ToLower()}",
+                                    Token = "token"
+                                }
+                            );
+                        });
                 });
-            });
 
             dbContext.Connections.AddRange(connections);
             dbContext.SaveChanges();
@@ -73,13 +101,10 @@ public static class DatabaseInitializer
         {
             new ListingType { Name = "Post", PlatformId = 1 },
             new ListingType { Name = "Share", PlatformId = 1 },
-
             new ListingType { Name = "Tweet", PlatformId = 2 },
             new ListingType { Name = "Retweet", PlatformId = 2 },
-
             new ListingType { Name = "Story", PlatformId = 3 },
             new ListingType { Name = "Post", PlatformId = 3 },
-
             new ListingType { Name = "Video", PlatformId = 4 },
             new ListingType { Name = "Stream", PlatformId = 4 }
         };
@@ -96,29 +121,41 @@ public static class DatabaseInitializer
             var maxPrice = 1000;
 
             var listings = new List<Listing>();
-            dbContext.Users.ToList().ForEach(user =>
-            {
-                dbContext.Platforms.ToList().ForEach(platform =>
+            dbContext
+                .Users.ToList()
+                .ForEach(user =>
                 {
-                    dbContext.ListingTypes.Where(x => x.PlatformId == platform.PlatformId)
-                        .ToList()
-                        .ForEach(listingType =>
+                    dbContext
+                        .Platforms.ToList()
+                        .ForEach(platform =>
                         {
-                            var probability = random.NextDouble();
-                            if (probability < 0.5)
-                            {
-                                var price = (decimal)Math.Round(random.NextDouble() * (maxPrice - minPrice) + minPrice, 2);
-                                listings.Add(new Listing
+                            dbContext
+                                .ListingTypes.Where(x => x.PlatformId == platform.PlatformId)
+                                .ToList()
+                                .ForEach(listingType =>
                                 {
-                                    UserId = user.UserId,
-                                    ListingTypeId = listingType.ListingTypeId,
-                                    PlatformId = listingType.PlatformId,
-                                    Price = price
+                                    var probability = random.NextDouble();
+                                    if (probability < 0.5)
+                                    {
+                                        var price = (decimal)
+                                            Math.Round(
+                                                random.NextDouble() * (maxPrice - minPrice)
+                                                    + minPrice,
+                                                2
+                                            );
+                                        listings.Add(
+                                            new Listing
+                                            {
+                                                UserId = user.UserId,
+                                                ListingTypeId = listingType.ListingTypeId,
+                                                PlatformId = listingType.PlatformId,
+                                                Price = price
+                                            }
+                                        );
+                                    }
                                 });
-                            }
                         });
                 });
-            });
 
             dbContext.Listings.AddRange(listings);
             dbContext.SaveChanges();
@@ -127,11 +164,7 @@ public static class DatabaseInitializer
         if (dbContext.OrderStatuses.FirstOrDefault() is null)
         {
             var orderStatuses = Enum.GetValues<OrderStatusEnum>()
-                .Select(x => new OrderStatus
-                {
-                    OrderStatusId = x,
-                    Name = x.ToString()
-                });
+                .Select(x => new OrderStatus { OrderStatusId = x, Name = x.ToString() });
             dbContext.OrderStatuses.AddRange(orderStatuses);
             dbContext.SaveChanges();
         }
@@ -140,19 +173,25 @@ public static class DatabaseInitializer
         {
             var numStatus = Enum.GetValues(typeof(OrderStatusEnum)).Length;
             var orders = new List<Order>();
-            dbContext.Users.ToList().ForEach(user =>
-            {
-                dbContext.Listings.ToList().ForEach(listing =>
+            dbContext
+                .Users.ToList()
+                .ForEach(user =>
                 {
-                    var probability = random.NextDouble();
-                    if (probability < 0.1 && listing.UserId != user.UserId)
-                    {
-                        var status = (OrderStatusEnum)random.Next(numStatus);
-                        orders.Add(new Order
+                    dbContext
+                        .Listings.ToList()
+                        .ForEach(listing =>
                         {
-                            UserId = user.UserId,
-                            ListingId = listing.ListingId,
-                            Description = @"Hey, everyone! Today, I'm super excited to talk to you about something that's been a game-changer for me as an influencer, and I think it's going to be huge for you too!
+                            var probability = random.NextDouble();
+                            if (probability < 0.1 && listing.UserId != user.UserId)
+                            {
+                                var status = (OrderStatusEnum)random.Next(numStatus);
+                                orders.Add(
+                                    new Order
+                                    {
+                                        UserId = user.UserId,
+                                        ListingId = listing.ListingId,
+                                        Description =
+                                            @"Hey, everyone! Today, I'm super excited to talk to you about something that's been a game-changer for me as an influencer, and I think it's going to be huge for you too!
 
 It's called AdSpot! 🌟 Now, if you're anything like me, you're always looking for new and innovative ways to connect with brands that align with your values and your audience's interests. And let me tell you, AdSpot is the answer to that!
 
@@ -165,11 +204,12 @@ But wait, there's more! AdSpot also offers a secure payment system, ensuring tha
 So, if you're ready to take your influencer game to the next level and connect with amazing brands, then head over to AdSpot today! I've left the link in the description below so you can check it out for yourself. Trust me, you won't regret it!
 
 Thanks for watching, guys! And remember, the opportunities are endless with AdSpot. Let's make some magic happen together! 💫",
-                            OrderStatusId = status
+                                        OrderStatusId = status
+                                    }
+                                );
+                            }
                         });
-                    }
                 });
-            });
 
             foreach (var order in orders)
             {

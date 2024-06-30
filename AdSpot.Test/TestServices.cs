@@ -13,19 +13,13 @@ public static class TestServices
 
         ServiceProvider = new ServiceCollection()
             .AddScoped<IConfiguration>(sp => config)
-
             // Options
             .AddAndValidateOptions<JwtOptions>()
             .AddAndValidateOptions<EndpointsOptions>()
             .AddAndValidateOptions<OAuthOptions>()
-
-
-            .AddDbContext<AdSpotDbContext>(
-                o => o.UseInMemoryDatabase("adspot-inmemory-db"))
-
+            .AddDbContext<AdSpotDbContext>(o => o.UseInMemoryDatabase("adspot-inmemory-db"))
             // Services
             .AddScoped<InstagramService>()
-
             // Repositories
             .AddScoped<ConnectionRepository>()
             .AddScoped<ListingRepository>()
@@ -33,20 +27,16 @@ public static class TestServices
             .AddScoped<OrderRepository>()
             .AddScoped<PlatformRepository>()
             .AddScoped<UserRepository>()
-
             // Validators
             .AddScoped<AddUserInputValidator>()
-
             .AddFluentValidationAutoValidation()
             .AddFluentValidationClientsideAdapters()
-
             .AddGraphQLServer()
             .AddMutationConventions(applyToAllMutations: true)
             .AddAdSpotTypes()
             .AddProjections()
             .AddFiltering()
             .AddSorting()
-
             .RegisterDbContext<AdSpotDbContext>()
             .RegisterService<IConfiguration>()
             .RegisterService<InstagramService>()
@@ -56,22 +46,17 @@ public static class TestServices
             .RegisterService<OrderRepository>(ServiceKind.Resolver)
             .RegisterService<PlatformRepository>()
             .RegisterService<UserRepository>()
-
-            .SetPagingOptions(new HotChocolate.Types.Pagination.PagingOptions
+            .SetPagingOptions(
+                new HotChocolate.Types.Pagination.PagingOptions { IncludeTotalCount = true, }
+            )
+            .ModifyRequestOptions(options =>
             {
-                IncludeTotalCount = true,
+                options.IncludeExceptionDetails = true;
             })
-
-            .ModifyRequestOptions(
-                options =>
-                {
-                    options.IncludeExceptionDetails = true;
-                })
-            .Services
-            .AddSingleton(
-                sp => new RequestExecutorProxy(
-                    sp.GetRequiredService<IRequestExecutorResolver>(),
-                    Schema.DefaultName))
+            .Services.AddSingleton(sp => new RequestExecutorProxy(
+                sp.GetRequiredService<IRequestExecutorResolver>(),
+                Schema.DefaultName
+            ))
             .BuildServiceProvider();
 
         Executor = ServiceProvider.GetRequiredService<RequestExecutorProxy>();
@@ -85,7 +70,8 @@ public static class TestServices
 
     public static async Task<IExecutionResult> ExecuteRequestAsync(
         Action<IQueryRequestBuilder> configureRequest,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var scope = ServiceProvider.CreateAsyncScope();
 

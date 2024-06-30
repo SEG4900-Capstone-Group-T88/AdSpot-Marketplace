@@ -3,24 +3,23 @@
 public class PlatformQueriesTests
 {
     private const string PlatformsQuery = """
-    query {
-        platforms {
-            platformId
-            name
-            listingTypes {
-                listingTypeId
+        query {
+            platforms {
+                platformId
                 name
+                listingTypes {
+                    listingTypeId
+                    name
+                }
             }
         }
-    }
-    """;
+        """;
 
     [Fact]
     [Trait("Category", "Unit")]
     public async Task GetPlatforms()
     {
-        var result = await TestServices.ExecuteRequestAsync(
-            b => b.SetQuery(PlatformsQuery));
+        var result = await TestServices.ExecuteRequestAsync(b => b.SetQuery(PlatformsQuery));
 
         result.MatchSnapshot();
     }

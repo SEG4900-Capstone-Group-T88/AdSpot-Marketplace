@@ -12,9 +12,9 @@ public static class JwtUtils
             jwtOptions.Value.Audience,
             null,
             expires: DateTime.Now.AddMinutes(120),
-            signingCredentials: credentials);
+            signingCredentials: credentials
+        );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }
-

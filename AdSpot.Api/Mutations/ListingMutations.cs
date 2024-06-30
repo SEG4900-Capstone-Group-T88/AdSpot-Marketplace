@@ -8,10 +8,13 @@ public class ListingMutations
     [Error<InvalidListingTypeIdError>]
     [Error<AccountHasNotBeenConnectedError>]
     public MutationResult<IQueryable<Listing>> AddListing(
-        int listingTypeId, int userId, decimal price,
+        int listingTypeId,
+        int userId,
+        decimal price,
         ConnectionRepository connectionRepo,
         ListingRepository listingRepo,
-        ListingTypeRepository listingTypesRepo)
+        ListingTypeRepository listingTypesRepo
+    )
     {
         var listingType = listingTypesRepo.GetListingTypeById(listingTypeId).FirstOrDefault();
         if (listingType is null)
@@ -19,19 +22,23 @@ public class ListingMutations
             return new(new InvalidListingTypeIdError(listingTypeId));
         }
 
-        var connection = connectionRepo.GetConnection(userId, listingType.PlatformId).FirstOrDefault();
+        var connection = connectionRepo
+            .GetConnection(userId, listingType.PlatformId)
+            .FirstOrDefault();
         if (connection is null)
         {
             return new(new AccountHasNotBeenConnectedError(userId, listingType.PlatformId));
         }
 
-        var listing = listingRepo.AddListing(new Listing
-        {
-            PlatformId = listingType.PlatformId,
-            ListingTypeId = listingTypeId,
-            UserId = userId,
-            Price = price
-        });
+        var listing = listingRepo.AddListing(
+            new Listing
+            {
+                PlatformId = listingType.PlatformId,
+                ListingTypeId = listingTypeId,
+                UserId = userId,
+                Price = price
+            }
+        );
 
         return new(listing);
     }
@@ -41,8 +48,14 @@ public class ListingMutations
     [Error<InvalidListingIdError>]
     [Error<CannotOrderOwnListingError>]
     [Error<ListingPriceHasChangedError>]
-    public MutationResult<IQueryable<Order>> OrderListing(int listingId, int userId, decimal price, string description,
-        ListingRepository listingRepo, OrderRepository orderRepo)
+    public MutationResult<IQueryable<Order>> OrderListing(
+        int listingId,
+        int userId,
+        decimal price,
+        string description,
+        ListingRepository listingRepo,
+        OrderRepository orderRepo
+    )
     {
         var listing = listingRepo.GetListingById(listingId).FirstOrDefault();
         if (listing is null)
@@ -60,13 +73,15 @@ public class ListingMutations
             return new(new ListingPriceHasChangedError(price, listing.Price));
         }
 
-        var order = orderRepo.AddOrder(new Order
-        {
-            ListingId = listingId,
-            UserId = userId,
-            Price = price,
-            Description = description
-        });
+        var order = orderRepo.AddOrder(
+            new Order
+            {
+                ListingId = listingId,
+                UserId = userId,
+                Price = price,
+                Description = description
+            }
+        );
 
         return new(order);
     }
