@@ -7,7 +7,8 @@ public class UserMutations
     public MutationResult<AddUserPayload> AddUser(
         [UseFluentValidation, UseValidator<AddUserInputValidator>] AddUserInput input,
         UserRepository repo,
-        [Service] IOptions<JwtOptions> jwtOptions
+        [Service] IOptions<JwtOptions> jwtOptions,
+        [Service] KeyManager keyManager
     )
     {
         var user = repo.GetUserByEmail(input.Email);
@@ -26,7 +27,7 @@ public class UserMutations
             }
         );
 
-        var token = JwtUtils.GenerateToken(user, jwtOptions);
+        var token = JwtUtils.GenerateToken(user, jwtOptions, keyManager);
 
         return new AddUserPayload { User = user, Token = token };
     }
@@ -49,7 +50,8 @@ public class UserMutations
         string email,
         string password,
         UserRepository repo,
-        [Service] IOptions<JwtOptions> jwtOptions
+        [Service] IOptions<JwtOptions> jwtOptions,
+        [Service] KeyManager keyManager
     )
     {
         var user = repo.GetUserByEmail(email);
@@ -65,7 +67,7 @@ public class UserMutations
             return new(new UserInvalidCredentialsError());
         }
 
-        var token = JwtUtils.GenerateToken(user, jwtOptions);
+        var token = JwtUtils.GenerateToken(user, jwtOptions, keyManager);
 
         return new LoginPayload { User = user, Token = token };
     }

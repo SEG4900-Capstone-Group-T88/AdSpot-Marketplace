@@ -1,10 +1,12 @@
-﻿using HotChocolate.Subscriptions;
+﻿using HotChocolate.Authorization;
+using HotChocolate.Subscriptions;
 
 namespace AdSpot.Api.Mutations;
 
 [MutationType]
 public class ConnectionMutations
 {
+    [Authorize]
     [UseFirstOrDefault]
     [UseProjection]
     public IQueryable<Connection> AddConnection(

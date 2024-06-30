@@ -1,8 +1,11 @@
-﻿namespace AdSpot.Api.Mutations;
+﻿using HotChocolate.Authorization;
+
+namespace AdSpot.Api.Mutations;
 
 [MutationType]
 public class ListingMutations
 {
+    [Authorize]
     //Seems like we can't use projections here
     //[UseProjection]
     [Error<InvalidListingTypeIdError>]
@@ -43,6 +46,7 @@ public class ListingMutations
         return new(listing);
     }
 
+    [Authorize]
     //Seems like we can't use projections here
     //[UseProjection]
     [Error<InvalidListingIdError>]
