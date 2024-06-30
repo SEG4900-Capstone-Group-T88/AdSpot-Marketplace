@@ -2,30 +2,16 @@
   "data": {
     "platforms": [
       {
-        "platformId": 4,
-        "name": "Youtube",
+        "platformId": 1,
+        "name": "Facebook",
         "listingTypes": [
           {
-            "listingTypeId": 8,
-            "name": "Stream"
+            "listingTypeId": 2,
+            "name": "Share"
           },
           {
-            "listingTypeId": 7,
-            "name": "Video"
-          }
-        ]
-      },
-      {
-        "platformId": 3,
-        "name": "Instagram",
-        "listingTypes": [
-          {
-            "listingTypeId": 6,
+            "listingTypeId": 1,
             "name": "Post"
-          },
-          {
-            "listingTypeId": 5,
-            "name": "Story"
           }
         ]
       },
@@ -44,16 +30,30 @@
         ]
       },
       {
-        "platformId": 1,
-        "name": "Facebook",
+        "platformId": 3,
+        "name": "Instagram",
         "listingTypes": [
           {
-            "listingTypeId": 2,
-            "name": "Share"
+            "listingTypeId": 5,
+            "name": "Story"
           },
           {
-            "listingTypeId": 1,
+            "listingTypeId": 6,
             "name": "Post"
+          }
+        ]
+      },
+      {
+        "platformId": 4,
+        "name": "Youtube",
+        "listingTypes": [
+          {
+            "listingTypeId": 7,
+            "name": "Video"
+          },
+          {
+            "listingTypeId": 8,
+            "name": "Stream"
           }
         ]
       }

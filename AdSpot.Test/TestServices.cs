@@ -1,4 +1,5 @@
-﻿using AdSpot.Extensions;
+﻿using System.Security.Claims;
+using AdSpot.Extensions;
 
 namespace AdSpot.Test;
 
@@ -11,14 +12,19 @@ public static class TestServices
             .AddJsonFile("appsettings.Development.json")
             .Build();
 
+        var keyManager = new KeyManager();
+
         ServiceProvider = new ServiceCollection()
+            .AddLogging() // Required for auth stuff
             .AddScoped<IConfiguration>(sp => config)
+            .AddAndValidateOptions<JwtOptions>(config, out var jwtOptions)
             // Options
             .AddAndValidateOptions<JwtOptions>()
             .AddAndValidateOptions<EndpointsOptions>()
             .AddAndValidateOptions<OAuthOptions>()
             .AddDbContext<AdSpotDbContext>(o => o.UseInMemoryDatabase("adspot-inmemory-db"))
             // Services
+            .AddSingleton(keyManager)
             .AddScoped<InstagramService>()
             // Repositories
             .AddScoped<ConnectionRepository>()
@@ -37,6 +43,7 @@ public static class TestServices
             .AddProjections()
             .AddFiltering()
             .AddSorting()
+            .AddAuthorization()
             .RegisterDbContext<AdSpotDbContext>()
             .RegisterService<IConfiguration>()
             .RegisterService<InstagramService>()
@@ -58,13 +65,23 @@ public static class TestServices
             .BuildServiceProvider();
 
         Executor = ServiceProvider.GetRequiredService<RequestExecutorProxy>();
-
-        ServiceProvider.GetRequiredService<AdSpotDbContext>().SeedDatabase();
     }
 
     public static IServiceProvider ServiceProvider { get; }
 
     public static RequestExecutorProxy Executor { get; }
+
+    private static ClaimsPrincipal CreateClaimsPrincipal()
+    {
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Name, $"{TestDatabase.TestUser.FirstName} {TestDatabase.TestUser.LastName}"),
+            new(ClaimTypes.Email, TestDatabase.TestUser.Email),
+        };
+
+        var identity = new ClaimsIdentity(claims, "TestAuth");
+        return new ClaimsPrincipal(identity);
+    }
 
     public static async Task<IExecutionResult> ExecuteRequestAsync(
         Action<IQueryRequestBuilder> configureRequest,
@@ -76,7 +93,38 @@ public static class TestServices
         var requestBuilder = new QueryRequestBuilder();
         requestBuilder.SetServices(scope.ServiceProvider);
         configureRequest(requestBuilder);
+        requestBuilder.AddGlobalState(nameof(ClaimsPrincipal), CreateClaimsPrincipal());
         var request = requestBuilder.Create();
+
+        var context = ServiceProvider.GetRequiredService<AdSpotDbContext>();
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+        context.SeedTestDatabase();
+
+        var result = await Executor.ExecuteAsync(request, cancellationToken);
+        result.RegisterForCleanup(scope.DisposeAsync);
+        return result;
+    }
+
+    public static async Task<IExecutionResult> ExecuteRequestAsync(
+        Action<AsyncServiceScope> arrangeData,
+        Action<IQueryRequestBuilder> configureRequest,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var scope = ServiceProvider.CreateAsyncScope();
+
+        var requestBuilder = new QueryRequestBuilder();
+        requestBuilder.SetServices(scope.ServiceProvider);
+        configureRequest(requestBuilder);
+        requestBuilder.AddGlobalState(nameof(ClaimsPrincipal), CreateClaimsPrincipal());
+        var request = requestBuilder.Create();
+
+        var context = ServiceProvider.GetRequiredService<AdSpotDbContext>();
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+        context.SeedTestDatabase();
+        arrangeData.Invoke(scope);
 
         var result = await Executor.ExecuteAsync(request, cancellationToken);
         result.RegisterForCleanup(scope.DisposeAsync);

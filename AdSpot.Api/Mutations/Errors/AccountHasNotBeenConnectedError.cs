@@ -1,6 +1,6 @@
 ﻿namespace AdSpot.Api.Mutations.Errors;
 
-public class AccountHasNotBeenConnectedError
+public record AccountHasNotBeenConnectedError
 {
     public AccountHasNotBeenConnectedError(int userId, int platformId)
     {

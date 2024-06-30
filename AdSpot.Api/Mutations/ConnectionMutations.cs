@@ -7,9 +7,8 @@ namespace AdSpot.Api.Mutations;
 public class ConnectionMutations
 {
     [Authorize]
-    [UseFirstOrDefault]
-    [UseProjection]
-    public IQueryable<Connection> AddConnection(
+    [Error<ConnectionAlreadyExistsError>]
+    public MutationResult<IQueryable<Connection>> AddConnection(
         int userId,
         int platformId,
         string accountHandle,
@@ -17,6 +16,12 @@ public class ConnectionMutations
         ConnectionRepository repo
     )
     {
+        var connectionExists = repo.GetConnection(userId, platformId).Any();
+        if (connectionExists)
+        {
+            return new(new ConnectionAlreadyExistsError(userId, platformId));
+        }
+
         var account = repo.AddConnection(
             new Connection
             {
@@ -27,7 +32,7 @@ public class ConnectionMutations
             }
         );
 
-        return account;
+        return new(account);
     }
 
     [Error<InstagramOauthError>]

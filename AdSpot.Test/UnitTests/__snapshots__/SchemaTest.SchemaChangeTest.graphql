@@ -17,7 +17,8 @@ type AccountWithEmailAlreadyExistsError implements Error {
 }
 
 type AddConnectionPayload {
-  connection: Connection
+  connection: [Connection!]
+  errors: [AddConnectionError!]
 }
 
 type AddListingPayload {
@@ -43,6 +44,10 @@ type Connection {
   user: User!
   platformId: Int!
   platform: Platform!
+}
+
+type ConnectionAlreadyExistsError implements Error {
+  message: String!
 }
 
 type DeleteUserPayload {
@@ -98,10 +103,10 @@ type LoginPayload {
 }
 
 type Mutation {
-  addConnection(input: AddConnectionInput!): AddConnectionPayload!
+  addConnection(input: AddConnectionInput!): AddConnectionPayload! @authorize
   exchangeInstagramAuthCodeForToken(input: ExchangeInstagramAuthCodeForTokenInput!): ExchangeInstagramAuthCodeForTokenPayload!
-  addListing(input: AddListingInput!): AddListingPayload!
-  orderListing(input: OrderListingInput!): OrderListingPayload!
+  addListing(input: AddListingInput!): AddListingPayload! @authorize
+  orderListing(input: OrderListingInput!): OrderListingPayload! @authorize
   addUser(input: AddUserInput!): AddUserPayload!
   deleteUser(input: DeleteUserInput!): DeleteUserPayload!
   updatePassword(input: UpdatePasswordInput!): UpdatePasswordPayload!
@@ -171,11 +176,11 @@ type Platform {
 }
 
 type Query {
-  connection(userId: Int! platformId: Int!): [Connection!]!
-  orders(where: OrderFilterInput): [Order!]!
-  orderById(orderId: Int!): Order
-  ordersByStatus(userId: Int! status: OrderStatusEnum! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [OrderSortInput!]): OrdersByStatusConnection
-  requestsByStatus(userId: Int! status: OrderStatusEnum! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [OrderSortInput!]): RequestsByStatusConnection
+  connection(userId: Int! platformId: Int!): [Connection!]! @authorize
+  orders(where: OrderFilterInput): [Order!]! @authorize
+  orderById(orderId: Int!): Order @authorize
+  ordersByStatus(userId: Int! status: OrderStatusEnum! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [OrderSortInput!]): OrdersByStatusConnection @authorize
+  requestsByStatus(userId: Int! status: OrderStatusEnum! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [OrderSortInput!]): RequestsByStatusConnection @authorize
   platforms: [Platform!]!
   users("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: UserFilterInput order: [UserSortInput!]): UsersConnection
   userById(userId: Int!): User
@@ -247,6 +252,8 @@ type UsersEdge {
   "The item at the end of the edge."
   node: User!
 }
+
+union AddConnectionError = ConnectionAlreadyExistsError
 
 union AddListingError = InvalidListingTypeIdError | AccountHasNotBeenConnectedError
 
@@ -541,6 +548,12 @@ input UserSortInput {
   lastName: SortEnumType
 }
 
+enum ApplyPolicy {
+  BEFORE_RESOLVER
+  AFTER_RESOLVER
+  VALIDATION
+}
+
 enum OrderStatusEnum {
   PENDING
   ACCEPTED
@@ -552,6 +565,8 @@ enum SortEnumType {
   ASC
   DESC
 }
+
+directive @authorize("The name of the authorization policy that determines access to the annotated resource." policy: String "Roles that are allowed to access the annotated resource." roles: [String!] "Defines when when the authorize directive shall be applied.By default the authorize directives are applied during the validation phase." apply: ApplyPolicy! = BEFORE_RESOLVER) repeatable on OBJECT | FIELD_DEFINITION
 
 "The `DateTime` scalar represents an ISO-8601 compliant date time type."
 scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")
