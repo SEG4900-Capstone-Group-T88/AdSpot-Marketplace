@@ -1,13 +1,14 @@
-﻿using HotChocolate.Subscriptions;
+﻿using HotChocolate.Authorization;
+using HotChocolate.Subscriptions;
 
 namespace AdSpot.Api.Mutations;
 
 [MutationType]
 public class ConnectionMutations
 {
-    [UseFirstOrDefault]
-    [UseProjection]
-    public IQueryable<Connection> AddConnection(
+    [Authorize]
+    [Error<ConnectionAlreadyExistsError>]
+    public MutationResult<IQueryable<Connection>> AddConnection(
         int userId,
         int platformId,
         string accountHandle,
@@ -15,6 +16,12 @@ public class ConnectionMutations
         ConnectionRepository repo
     )
     {
+        var connectionExists = repo.GetConnection(userId, platformId).Any();
+        if (connectionExists)
+        {
+            return new(new ConnectionAlreadyExistsError(userId, platformId));
+        }
+
         var account = repo.AddConnection(
             new Connection
             {
@@ -25,7 +32,7 @@ public class ConnectionMutations
             }
         );
 
-        return account;
+        return new(account);
     }
 
     [Error<InstagramOauthError>]
@@ -39,8 +46,7 @@ public class ConnectionMutations
     )
     {
         var response = await service.ExchangeAuthCodeForAccessToken(authCode);
-        var json =
-            await response.Content.ReadFromJsonAsync<ExchangeInstagramAuthCodeForTokenPayload>();
+        var json = await response.Content.ReadFromJsonAsync<ExchangeInstagramAuthCodeForTokenPayload>();
         if (json?.AccessToken is null)
         {
             var content = await response.Content.ReadAsStringAsync();

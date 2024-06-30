@@ -1,6 +1,6 @@
 ﻿namespace AdSpot.Api.Mutations.Errors;
 
-public class InstagramOauthError
+public record InstagramOauthError
 {
     public InstagramOauthError(JObject obj)
     {

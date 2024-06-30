@@ -3,9 +3,9 @@
     "login": {
       "user": {
         "userId": 1,
-        "email": "user1",
-        "firstName": "User",
-        "lastName": "1"
+        "email": "testuser@adspot.com",
+        "firstName": "Test",
+        "lastName": "User"
       },
       "errors": null
     }

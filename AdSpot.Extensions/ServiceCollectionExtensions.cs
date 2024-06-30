@@ -13,11 +13,7 @@ public static class ServiceCollectionExtensions
         where T : class
     {
         var configSectionPath = typeof(T).Name.Replace("Options", "");
-        services
-            .AddOptions<T>()
-            .BindConfiguration(configSectionPath)
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
+        services.AddOptions<T>().BindConfiguration(configSectionPath).ValidateDataAnnotations().ValidateOnStart();
 
         options =
             config.GetSection(configSectionPath).Get<T>()
@@ -30,11 +26,7 @@ public static class ServiceCollectionExtensions
         where T : class
     {
         var configSectionPath = typeof(T).Name.Replace("Options", "");
-        services
-            .AddOptions<T>()
-            .BindConfiguration(configSectionPath)
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
+        services.AddOptions<T>().BindConfiguration(configSectionPath).ValidateDataAnnotations().ValidateOnStart();
 
         return services;
     }

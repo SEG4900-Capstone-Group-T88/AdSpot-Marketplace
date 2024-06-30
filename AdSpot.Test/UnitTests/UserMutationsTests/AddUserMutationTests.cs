@@ -1,5 +1,6 @@
 ﻿namespace AdSpot.Test.UnitTests.UserMutationsTests;
 
+[Collection("adspot-inmemory-db")]
 public class AddUserMutationTests
 {
     private const string AddUserMutation = """
@@ -53,10 +54,10 @@ public class AddUserMutationTests
                     "input",
                     new Dictionary<string, object?>
                     {
-                        { "email", "user1" },
-                        { "password", "user1" },
-                        { "firstName", "user" },
-                        { "lastName", "1" },
+                        { "email", TestDatabase.TestUser.Email },
+                        { "password", TestDatabase.TestUser.Password },
+                        { "firstName", TestDatabase.TestUser.FirstName },
+                        { "lastName", TestDatabase.TestUser.LastName },
                     }
                 )
         );

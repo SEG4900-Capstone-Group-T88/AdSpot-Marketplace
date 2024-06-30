@@ -1,20 +1,30 @@
-﻿namespace AdSpot.Api.Utils;
+﻿using System.Security.Claims;
+using Microsoft.IdentityModel.JsonWebTokens;
+
+namespace AdSpot.Api.Utils;
 
 public static class JwtUtils
 {
-    public static string GenerateToken(User user, IOptions<JwtOptions> jwtOptions)
+    public static string GenerateToken(User user, IOptions<JwtOptions> jwtOptions, KeyManager keyManager)
     {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.Key));
-        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        var handler = new JsonWebTokenHandler();
+        var key = new RsaSecurityKey(keyManager.RsaKey);
 
-        var token = new JwtSecurityToken(
-            jwtOptions.Value.Issuer,
-            jwtOptions.Value.Audience,
-            null,
-            expires: DateTime.Now.AddMinutes(120),
-            signingCredentials: credentials
+        var subject = new ClaimsIdentity(
+            new[] { new Claim("sub", user.UserId.ToString()), new Claim("name", $"{user.FirstName} {user.LastName}"), }
         );
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        var token = handler.CreateToken(
+            new SecurityTokenDescriptor
+            {
+                Issuer = jwtOptions.Value.Issuer,
+                Audience = jwtOptions.Value.Audience,
+                Expires = DateTime.UtcNow.AddMinutes(jwtOptions.Value.ExpiryMinutes),
+                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256),
+                Subject = subject
+            }
+        );
+
+        return token;
     }
 }

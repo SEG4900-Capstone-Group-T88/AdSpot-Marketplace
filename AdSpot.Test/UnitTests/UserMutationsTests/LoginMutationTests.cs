@@ -1,5 +1,6 @@
 ﻿namespace AdSpot.Test.UnitTests.UserMutationsTests;
 
+[Collection("adspot-inmemory-db")]
 public class LoginMutationTests
 {
     private const string LoginMutation = """
@@ -32,8 +33,8 @@ public class LoginMutationTests
                     "input",
                     new Dictionary<string, object?>
                     {
-                        { "email", "user1" },
-                        { "password", "user1" },
+                        { "email", TestDatabase.TestUser.Email },
+                        { "password", TestDatabase.TestUser.Password },
                     }.AsReadOnly()
                 )
         );
@@ -51,8 +52,8 @@ public class LoginMutationTests
                     "input",
                     new Dictionary<string, object?>
                     {
-                        { "email", "user1" },
-                        { "password", "invalidcredentials" },
+                        { "email", TestDatabase.TestUser.Email },
+                        { "password", TestDatabase.TestUser.Password + "invalid" },
                     }.AsReadOnly()
                 )
         );

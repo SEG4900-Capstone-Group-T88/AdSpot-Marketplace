@@ -1,6 +1,6 @@
 ﻿namespace AdSpot.Api.Mutations.Errors;
 
-public class InvalidListingIdError
+public record InvalidListingIdError
 {
     public InvalidListingIdError(int listingId)
     {

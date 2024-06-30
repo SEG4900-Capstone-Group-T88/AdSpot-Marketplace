@@ -1,5 +1,6 @@
 ﻿namespace AdSpot.Test.UnitTests;
 
+[Collection("adspot-inmemory-db")]
 public class PlatformQueriesTests
 {
     private const string PlatformsQuery = """
