@@ -23,9 +23,7 @@ public class ConnectionRepository
     {
         context.Connections.Add(connection);
         context.SaveChanges();
-        return context.Connections.Where(x =>
-            x.UserId == connection.UserId && x.PlatformId == connection.PlatformId
-        );
+        return context.Connections.Where(x => x.UserId == connection.UserId && x.PlatformId == connection.PlatformId);
     }
 
     public IQueryable<Connection> UpdateConnection(Connection connection)
@@ -38,9 +36,7 @@ public class ConnectionRepository
         existingConnection.Handle = connection.Handle;
         context.SaveChanges();
 
-        return context.Connections.Where(x =>
-            x.UserId == connection.UserId && x.PlatformId == connection.PlatformId
-        );
+        return context.Connections.Where(x => x.UserId == connection.UserId && x.PlatformId == connection.PlatformId);
     }
 
     public IQueryable<Connection> AddOrUpdateConnection(Connection connection)

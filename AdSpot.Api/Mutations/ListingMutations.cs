@@ -25,9 +25,7 @@ public class ListingMutations
             return new(new InvalidListingTypeIdError(listingTypeId));
         }
 
-        var connection = connectionRepo
-            .GetConnection(userId, listingType.PlatformId)
-            .FirstOrDefault();
+        var connection = connectionRepo.GetConnection(userId, listingType.PlatformId).FirstOrDefault();
         if (connection is null)
         {
             return new(new AccountHasNotBeenConnectedError(userId, listingType.PlatformId));

@@ -30,11 +30,7 @@ public class LoginMutationTests
             b.SetQuery(LoginMutation)
                 .SetVariableValue(
                     "input",
-                    new Dictionary<string, object?>
-                    {
-                        { "email", "user1" },
-                        { "password", "user1" },
-                    }.AsReadOnly()
+                    new Dictionary<string, object?> { { "email", "user1" }, { "password", "user1" }, }.AsReadOnly()
                 )
         );
 

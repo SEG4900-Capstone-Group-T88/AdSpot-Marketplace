@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-
 using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace AdSpot.Api.Utils;
@@ -11,20 +10,20 @@ public static class JwtUtils
         var handler = new JsonWebTokenHandler();
         var key = new RsaSecurityKey(keyManager.RsaKey);
 
-        var subject = new ClaimsIdentity(new[]
-        {
-            new Claim("sub", user.UserId.ToString()),
-            new Claim("name", $"{user.FirstName} {user.LastName}"),
-        });
+        var subject = new ClaimsIdentity(
+            new[] { new Claim("sub", user.UserId.ToString()), new Claim("name", $"{user.FirstName} {user.LastName}"), }
+        );
 
-        var token = handler.CreateToken(new SecurityTokenDescriptor
-        {
-            Issuer = jwtOptions.Value.Issuer,
-            Audience = jwtOptions.Value.Audience,
-            Expires = DateTime.UtcNow.AddMinutes(jwtOptions.Value.ExpiryMinutes),
-            SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256),
-            Subject = subject
-        });
+        var token = handler.CreateToken(
+            new SecurityTokenDescriptor
+            {
+                Issuer = jwtOptions.Value.Issuer,
+                Audience = jwtOptions.Value.Audience,
+                Expires = DateTime.UtcNow.AddMinutes(jwtOptions.Value.ExpiryMinutes),
+                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256),
+                Subject = subject
+            }
+        );
 
         return token;
     }

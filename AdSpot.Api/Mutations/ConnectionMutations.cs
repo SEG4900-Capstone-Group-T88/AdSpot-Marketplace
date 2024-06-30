@@ -41,8 +41,7 @@ public class ConnectionMutations
     )
     {
         var response = await service.ExchangeAuthCodeForAccessToken(authCode);
-        var json =
-            await response.Content.ReadFromJsonAsync<ExchangeInstagramAuthCodeForTokenPayload>();
+        var json = await response.Content.ReadFromJsonAsync<ExchangeInstagramAuthCodeForTokenPayload>();
         if (json?.AccessToken is null)
         {
             var content = await response.Content.ReadAsStringAsync();

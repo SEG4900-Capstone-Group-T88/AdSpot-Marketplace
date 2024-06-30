@@ -25,11 +25,7 @@ public class OrderQueries
     [UsePaging]
     [UseProjection]
     [UseSorting]
-    public IQueryable<Order> GetOrdersByStatus(
-        int userId,
-        OrderStatusEnum status,
-        OrderRepository repo
-    )
+    public IQueryable<Order> GetOrdersByStatus(int userId, OrderStatusEnum status, OrderRepository repo)
     {
         return repo.GetOrdersByStatus(userId, status);
     }
@@ -38,11 +34,7 @@ public class OrderQueries
     [UsePaging]
     [UseProjection]
     [UseSorting]
-    public IQueryable<Order> GetRequestsByStatus(
-        int userId,
-        OrderStatusEnum status,
-        OrderRepository repo
-    )
+    public IQueryable<Order> GetRequestsByStatus(int userId, OrderStatusEnum status, OrderRepository repo)
     {
         return repo.GetRequestsByStatus(userId, status);
     }

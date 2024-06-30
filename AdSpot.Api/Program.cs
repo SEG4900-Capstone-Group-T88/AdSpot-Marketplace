@@ -4,9 +4,7 @@ var config = builder.Configuration;
 var keyManager = new KeyManager();
 builder.Services.AddSingleton(keyManager);
 
-builder.Services.AddDbContext<AdSpotDbContext>(options =>
-    options.UseNpgsql(config.GetConnectionString("Postgres"))
-);
+builder.Services.AddDbContext<AdSpotDbContext>(options => options.UseNpgsql(config.GetConnectionString("Postgres")));
 
 builder.Services.AddHttpClient();
 
@@ -51,9 +49,7 @@ builder
     .RegisterService<OrderRepository>(ServiceKind.Resolver)
     .RegisterService<PlatformRepository>()
     .RegisterService<UserRepository>()
-    .SetPagingOptions(
-        new HotChocolate.Types.Pagination.PagingOptions { IncludeTotalCount = true, }
-    );
+    .SetPagingOptions(new HotChocolate.Types.Pagination.PagingOptions { IncludeTotalCount = true, });
 
 builder
     .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

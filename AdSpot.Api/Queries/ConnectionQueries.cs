@@ -6,11 +6,7 @@ namespace AdSpot.Api.Queries;
 public class ConnectionQueries
 {
     [Authorize]
-    public IQueryable<Connection> GetConnection(
-        int userId,
-        int platformId,
-        ConnectionRepository repo
-    )
+    public IQueryable<Connection> GetConnection(int userId, int platformId, ConnectionRepository repo)
     {
         return repo.GetConnection(userId, platformId);
     }

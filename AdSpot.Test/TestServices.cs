@@ -46,9 +46,7 @@ public static class TestServices
             .RegisterService<OrderRepository>(ServiceKind.Resolver)
             .RegisterService<PlatformRepository>()
             .RegisterService<UserRepository>()
-            .SetPagingOptions(
-                new HotChocolate.Types.Pagination.PagingOptions { IncludeTotalCount = true, }
-            )
+            .SetPagingOptions(new HotChocolate.Types.Pagination.PagingOptions { IncludeTotalCount = true, })
             .ModifyRequestOptions(options =>
             {
                 options.IncludeExceptionDetails = true;

@@ -8,10 +8,7 @@ public class InstagramService
     private readonly HttpClient graphClient;
     private readonly IOptions<OAuthOptions> oauthOptions;
 
-    public InstagramService(
-        IHttpClientFactory httpClientFactory,
-        IOptions<OAuthOptions> oauthOptions
-    )
+    public InstagramService(IHttpClientFactory httpClientFactory, IOptions<OAuthOptions> oauthOptions)
     {
         apiClient = httpClientFactory.CreateClient();
         apiClient.BaseAddress = new Uri("https://api.instagram.com/");
@@ -42,11 +39,7 @@ public class InstagramService
     public async Task<JObject?> GetUser(string accessToken)
     {
         var parameters = new FormUrlEncodedContent(
-            new Dictionary<string, string>
-            {
-                { "fields", "id,username" },
-                { "access_token", accessToken }
-            }
+            new Dictionary<string, string> { { "fields", "id,username" }, { "access_token", accessToken } }
         );
         var query = await parameters.ReadAsStringAsync();
         var response = await graphClient.GetAsync("me?" + query);
@@ -75,11 +68,7 @@ public class InstagramService
     public async Task<JObject?> RefreshToken(string accessToken)
     {
         var parameters = new FormUrlEncodedContent(
-            new Dictionary<string, string>
-            {
-                { "grant_type", "ig_refresh_token" },
-                { "access_token", accessToken }
-            }
+            new Dictionary<string, string> { { "grant_type", "ig_refresh_token" }, { "access_token", accessToken } }
         );
         var query = await parameters.ReadAsStringAsync();
         var response = await graphClient.GetAsync("refresh_access_token?" + query);

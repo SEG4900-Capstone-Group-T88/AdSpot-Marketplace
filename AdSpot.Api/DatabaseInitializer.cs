@@ -138,11 +138,7 @@ public static class DatabaseInitializer
                                     if (probability < 0.5)
                                     {
                                         var price = (decimal)
-                                            Math.Round(
-                                                random.NextDouble() * (maxPrice - minPrice)
-                                                    + minPrice,
-                                                2
-                                            );
+                                            Math.Round(random.NextDouble() * (maxPrice - minPrice) + minPrice, 2);
                                         listings.Add(
                                             new Listing
                                             {
