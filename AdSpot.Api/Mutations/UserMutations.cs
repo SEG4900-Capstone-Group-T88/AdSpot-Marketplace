@@ -32,13 +32,13 @@ public class UserMutations
         return new AddUserPayload { User = user, Token = token };
     }
 
-    public User DeleteUser(int userId, UserRepository repo)
+    public IQueryable<User> DeleteUser(int userId, UserRepository repo)
     {
         var user = repo.DeleteUser(userId);
         return user;
     }
 
-    public User UpdatePassword(int userId, string password, UserRepository repo)
+    public IQueryable<User> UpdatePassword(int userId, string password, UserRepository repo)
     {
         var user = repo.UpdatePassword(userId, password);
         return user;
