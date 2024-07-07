@@ -1,4 +1,4 @@
-﻿namespace AdSpot.Test.UnitTests;
+﻿namespace AdSpot.Test.UnitTests.BasicQueriesTests;
 
 [Collection("adspot-inmemory-db")]
 public class PlatformQueriesTests

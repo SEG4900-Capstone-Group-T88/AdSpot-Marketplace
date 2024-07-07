@@ -1,7 +1,4 @@
-﻿using HotChocolate.Authorization;
-using HotChocolate.Subscriptions;
-
-namespace AdSpot.Api.Mutations;
+﻿namespace AdSpot.Api.Mutations;
 
 [MutationType]
 public class ConnectionMutations
@@ -78,7 +75,7 @@ public class ConnectionMutations
                     )
                     .FirstOrDefault();
 
-                var topicName = $"{userId}_{nameof(Subscription.OnAccountConnected)}";
+                var topicName = $"{userId}_{nameof(NewConnectionSubscription.OnAccountConnected)}";
                 await topicEventSender.SendAsync(topicName, connection);
 
                 return connection;

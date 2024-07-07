@@ -47,7 +47,7 @@ public class OrderMutations
 
         // Notify seller
         var newOrder = order.FirstOrDefault();
-        var topicName = $"{listing.UserId}_{nameof(Subscription.OnNewOrder)}";
+        var topicName = $"{listing.UserId}_{nameof(NewOrderSubscription.OnNewOrder)}";
         await topicEventSender.SendAsync(topicName, newOrder);
 
         return new(order);
