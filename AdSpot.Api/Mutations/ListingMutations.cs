@@ -1,6 +1,4 @@
-﻿using HotChocolate.Authorization;
-
-namespace AdSpot.Api.Mutations;
+﻿namespace AdSpot.Api.Mutations;
 
 [MutationType]
 public class ListingMutations
@@ -42,49 +40,5 @@ public class ListingMutations
         );
 
         return new(listing);
-    }
-
-    [Authorize]
-    //Seems like we can't use projections here
-    //[UseProjection]
-    [Error<InvalidListingIdError>]
-    [Error<CannotOrderOwnListingError>]
-    [Error<ListingPriceHasChangedError>]
-    public MutationResult<IQueryable<Order>> OrderListing(
-        int listingId,
-        int userId,
-        decimal price,
-        string description,
-        ListingRepository listingRepo,
-        OrderRepository orderRepo
-    )
-    {
-        var listing = listingRepo.GetListingById(listingId).FirstOrDefault();
-        if (listing is null)
-        {
-            return new(new InvalidListingIdError(listingId));
-        }
-
-        if (userId == listing.UserId)
-        {
-            return new(new CannotOrderOwnListingError());
-        }
-
-        if (listing.Price != price)
-        {
-            return new(new ListingPriceHasChangedError(price, listing.Price));
-        }
-
-        var order = orderRepo.AddOrder(
-            new Order
-            {
-                ListingId = listingId,
-                UserId = userId,
-                Price = price,
-                Description = description
-            }
-        );
-
-        return new(order);
     }
 }

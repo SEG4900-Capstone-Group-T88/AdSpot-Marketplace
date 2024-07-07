@@ -1,13 +1,8 @@
-﻿using HotChocolate.Execution;
-using HotChocolate.Subscriptions;
+﻿namespace AdSpot.Api.Subscriptions;
 
-namespace AdSpot.Api;
-
-[SubscriptionType]
-public class Subscription
+[ExtendObjectType(OperationTypeNames.Subscription)]
+public class NewConnectionSubscription
 {
-    //https://chillicream.com/docs/hotchocolate/v13/migrating/migrate-from-12-to-13/#subscribeandresolve
-
     public ValueTask<ISourceStream<Connection>> SubscribeToConnectedAccounts(
         int userId,
         ITopicEventReceiver receiver,

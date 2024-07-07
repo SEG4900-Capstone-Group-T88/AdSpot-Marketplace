@@ -8,6 +8,11 @@ interface Error {
   message: String!
 }
 
+type AcceptOrderPayload {
+  order: [Order!]
+  errors: [AcceptOrderError!]
+}
+
 type AccountHasNotBeenConnectedError implements Error {
   message: String!
 }
@@ -51,7 +56,7 @@ type ConnectionAlreadyExistsError implements Error {
 }
 
 type DeleteUserPayload {
-  user: User
+  user: [User!]
 }
 
 type ExchangeInstagramAuthCodeForTokenPayload {
@@ -71,6 +76,10 @@ type InvalidListingTypeIdError implements Error {
   message: String!
 }
 
+type InvalidOrderIdError implements Error {
+  message: String!
+}
+
 type Listing {
   listingId: Int!
   platformId: Int!
@@ -82,6 +91,10 @@ type Listing {
   price: Decimal!
   connection: Connection!
   orders: [Order!]!
+}
+
+type ListingDoesNotBelongToUserError implements Error {
+  message: String!
 }
 
 type ListingPriceHasChangedError implements Error {
@@ -107,6 +120,8 @@ type Mutation {
   exchangeInstagramAuthCodeForToken(input: ExchangeInstagramAuthCodeForTokenInput!): ExchangeInstagramAuthCodeForTokenPayload!
   addListing(input: AddListingInput!): AddListingPayload! @authorize
   orderListing(input: OrderListingInput!): OrderListingPayload! @authorize
+  acceptOrder(input: AcceptOrderInput!): AcceptOrderPayload! @authorize
+  rejectOrder(input: RejectOrderInput!): RejectOrderPayload! @authorize
   addUser(input: AddUserInput!): AddUserPayload!
   deleteUser(input: DeleteUserInput!): DeleteUserPayload!
   updatePassword(input: UpdatePasswordInput!): UpdatePasswordPayload!
@@ -186,6 +201,11 @@ type Query {
   userById(userId: Int!): User
 }
 
+type RejectOrderPayload {
+  order: [Order!]
+  errors: [RejectOrderError!]
+}
+
 "A connection to a list of items."
 type RequestsByStatusConnection {
   "Information to aid in pagination."
@@ -208,10 +228,12 @@ type RequestsByStatusEdge {
 
 type Subscription {
   onAccountConnected(userId: Int!): Connection!
+  onNewOrder(userId: Int!): Order!
+  name: String!
 }
 
 type UpdatePasswordPayload {
-  user: User
+  user: [User!]
 }
 
 type User {
@@ -253,6 +275,8 @@ type UsersEdge {
   node: User!
 }
 
+union AcceptOrderError = InvalidOrderIdError | ListingDoesNotBelongToUserError
+
 union AddConnectionError = ConnectionAlreadyExistsError
 
 union AddListingError = InvalidListingTypeIdError | AccountHasNotBeenConnectedError
@@ -264,6 +288,13 @@ union ExchangeInstagramAuthCodeForTokenError = InstagramOauthError
 union LoginError = UserNotFoundError | UserInvalidCredentialsError
 
 union OrderListingError = InvalidListingIdError | CannotOrderOwnListingError | ListingPriceHasChangedError
+
+union RejectOrderError = InvalidOrderIdError | ListingDoesNotBelongToUserError
+
+input AcceptOrderInput {
+  userId: Int!
+  orderId: Int!
+}
 
 input AddConnectionInput {
   userId: Int!
@@ -505,6 +536,11 @@ input PlatformFilterInput {
 input PlatformSortInput {
   platformId: SortEnumType
   name: SortEnumType
+}
+
+input RejectOrderInput {
+  userId: Int!
+  orderId: Int!
 }
 
 input StringOperationFilterInput {
