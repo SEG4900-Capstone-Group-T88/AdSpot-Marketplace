@@ -24,14 +24,54 @@ public static class TestDatabase
 
     public static List<ListingType> ListingTypes =
     [
-        new() { Name = "Post", PlatformId = 1 },
-        new() { Name = "Share", PlatformId = 1 },
-        new() { Name = "Tweet", PlatformId = 2 },
-        new() { Name = "Retweet", PlatformId = 2 },
-        new() { Name = "Story", PlatformId = 3 },
-        new() { Name = "Post", PlatformId = 3 },
-        new() { Name = "Video", PlatformId = 4 },
-        new() { Name = "Stream", PlatformId = 4 }
+        new()
+        {
+            ListingTypeId = 1,
+            Name = "Post",
+            PlatformId = 1
+        },
+        new()
+        {
+            ListingTypeId = 2,
+            Name = "Share",
+            PlatformId = 1
+        },
+        new()
+        {
+            ListingTypeId = 3,
+            Name = "Tweet",
+            PlatformId = 2
+        },
+        new()
+        {
+            ListingTypeId = 4,
+            Name = "Retweet",
+            PlatformId = 2
+        },
+        new()
+        {
+            ListingTypeId = 5,
+            Name = "Story",
+            PlatformId = 3
+        },
+        new()
+        {
+            ListingTypeId = 6,
+            Name = "Post",
+            PlatformId = 3
+        },
+        new()
+        {
+            ListingTypeId = 7,
+            Name = "Video",
+            PlatformId = 4
+        },
+        new()
+        {
+            ListingTypeId = 8,
+            Name = "Stream",
+            PlatformId = 4
+        }
     ];
 
     public static void SeedTestDatabase(this AdSpotDbContext context)
