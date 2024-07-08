@@ -26,11 +26,13 @@ public class OrderRepository
         return context.Orders.Where(o => o.OrderId == orderId);
     }
 
+    [UseSorting]
     public IQueryable<Order> GetOrdersByStatus(int userId, OrderStatusEnum status)
     {
         return context.Orders.Where(o => o.UserId == userId && o.OrderStatusId == status);
     }
 
+    [UseSorting]
     public IQueryable<Order> GetRequestsByStatus(int userId, OrderStatusEnum status)
     {
         return context.Orders.Where(o => o.Listing.UserId == userId && o.OrderStatusId == status);
