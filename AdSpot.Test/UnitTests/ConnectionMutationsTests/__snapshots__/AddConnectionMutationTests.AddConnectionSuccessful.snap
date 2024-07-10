@@ -1,12 +1,10 @@
 {
   "data": {
     "addConnection": {
-      "connection": [
-        {
-          "userId": 1,
-          "platformId": 1
-        }
-      ],
+      "connection": {
+        "userId": 1,
+        "platformId": 1
+      },
       "errors": null
     }
   }

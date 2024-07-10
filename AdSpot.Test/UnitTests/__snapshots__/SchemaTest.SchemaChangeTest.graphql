@@ -9,7 +9,7 @@ interface Error {
 }
 
 type AcceptOrderPayload {
-  order: [Order!]
+  order: Order
   errors: [AcceptOrderError!]
 }
 
@@ -22,12 +22,12 @@ type AccountWithEmailAlreadyExistsError implements Error {
 }
 
 type AddConnectionPayload {
-  connection: [Connection!]
+  connection: Connection
   errors: [AddConnectionError!]
 }
 
 type AddListingPayload {
-  listing: [Listing!]
+  listing: Listing
   errors: [AddListingError!]
 }
 
@@ -56,7 +56,8 @@ type ConnectionAlreadyExistsError implements Error {
 }
 
 type DeleteUserPayload {
-  user: [User!]
+  user: User
+  errors: [DeleteUserError!]
 }
 
 type ExchangeInstagramAuthCodeForTokenPayload {
@@ -77,6 +78,10 @@ type InvalidListingTypeIdError implements Error {
 }
 
 type InvalidOrderIdError implements Error {
+  message: String!
+}
+
+type InvalidUserIdError implements Error {
   message: String!
 }
 
@@ -142,7 +147,7 @@ type Order {
 }
 
 type OrderListingPayload {
-  order: [Order!]
+  order: Order
   errors: [OrderListingError!]
 }
 
@@ -172,6 +177,26 @@ type OrdersByStatusEdge {
   node: Order!
 }
 
+"A connection to a list of items."
+type OrdersConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [OrdersEdge!]
+  "A flattened list of the nodes."
+  nodes: [Order!]
+  "Identifies the total count of items in the connection."
+  totalCount: Int!
+}
+
+"An edge in a connection."
+type OrdersEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Order!
+}
+
 "Information about pagination in a connection."
 type PageInfo {
   "Indicates whether more edges exist following the set defined by the clients arguments."
@@ -192,17 +217,17 @@ type Platform {
 
 type Query {
   connection(userId: Int! platformId: Int!): [Connection!]! @authorize
-  orders(where: OrderFilterInput): [Order!]! @authorize
   orderById(orderId: Int!): Order @authorize
-  ordersByStatus(userId: Int! status: OrderStatusEnum! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [OrderSortInput!]): OrdersByStatusConnection @authorize
-  requestsByStatus(userId: Int! status: OrderStatusEnum! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [OrderSortInput!]): RequestsByStatusConnection @authorize
+  orders(userId: Int! pov: OrderPov! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: OrderFilterInput order: [OrderSortInput!]): OrdersConnection @authorize
+  ordersByStatus(userId: Int! status: OrderStatusEnum! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [OrderSortInput!]): OrdersByStatusConnection @authorize @deprecated(reason: "Use the `orders` field with a filter instead")
+  requestsByStatus(userId: Int! status: OrderStatusEnum! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [OrderSortInput!]): RequestsByStatusConnection @authorize @deprecated(reason: "Use the `orders` field with a filter instead")
   platforms: [Platform!]!
   users("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: UserFilterInput order: [UserSortInput!]): UsersConnection
   userById(userId: Int!): User
 }
 
 type RejectOrderPayload {
-  order: [Order!]
+  order: Order
   errors: [RejectOrderError!]
 }
 
@@ -233,7 +258,8 @@ type Subscription {
 }
 
 type UpdatePasswordPayload {
-  user: [User!]
+  user: User
+  errors: [UpdatePasswordError!]
 }
 
 type User {
@@ -283,6 +309,8 @@ union AddListingError = InvalidListingTypeIdError | AccountHasNotBeenConnectedEr
 
 union AddUserError = AccountWithEmailAlreadyExistsError
 
+union DeleteUserError = InvalidUserIdError
+
 union ExchangeInstagramAuthCodeForTokenError = InstagramOauthError
 
 union LoginError = UserNotFoundError | UserInvalidCredentialsError
@@ -290,6 +318,8 @@ union LoginError = UserNotFoundError | UserInvalidCredentialsError
 union OrderListingError = InvalidListingIdError | CannotOrderOwnListingError | ListingPriceHasChangedError
 
 union RejectOrderError = InvalidOrderIdError | ListingDoesNotBelongToUserError
+
+union UpdatePasswordError = InvalidUserIdError
 
 input AcceptOrderInput {
   userId: Int!
@@ -588,6 +618,11 @@ enum ApplyPolicy {
   BEFORE_RESOLVER
   AFTER_RESOLVER
   VALIDATION
+}
+
+enum OrderPov {
+  BUYER
+  SELLER
 }
 
 enum OrderStatusEnum {

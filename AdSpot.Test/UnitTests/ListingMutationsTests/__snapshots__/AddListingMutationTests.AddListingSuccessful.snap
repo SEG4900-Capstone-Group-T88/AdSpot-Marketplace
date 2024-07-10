@@ -1,11 +1,9 @@
 {
   "data": {
     "addListing": {
-      "listing": [
-        {
-          "listingId": 1
-        }
-      ],
+      "listing": {
+        "listingId": 1
+      },
       "errors": null
     }
   }
