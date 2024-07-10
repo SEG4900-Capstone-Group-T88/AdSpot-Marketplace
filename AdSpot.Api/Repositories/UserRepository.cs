@@ -31,26 +31,20 @@ public class UserRepository
         return user;
     }
 
-    public IQueryable<User> DeleteUser(int userId)
+    public User DeleteUser(int userId)
     {
-        var user = context.Users.FirstOrDefault(u => u.UserId == userId);
-        if (user is not null)
-        {
-            context.Users.Remove(user);
-            context.SaveChanges();
-        }
-        return context.Users.Where(u => u.UserId == userId);
+        var user = context.Users.First(u => u.UserId == userId);
+        context.Users.Remove(user);
+        context.SaveChanges();
+        return user;
     }
 
-    public IQueryable<User> UpdatePassword(int userId, string password)
+    public User UpdatePassword(int userId, string password)
     {
-        var user = context.Users.FirstOrDefault(u => u.UserId == userId);
-        if (user is not null)
-        {
-            user.Password = password;
-            context.SaveChanges();
-        }
-        return context.Users.Where(u => u.UserId == userId);
+        var user = context.Users.First(u => u.UserId == userId);
+        user.Password = password;
+        context.SaveChanges();
+        return user;
     }
 
     public User? ValidateUser(string email, string password)

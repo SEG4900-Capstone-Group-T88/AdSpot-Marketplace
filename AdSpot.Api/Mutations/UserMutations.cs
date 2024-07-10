@@ -32,15 +32,31 @@ public class UserMutations
         return new AddUserPayload { User = user, Token = token };
     }
 
-    public IQueryable<User> DeleteUser(int userId, UserRepository repo)
+    [Error<InvalidUserIdError>]
+    public MutationResult<User> DeleteUser(int userId, UserRepository repo)
     {
-        var user = repo.DeleteUser(userId);
-        return user;
+        var user = repo.GetUserById(userId).FirstOrDefault();
+
+        if (user is null)
+        {
+            return new(new InvalidUserIdError(userId));
+        }
+
+        user = repo.DeleteUser(userId);
+        return new(user);
     }
 
-    public IQueryable<User> UpdatePassword(int userId, string password, UserRepository repo)
+    [Error<InvalidUserIdError>]
+    public MutationResult<User> UpdatePassword(int userId, string password, UserRepository repo)
     {
-        var user = repo.UpdatePassword(userId, password);
+        var user = repo.GetUserById(userId).FirstOrDefault();
+
+        if (user is null)
+        {
+            return new(new InvalidUserIdError(userId));
+        }
+
+        user = repo.UpdatePassword(userId, password);
         return user;
     }
 

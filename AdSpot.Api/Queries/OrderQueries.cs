@@ -1,17 +1,15 @@
-﻿using HotChocolate.Authorization;
-
-namespace AdSpot.Api.Queries;
+﻿namespace AdSpot.Api.Queries;
 
 [QueryType]
 public class OrderQueries
 {
-    [Authorize]
-    [UseProjection]
-    [UseFiltering]
-    public IQueryable<Order> GetOrders(OrderRepository repo)
-    {
-        return repo.GetAllOrders();
-    }
+    //[Authorize]
+    //[UseProjection]
+    //[UseFiltering]
+    //public IQueryable<Order> GetOrders(OrderRepository repo)
+    //{
+    //    return repo.GetAllOrders();
+    //}
 
     [Authorize]
     [UseFirstOrDefault]
@@ -24,7 +22,18 @@ public class OrderQueries
     [Authorize]
     [UsePaging]
     [UseProjection]
+    [UseFiltering]
     [UseSorting]
+    public IQueryable<Order> GetOrders(int userId, OrderPov pov, OrderRepository repo)
+    {
+        return repo.GetOrders(userId, pov);
+    }
+
+    [Authorize]
+    [UsePaging]
+    [UseProjection]
+    [UseSorting]
+    [GraphQLDeprecated("Use the `orders` field with a filter instead")]
     public IQueryable<Order> GetOrdersByStatus(int userId, OrderStatusEnum status, OrderRepository repo)
     {
         return repo.GetOrdersByStatus(userId, status);
@@ -34,6 +43,7 @@ public class OrderQueries
     [UsePaging]
     [UseProjection]
     [UseSorting]
+    [GraphQLDeprecated("Use the `orders` field with a filter instead")]
     public IQueryable<Order> GetRequestsByStatus(int userId, OrderStatusEnum status, OrderRepository repo)
     {
         return repo.GetRequestsByStatus(userId, status);

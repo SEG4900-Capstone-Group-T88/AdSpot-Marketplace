@@ -19,10 +19,10 @@ public class ListingRepository
         return context.Listings.Where(l => l.ListingId == listingId);
     }
 
-    public IQueryable<Listing> AddListing(Listing listing)
+    public Listing AddListing(Listing listing)
     {
         context.Listings.Add(listing);
         context.SaveChanges();
-        return context.Listings.Where(x => x.ListingId == listing.ListingId);
+        return context.Listings.First(x => x.ListingId == listing.ListingId);
     }
 }

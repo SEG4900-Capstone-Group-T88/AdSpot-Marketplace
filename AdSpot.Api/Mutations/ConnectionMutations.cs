@@ -5,7 +5,7 @@ public class ConnectionMutations
 {
     [Authorize]
     [Error<ConnectionAlreadyExistsError>]
-    public MutationResult<IQueryable<Connection>> AddConnection(
+    public MutationResult<Connection> AddConnection(
         int userId,
         int platformId,
         string accountHandle,
@@ -64,16 +64,15 @@ public class ConnectionMutations
                 var expirationDate = DateTime.UtcNow.AddSeconds(expiresIn);
 
                 var connection = repo.AddOrUpdateConnection(
-                        new Connection
-                        {
-                            Handle = handle,
-                            PlatformId = platformId,
-                            Token = token,
-                            TokenExpiration = expirationDate,
-                            UserId = userId
-                        }
-                    )
-                    .FirstOrDefault();
+                    new Connection
+                    {
+                        Handle = handle,
+                        PlatformId = platformId,
+                        Token = token,
+                        TokenExpiration = expirationDate,
+                        UserId = userId
+                    }
+                );
 
                 var topicName = $"{userId}_{nameof(NewConnectionSubscription.OnAccountConnected)}";
                 await topicEventSender.SendAsync(topicName, connection);

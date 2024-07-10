@@ -8,7 +8,7 @@ public class ListingMutations
     //[UseProjection]
     [Error<InvalidListingTypeIdError>]
     [Error<AccountHasNotBeenConnectedError>]
-    public MutationResult<IQueryable<Listing>> AddListing(
+    public MutationResult<Listing> AddListing(
         int listingTypeId,
         int userId,
         decimal price,
