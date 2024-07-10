@@ -20,3 +20,9 @@ public class Order
     //public string? Deliverable { get; set; }
     //public float? Rating { get; set; }
 }
+
+public enum OrderPov
+{
+    Buyer,
+    Seller
+}

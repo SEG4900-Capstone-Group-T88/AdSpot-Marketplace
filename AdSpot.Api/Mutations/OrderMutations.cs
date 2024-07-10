@@ -9,7 +9,7 @@ public class OrderMutations
     [Error<InvalidListingIdError>]
     [Error<CannotOrderOwnListingError>]
     [Error<ListingPriceHasChangedError>]
-    public async Task<MutationResult<IQueryable<Order>>> OrderListing(
+    public async Task<MutationResult<Order>> OrderListing(
         int listingId,
         int userId,
         decimal price,
@@ -46,9 +46,8 @@ public class OrderMutations
         );
 
         // Notify seller
-        var newOrder = order.FirstOrDefault();
         var topicName = $"{listing.UserId}_{nameof(NewOrderSubscription.OnNewOrder)}";
-        await topicEventSender.SendAsync(topicName, newOrder);
+        await topicEventSender.SendAsync(topicName, order);
 
         return new(order);
     }
@@ -56,7 +55,7 @@ public class OrderMutations
     [Authorize]
     [Error<InvalidOrderIdError>]
     [Error<ListingDoesNotBelongToUserError>]
-    public MutationResult<IQueryable<Order>> AcceptOrder(int userId, int orderId, OrderRepository orderRepo)
+    public MutationResult<Order> AcceptOrder(int userId, int orderId, OrderRepository orderRepo)
     {
         var order = orderRepo.GetOrderById(orderId).Include(o => o.Listing).FirstOrDefault();
 
@@ -78,7 +77,7 @@ public class OrderMutations
     [Authorize]
     [Error<InvalidOrderIdError>]
     [Error<ListingDoesNotBelongToUserError>]
-    public MutationResult<IQueryable<Order>> RejectOrder(int userId, int orderId, OrderRepository orderRepo)
+    public MutationResult<Order> RejectOrder(int userId, int orderId, OrderRepository orderRepo)
     {
         var order = orderRepo.GetOrderById(orderId).Include(o => o.Listing).FirstOrDefault();
 

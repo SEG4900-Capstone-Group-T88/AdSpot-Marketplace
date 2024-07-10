@@ -14,11 +14,11 @@ public class OrderRepository
         return context.Orders;
     }
 
-    public IQueryable<Order> AddOrder(Order order)
+    public Order AddOrder(Order order)
     {
         context.Orders.Add(order);
         context.SaveChanges();
-        return context.Orders.Where(o => o.OrderId == order.OrderId);
+        return context.Orders.First(o => o.OrderId == order.OrderId);
     }
 
     public IQueryable<Order> GetOrderById(int orderId)
@@ -26,19 +26,26 @@ public class OrderRepository
         return context.Orders.Where(o => o.OrderId == orderId);
     }
 
-    [UseSorting]
     public IQueryable<Order> GetOrdersByStatus(int userId, OrderStatusEnum status)
     {
         return context.Orders.Where(o => o.UserId == userId && o.OrderStatusId == status);
     }
 
-    [UseSorting]
     public IQueryable<Order> GetRequestsByStatus(int userId, OrderStatusEnum status)
     {
         return context.Orders.Where(o => o.Listing.UserId == userId && o.OrderStatusId == status);
     }
 
-    public IQueryable<Order> AcceptOrder(int orderId)
+    public IQueryable<Order> GetOrders(int userId, OrderPov pov)
+    {
+        return pov switch
+        {
+            OrderPov.Buyer => context.Orders.Where(o => o.UserId == userId),
+            OrderPov.Seller => context.Orders.Where(o => o.Listing.UserId == userId),
+        };
+    }
+
+    public Order AcceptOrder(int orderId)
     {
         var order = context.Orders.FirstOrDefault(o => o.OrderId == orderId);
         if (order is not null)
@@ -46,10 +53,10 @@ public class OrderRepository
             order.OrderStatusId = OrderStatusEnum.Accepted;
             context.SaveChanges();
         }
-        return context.Orders.Where(o => o.OrderId == orderId);
+        return context.Orders.First(o => o.OrderId == orderId);
     }
 
-    public IQueryable<Order> RejectOrder(int orderId)
+    public Order RejectOrder(int orderId)
     {
         var order = context.Orders.FirstOrDefault(o => o.OrderId == orderId);
         if (order is not null)
@@ -57,6 +64,6 @@ public class OrderRepository
             order.OrderStatusId = OrderStatusEnum.Rejected;
             context.SaveChanges();
         }
-        return context.Orders.Where(o => o.OrderId == orderId);
+        return context.Orders.First(o => o.OrderId == orderId);
     }
 }
