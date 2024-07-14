@@ -1,6 +1,4 @@
-﻿using HotChocolate.Authorization;
-
-namespace AdSpot.Api.Queries;
+﻿namespace AdSpot.Api.Queries;
 
 [QueryType]
 public class ConnectionQueries
@@ -9,5 +7,12 @@ public class ConnectionQueries
     public IQueryable<Connection> GetConnection(int userId, int platformId, ConnectionRepository repo)
     {
         return repo.GetConnection(userId, platformId);
+    }
+
+    [Authorize]
+    [UseProjection]
+    public IQueryable<Connection> GetConnections(int userId, ConnectionRepository repo)
+    {
+        return repo.GetConnections(userId);
     }
 }

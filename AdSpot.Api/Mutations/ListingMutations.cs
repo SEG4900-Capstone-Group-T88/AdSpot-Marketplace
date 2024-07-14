@@ -8,13 +8,14 @@ public class ListingMutations
     //[UseProjection]
     [Error<InvalidListingTypeIdError>]
     [Error<AccountHasNotBeenConnectedError>]
-    public MutationResult<Listing> AddListing(
+    public async Task<MutationResult<Listing>> AddListing(
         int listingTypeId,
         int userId,
         decimal price,
         ConnectionRepository connectionRepo,
         ListingRepository listingRepo,
-        ListingTypeRepository listingTypesRepo
+        ListingTypeRepository listingTypesRepo,
+        [Service] ITopicEventSender topicEventSender
     )
     {
         var listingType = listingTypesRepo.GetListingTypeById(listingTypeId).FirstOrDefault();
@@ -38,6 +39,9 @@ public class ListingMutations
                 Price = price
             }
         );
+
+        var topicName = $"{userId}_{nameof(NewListingSubscription.OnNewListing)}";
+        await topicEventSender.SendAsync(topicName, listing);
 
         return new(listing);
     }

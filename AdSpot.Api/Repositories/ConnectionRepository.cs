@@ -9,9 +9,9 @@ public class ConnectionRepository
         this.context = context;
     }
 
-    public IQueryable<Connection> GetConnections()
+    public IQueryable<Connection> GetConnections(int userId)
     {
-        return context.Connections;
+        return context.Connections.Where(c => c.UserId == userId);
     }
 
     public IQueryable<Connection> GetConnection(int userId, int platformId)
