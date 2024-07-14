@@ -4,7 +4,7 @@ public record InvalidPriceError
 {
     public InvalidPriceError(decimal price)
     {
-        Message = $"Price `{price}` is invalid. Must be greater than 0.";
+        Message = $"Price `{price}` is invalid. Price must be greater than 0.";
     }
 
     public string Message { get; }
