@@ -3,7 +3,7 @@
     "addUser": {
       "user": {
         "userId": 2,
-        "email": "newuser",
+        "email": "newadspotuser@adspot.com",
         "firstName": "new",
         "lastName": "user"
       },

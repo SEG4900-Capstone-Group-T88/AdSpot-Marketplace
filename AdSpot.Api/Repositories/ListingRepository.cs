@@ -14,9 +14,9 @@ public class ListingRepository
         return context.Listings;
     }
 
-    public IQueryable<Listing> GetListingById(int listingId)
+    public Listing? GetListingById(int listingId)
     {
-        return context.Listings.Where(l => l.ListingId == listingId);
+        return context.Listings.FirstOrDefault(l => l.ListingId == listingId);
     }
 
     public Listing AddListing(Listing listing)
@@ -24,5 +24,13 @@ public class ListingRepository
         context.Listings.Add(listing);
         context.SaveChanges();
         return context.Listings.First(x => x.ListingId == listing.ListingId);
+    }
+
+    public Listing UpdatePrice(int listingId, decimal price)
+    {
+        var listing = context.Listings.First(u => u.ListingId == listingId);
+        listing.Price = price;
+        context.SaveChanges();
+        return listing;
     }
 }

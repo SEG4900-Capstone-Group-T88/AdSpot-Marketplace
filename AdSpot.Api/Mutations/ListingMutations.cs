@@ -8,13 +8,14 @@ public class ListingMutations
     //[UseProjection]
     [Error<InvalidListingTypeIdError>]
     [Error<AccountHasNotBeenConnectedError>]
-    public MutationResult<Listing> AddListing(
+    public async Task<MutationResult<Listing>> AddListing(
         int listingTypeId,
         int userId,
         decimal price,
         ConnectionRepository connectionRepo,
         ListingRepository listingRepo,
-        ListingTypeRepository listingTypesRepo
+        ListingTypeRepository listingTypesRepo,
+        [Service] ITopicEventSender topicEventSender
     )
     {
         var listingType = listingTypesRepo.GetListingTypeById(listingTypeId).FirstOrDefault();
@@ -38,6 +39,41 @@ public class ListingMutations
                 Price = price
             }
         );
+
+        var topicName = $"{userId}_{nameof(NewListingSubscription.OnNewListing)}";
+        await topicEventSender.SendAsync(topicName, listing);
+
+        return new(listing);
+    }
+
+    [Authorize]
+    [Error<InvalidPriceError>]
+    [Error<InvalidListingIdError>]
+    [Error<ListingDoesNotBelongToUserError>]
+    public MutationResult<Listing> UpdateListingPrice(
+        int listingId,
+        int userId,
+        decimal price,
+        ListingRepository listingRepo
+    )
+    {
+        if (price <= 0)
+        {
+            return new(new InvalidPriceError(price));
+        }
+
+        var listing = listingRepo.GetListingById(listingId);
+        if (listing is null)
+        {
+            return new(new InvalidListingIdError(listingId));
+        }
+
+        if (listing.UserId != userId)
+        {
+            return new(new ListingDoesNotBelongToUserError(listingId, userId));
+        }
+
+        listing = listingRepo.UpdatePrice(listingId, price);
 
         return new(listing);
     }

@@ -33,8 +33,8 @@ public class AddUserMutationTests
                     "input",
                     new Dictionary<string, object?>
                     {
-                        { "email", "newuser" },
-                        { "password", "newuser" },
+                        { "email", "newadspotuser@adspot.com" },
+                        { "password", "newadspotuser" },
                         { "firstName", "new" },
                         { "lastName", "user" },
                     }

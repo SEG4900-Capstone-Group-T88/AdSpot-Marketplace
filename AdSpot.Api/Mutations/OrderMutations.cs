@@ -19,7 +19,7 @@ public class OrderMutations
         [Service] ITopicEventSender topicEventSender
     )
     {
-        var listing = listingRepo.GetListingById(listingId).FirstOrDefault();
+        var listing = listingRepo.GetListingById(listingId);
         if (listing is null)
         {
             return new(new InvalidListingIdError(listingId));

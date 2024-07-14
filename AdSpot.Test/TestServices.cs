@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using AdSpot.Extensions;
+using AppAny.HotChocolate.FluentValidation;
 
 namespace AdSpot.Test;
 
@@ -38,12 +39,14 @@ public static class TestServices
             .AddFluentValidationAutoValidation()
             .AddFluentValidationClientsideAdapters()
             .AddGraphQLServer()
+            .AddAuthorization()
+            .AddFluentValidation()
             .AddMutationConventions(applyToAllMutations: true)
+            .AddInMemorySubscriptions()
             .AddAdSpotTypes()
             .AddProjections()
             .AddFiltering()
             .AddSorting()
-            .AddAuthorization()
             .RegisterDbContext<AdSpotDbContext>()
             .RegisterService<IConfiguration>()
             .RegisterService<InstagramService>()
