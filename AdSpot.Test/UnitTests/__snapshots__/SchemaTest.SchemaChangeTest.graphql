@@ -81,6 +81,10 @@ type InvalidOrderIdError implements Error {
   message: String!
 }
 
+type InvalidPriceError implements Error {
+  message: String!
+}
+
 type InvalidUserIdError implements Error {
   message: String!
 }
@@ -124,6 +128,7 @@ type Mutation {
   addConnection(input: AddConnectionInput!): AddConnectionPayload! @authorize
   exchangeInstagramAuthCodeForToken(input: ExchangeInstagramAuthCodeForTokenInput!): ExchangeInstagramAuthCodeForTokenPayload!
   addListing(input: AddListingInput!): AddListingPayload! @authorize
+  updateListingPrice(input: UpdateListingPriceInput!): UpdateListingPricePayload! @authorize
   orderListing(input: OrderListingInput!): OrderListingPayload! @authorize
   acceptOrder(input: AcceptOrderInput!): AcceptOrderPayload! @authorize
   rejectOrder(input: RejectOrderInput!): RejectOrderPayload! @authorize
@@ -217,6 +222,7 @@ type Platform {
 
 type Query {
   connection(userId: Int! platformId: Int!): [Connection!]! @authorize
+  connections(userId: Int!): [Connection!]! @authorize
   orderById(orderId: Int!): Order @authorize
   orders(userId: Int! pov: OrderPov! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: OrderFilterInput order: [OrderSortInput!]): OrdersConnection @authorize
   ordersByStatus(userId: Int! status: OrderStatusEnum! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [OrderSortInput!]): OrdersByStatusConnection @authorize @deprecated(reason: "Use the `orders` field with a filter instead")
@@ -253,8 +259,14 @@ type RequestsByStatusEdge {
 
 type Subscription {
   onAccountConnected(userId: Int!): Connection!
+  onNewListing(userId: Int!): Listing!
   onNewOrder(userId: Int!): Order!
   name: String!
+}
+
+type UpdateListingPricePayload {
+  listing: Listing
+  errors: [UpdateListingPriceError!]
 }
 
 type UpdatePasswordPayload {
@@ -318,6 +330,8 @@ union LoginError = UserNotFoundError | UserInvalidCredentialsError
 union OrderListingError = InvalidListingIdError | CannotOrderOwnListingError | ListingPriceHasChangedError
 
 union RejectOrderError = InvalidOrderIdError | ListingDoesNotBelongToUserError
+
+union UpdateListingPriceError = InvalidPriceError | InvalidListingIdError | ListingDoesNotBelongToUserError
 
 union UpdatePasswordError = InvalidUserIdError
 
@@ -586,6 +600,12 @@ input StringOperationFilterInput {
   nstartsWith: String
   endsWith: String
   nendsWith: String
+}
+
+input UpdateListingPriceInput {
+  listingId: Int!
+  userId: Int!
+  price: Decimal!
 }
 
 input UpdatePasswordInput {
