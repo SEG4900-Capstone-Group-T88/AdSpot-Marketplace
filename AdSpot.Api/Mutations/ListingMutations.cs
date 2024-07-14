@@ -45,4 +45,30 @@ public class ListingMutations
 
         return new(listing);
     }
+
+    [Authorize]
+    [Error<InvalidListingIdError>]
+    [Error<ListingDoesNotBelongToUserError>]
+    public MutationResult<Listing> UpdateListingPrice(
+        int listingId,
+        int userId,
+        decimal price,
+        ListingRepository listingRepo
+    )
+    {
+        var listing = listingRepo.GetListingById(listingId);
+        if (listing is null)
+        {
+            return new(new InvalidListingIdError(listingId));
+        }
+
+        if (listing.UserId != userId)
+        {
+            return new(new ListingDoesNotBelongToUserError(listingId, userId));
+        }
+
+        listing = listingRepo.UpdatePrice(listingId, price);
+
+        return new(listing);
+    }
 }
