@@ -47,6 +47,7 @@ public class ListingMutations
     }
 
     [Authorize]
+    [Error<InvalidPriceError>]
     [Error<InvalidListingIdError>]
     [Error<ListingDoesNotBelongToUserError>]
     public MutationResult<Listing> UpdateListingPrice(
@@ -56,6 +57,11 @@ public class ListingMutations
         ListingRepository listingRepo
     )
     {
+        if (price <= 0)
+        {
+            return new(new InvalidPriceError(price));
+        }
+
         var listing = listingRepo.GetListingById(listingId);
         if (listing is null)
         {
