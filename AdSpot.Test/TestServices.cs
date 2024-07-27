@@ -33,6 +33,7 @@ public static class TestServices
             .AddScoped<UserRepository>()
             // Validators
             .AddScoped<AddUserInputValidator>()
+            .AddScoped<SubmitDeliverableInputValidator>()
             .AddFluentValidationAutoValidation()
             .AddFluentValidationClientsideAdapters()
             .AddGraphQLServer()
