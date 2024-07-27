@@ -1,4 +1,6 @@
 ﻿global using System.ComponentModel.DataAnnotations;
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Security.Claims;
 global using System.Text.Json.Serialization;
 global using AdSpot.Api;
 global using AdSpot.Api.Mutations.Errors;
@@ -17,7 +19,9 @@ global using FluentValidation.AspNetCore;
 global using HotChocolate.Authorization;
 global using HotChocolate.Execution;
 global using HotChocolate.Subscriptions;
+global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Http;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Options;
 global using Microsoft.IdentityModel.Tokens;
