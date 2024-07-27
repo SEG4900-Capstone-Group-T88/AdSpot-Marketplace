@@ -24,7 +24,8 @@ builder
     .AddScoped<PlatformRepository>()
     .AddScoped<UserRepository>()
     // Validators
-    .AddScoped<AddUserInputValidator>();
+    .AddScoped<AddUserInputValidator>()
+    .AddScoped<SubmitDeliverableInputValidator>();
 
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 

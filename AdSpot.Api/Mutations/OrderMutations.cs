@@ -97,16 +97,19 @@ public class OrderMutations
     }
 
     [Error<InvalidOrderIdError>]
-    public MutationResult<Order> SubmitDeliverable(int orderId, string deliverable, OrderRepository orderRepo)
+    public MutationResult<Order> SubmitDeliverable(
+        [UseFluentValidation, UseValidator<SubmitDeliverableInputValidator>] SubmitDeliverableInput input,
+        OrderRepository orderRepo
+    )
     {
-        var order = orderRepo.GetOrderById(orderId).Include(o => o.Listing).FirstOrDefault();
+        var order = orderRepo.GetOrderById(input.OrderId).FirstOrDefault();
 
         if (order is null)
         {
-            return new(new InvalidOrderIdError(orderId));
+            return new(new InvalidOrderIdError(input.OrderId));
         }
 
-        order = orderRepo.SubmitDeliverable(orderId, deliverable);
+        order = orderRepo.SubmitDeliverable(input.OrderId, input.Deliverable);
         return new(order);
     }
 }
