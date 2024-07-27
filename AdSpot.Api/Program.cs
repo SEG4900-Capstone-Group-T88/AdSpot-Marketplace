@@ -6,7 +6,7 @@ builder.Services.AddSingleton(keyManager);
 
 builder.Services.AddDbContext<AdSpotDbContext>(options => options.UseNpgsql(config.GetConnectionString("Postgres")));
 
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClient().AddHttpContextAccessor();
 
 builder
     .Services
@@ -42,6 +42,7 @@ builder
     .AddSorting()
     .RegisterDbContext<AdSpotDbContext>()
     .RegisterService<IConfiguration>()
+    .RegisterService<IHttpContextAccessor>()
     .RegisterService<InstagramService>()
     .RegisterService<ConnectionRepository>()
     .RegisterService<ListingRepository>()

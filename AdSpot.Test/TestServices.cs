@@ -1,8 +1,4 @@
-﻿using System.Security.Claims;
-using AdSpot.Extensions;
-using AppAny.HotChocolate.FluentValidation;
-
-namespace AdSpot.Test;
+﻿namespace AdSpot.Test;
 
 public static class TestServices
 {
@@ -18,6 +14,7 @@ public static class TestServices
         ServiceProvider = new ServiceCollection()
             .AddLogging() // Required for auth stuff
             .AddScoped<IConfiguration>(sp => config)
+            .AddHttpContextAccessor()
             .AddAndValidateOptions<JwtOptions>(config, out var jwtOptions)
             // Options
             .AddAndValidateOptions<JwtOptions>()
@@ -49,6 +46,7 @@ public static class TestServices
             .AddSorting()
             .RegisterDbContext<AdSpotDbContext>()
             .RegisterService<IConfiguration>()
+            .RegisterService<IHttpContextAccessor>()
             .RegisterService<InstagramService>()
             .RegisterService<ConnectionRepository>()
             .RegisterService<ListingRepository>()
