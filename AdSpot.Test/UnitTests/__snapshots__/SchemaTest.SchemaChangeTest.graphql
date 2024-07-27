@@ -132,6 +132,7 @@ type Mutation {
   orderListing(input: OrderListingInput!): OrderListingPayload! @authorize
   acceptOrder(input: AcceptOrderInput!): AcceptOrderPayload! @authorize
   rejectOrder(input: RejectOrderInput!): RejectOrderPayload! @authorize
+  submitDeliverable(input: SubmitDeliverableInput!): SubmitDeliverablePayload!
   addUser(input: AddUserInput!): AddUserPayload!
   deleteUser(input: DeleteUserInput!): DeleteUserPayload!
   updatePassword(input: UpdatePasswordInput!): UpdatePasswordPayload!
@@ -149,6 +150,7 @@ type Order {
   user: User!
   price: Decimal!
   description: String!
+  deliverable: String
 }
 
 type OrderListingPayload {
@@ -258,6 +260,11 @@ type RequestsByStatusEdge {
   node: Order!
 }
 
+type SubmitDeliverablePayload {
+  order: Order
+  errors: [SubmitDeliverableError!]
+}
+
 type Subscription {
   onAccountConnected(userId: Int!): Connection!
   onNewListing(userId: Int!): Listing!
@@ -331,6 +338,8 @@ union LoginError = UserNotFoundError | UserInvalidCredentialsError
 union OrderListingError = InvalidListingIdError | CannotOrderOwnListingError | ListingPriceHasChangedError
 
 union RejectOrderError = InvalidOrderIdError | ListingDoesNotBelongToUserError
+
+union SubmitDeliverableError = InvalidOrderIdError
 
 union UpdateListingPriceError = InvalidPriceError | InvalidListingIdError | ListingDoesNotBelongToUserError
 
@@ -528,6 +537,7 @@ input OrderFilterInput {
   user: UserFilterInput
   price: DecimalOperationFilterInput
   description: StringOperationFilterInput
+  deliverable: StringOperationFilterInput
 }
 
 input OrderListingInput {
@@ -548,6 +558,7 @@ input OrderSortInput {
   user: UserSortInput
   price: SortEnumType
   description: SortEnumType
+  deliverable: SortEnumType
 }
 
 input OrderStatusEnumOperationFilterInput {
@@ -601,6 +612,11 @@ input StringOperationFilterInput {
   nstartsWith: String
   endsWith: String
   nendsWith: String
+}
+
+input SubmitDeliverableInput {
+  orderId: Int!
+  deliverable: String!
 }
 
 input UpdateListingPriceInput {
