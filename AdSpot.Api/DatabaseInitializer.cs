@@ -181,6 +181,7 @@ public static class DatabaseInitializer
                             if (probability < 0.1 && listing.UserId != user.UserId)
                             {
                                 var status = (OrderStatusEnum)random.Next(numStatus);
+                                var deliverable = status == OrderStatusEnum.Completed ? "https://www.google.com" : null;
                                 orders.Add(
                                     new Order
                                     {
@@ -200,7 +201,8 @@ But wait, there's more! AdSpot also offers a secure payment system, ensuring tha
 So, if you're ready to take your influencer game to the next level and connect with amazing brands, then head over to AdSpot today! I've left the link in the description below so you can check it out for yourself. Trust me, you won't regret it!
 
 Thanks for watching, guys! And remember, the opportunities are endless with AdSpot. Let's make some magic happen together! 💫",
-                                        OrderStatusId = status
+                                        OrderStatusId = status,
+                                        Deliverable = deliverable
                                     }
                                 );
                             }

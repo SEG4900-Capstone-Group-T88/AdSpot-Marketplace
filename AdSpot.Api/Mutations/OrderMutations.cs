@@ -95,4 +95,18 @@ public class OrderMutations
 
         return new(result);
     }
+
+    [Error<InvalidOrderIdError>]
+    public MutationResult<Order> SubmitDeliverable(int orderId, string deliverable, OrderRepository orderRepo)
+    {
+        var order = orderRepo.GetOrderById(orderId).Include(o => o.Listing).FirstOrDefault();
+
+        if (order is null)
+        {
+            return new(new InvalidOrderIdError(orderId));
+        }
+
+        order = orderRepo.SubmitDeliverable(orderId, deliverable);
+        return new(order);
+    }
 }

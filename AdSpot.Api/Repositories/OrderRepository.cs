@@ -66,4 +66,13 @@ public class OrderRepository
         }
         return context.Orders.First(o => o.OrderId == orderId);
     }
+
+    public Order SubmitDeliverable(int orderId, string deliverable)
+    {
+        var order = context.Orders.Single(o => o.OrderId == orderId);
+        order.Deliverable = deliverable;
+        order.OrderStatusId = OrderStatusEnum.Completed;
+        context.SaveChanges();
+        return order;
+    }
 }
