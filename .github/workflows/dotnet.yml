@@ -54,5 +54,5 @@ jobs:
         run: dotnet test --collect "Code Coverage;Format=cobertura" --results-directory "./TestResults/" --settings "AdSpot.Test/CodeCoverage.runsettings" ./AdSpot.sln
       - name: Create coverage report
         run: |
-          mkdir -p coverage
+          mkdir -p coverageReport
           reportgenerator -reports:"TestResults/**/*.xml" -targetdir:coverageReport -reporttypes:Html
