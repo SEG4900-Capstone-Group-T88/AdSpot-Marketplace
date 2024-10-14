@@ -61,7 +61,3 @@ jobs:
         with:
           name: coverage-report
           path: coverageReport/*
-      - name: Download coverage report
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-report
