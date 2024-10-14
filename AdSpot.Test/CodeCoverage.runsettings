@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+    <DataCollectionRunSettings>
+        <DataCollectors>
+            <DataCollector friendlyName="Code Coverage">
+                <Configuration>
+                    <CodeCoverage>
+                        <!-- Include or exclude specific assemblies or classes here -->
+                        <ModulePaths>
+                            <Include>
+                                <ModulePath>AdSpot.*</ModulePath>
+                            </Include>
+                            <Exclude>
+                                <ModulePath>FluentValidation.*</ModulePath>
+                            </Exclude>
+                        </ModulePaths>
+                    </CodeCoverage>
+                </Configuration>
+            </DataCollector>
+        </DataCollectors>
+    </DataCollectionRunSettings>
+</RunSettings>
