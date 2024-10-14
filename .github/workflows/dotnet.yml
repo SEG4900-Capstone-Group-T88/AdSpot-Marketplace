@@ -35,3 +35,29 @@ jobs:
         run: dotnet format --verify-no-changes ./AdSpot.sln
       - name: Test
         run: dotnet test --no-build --verbosity normal ./AdSpot.sln
+  create_coverage_report:
+    runs-on: ubuntu-latest
+
+    steps: 
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore ./AdSpot.sln
+      - name: Install reportgenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+      - name: Build
+        run: dotnet build --no-restore ./AdSpot.sln
+      - name: Test
+        run: dotnet test --collect "Code Coverage;Format=cobertura" --results-directory "./TestResults/" --settings "AdSpot.Test/CodeCoverage.runsettings" ./AdSpot.sln
+      - name: Create coverage report
+        run: |
+          mkdir -p coverageReport
+          reportgenerator -reports:"TestResults/**/*.xml" -targetdir:coverageReport -reporttypes:Html
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverageReport/*
