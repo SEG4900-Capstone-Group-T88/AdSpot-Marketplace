@@ -46,8 +46,8 @@ jobs:
           dotnet-version: 6.0.x
       - name: Restore dependencies
         run: dotnet restore ./AdSpot.sln
-      - name: Install coverlet
-        run: dotnet tool install --global coverlet.console
+      - name: Install reportgenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
       - name: Build
         run: dotnet build --no-restore ./AdSpot.sln
       - name: Test
