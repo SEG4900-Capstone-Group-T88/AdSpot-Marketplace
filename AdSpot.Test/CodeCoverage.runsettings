@@ -14,6 +14,12 @@
                                 <ModulePath>FluentValidation.*</ModulePath>
                             </Exclude>
                         </ModulePaths>
+                        <Functions>
+                            <Exclude>
+                                <Function>AdSpot.Api.DatabaseInitializer\..*</Function>
+                                <Function>Program</Function>
+                            </Exclude>
+                        </Functions>
                     </CodeCoverage>
                 </Configuration>
             </DataCollector>
