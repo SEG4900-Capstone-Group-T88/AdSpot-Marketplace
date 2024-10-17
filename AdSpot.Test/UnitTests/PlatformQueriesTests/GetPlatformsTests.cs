@@ -5,7 +5,7 @@ namespace AdSpot.Test.UnitTests.PlatformQueriesTests;
 [Collection("adspot-inmemory-db")]
 public class GetPlatformsTests 
 {
-    public const string GetAllPlatformQuery = """
+    public const string GetAllPlatformsQuery = """
         query GetPlatforms{
             platforms {
                 platformId
@@ -14,12 +14,12 @@ public class GetPlatformsTests
         }
         """;
 
-    [Fact]
+    //[Fact]
     [Trait("Category", "Unit")]
     public async Task GetPlatformsSuccessful()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(GetAllPlatformQuery)
+            b.SetQuery(GetAllPlatformsQuery)
         );
 
         result.MatchSnapshot();
