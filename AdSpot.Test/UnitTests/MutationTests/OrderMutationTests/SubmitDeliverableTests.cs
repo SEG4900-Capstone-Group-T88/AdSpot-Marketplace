@@ -1,6 +1,6 @@
 using AdSpot.Models;
 
-namespace AdSpot.Test.UnitTests.SubmitDeliverableMutationTests;
+namespace AdSpot.Test.UnitTests.OrderMutationsTests;
 
 [Collection("adspot-inmemory-db")]
 public class SubmitDeliverableMutationsTests

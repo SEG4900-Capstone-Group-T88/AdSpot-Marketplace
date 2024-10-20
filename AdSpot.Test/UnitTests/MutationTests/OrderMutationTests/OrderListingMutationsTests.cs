@@ -1,6 +1,6 @@
 using AdSpot.Models;
 
-namespace AdSpot.Test.UnitTests.OrderListingMutationTests;
+namespace AdSpot.Test.UnitTests.OrderMutationsTests;
 
 [Collection("adspot-inmemory-db")]
 public class OrderListingMutationsTests
