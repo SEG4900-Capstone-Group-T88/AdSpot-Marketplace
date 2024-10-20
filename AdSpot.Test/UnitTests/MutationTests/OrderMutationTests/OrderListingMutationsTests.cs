@@ -6,27 +6,27 @@ namespace AdSpot.Test.UnitTests.OrderListingMutationTests;
 public class OrderListingMutationsTests
 {
     public const string OrderListingMutation = """
-        mutation OrderListing($input: OrderListingInput!) {
-            orderListing(input: $input) {
-                order {
-                    listingId
-                    userId
-                    orderId
-                    description
-                }
-                errors {
-                    ... on Error {
-                        __typename
-                        message
+            mutation OrderListing($input: OrderListingInput!) {
+                orderListing(input: $input) {
+                    order {
+                        listingId
+                        userId
+                        orderId
+                        description
+                    }
+                    errors {
+                        ... on Error {
+                            __typename
+                            message
+                        }
                     }
                 }
             }
-        }
-    """;
+        """;
 
     [Fact]
     [Trait("Category", "Unit")]
-    public async Task OrderListingSuccessful() 
+    public async Task OrderListingSuccessful()
     {
         var result = await TestServices.ExecuteRequestAsync(
             scope =>
@@ -49,7 +49,11 @@ public class OrderListingMutationsTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId,
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId,
                         Price = 100.00M
                     }
                 );
@@ -73,10 +77,10 @@ public class OrderListingMutationsTests
                         "input",
                         new Dictionary<string, object?>
                         {
-                            { "description", "Test Order"},
-                            { "listingId", 1},
-                            { "price", 100.00M},
-                            { "userId", 2}
+                            { "description", "Test Order" },
+                            { "listingId", 1 },
+                            { "price", 100.00M },
+                            { "userId", 2 }
                         }.AsReadOnly()
                     )
         );
@@ -86,7 +90,7 @@ public class OrderListingMutationsTests
 
     [Fact]
     [Trait("Category", "Unit")]
-    public async Task OrderListingInvalidIdError() 
+    public async Task OrderListingInvalidIdError()
     {
         var result = await TestServices.ExecuteRequestAsync(
             scope =>
@@ -109,7 +113,11 @@ public class OrderListingMutationsTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId,
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId,
                         Price = 100.00M
                     }
                 );
@@ -133,10 +141,10 @@ public class OrderListingMutationsTests
                         "input",
                         new Dictionary<string, object?>
                         {
-                            { "description", "Test Order"},
-                            { "listingId", -1},
-                            { "price", 100.00M},
-                            { "userId", 2}
+                            { "description", "Test Order" },
+                            { "listingId", -1 },
+                            { "price", 100.00M },
+                            { "userId", 2 }
                         }.AsReadOnly()
                     )
         );
@@ -146,7 +154,7 @@ public class OrderListingMutationsTests
 
     [Fact]
     [Trait("Category", "Unit")]
-    public async Task OrderListingOwnListingError() 
+    public async Task OrderListingOwnListingError()
     {
         var result = await TestServices.ExecuteRequestAsync(
             scope =>
@@ -169,7 +177,11 @@ public class OrderListingMutationsTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId,
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId,
                         Price = 100.00M
                     }
                 );
@@ -181,10 +193,10 @@ public class OrderListingMutationsTests
                         "input",
                         new Dictionary<string, object?>
                         {
-                            { "description", "Test Order"},
-                            { "listingId", 1},
-                            { "price", 100.00M},
-                            { "userId", TestDatabase.TestUser.UserId}
+                            { "description", "Test Order" },
+                            { "listingId", 1 },
+                            { "price", 100.00M },
+                            { "userId", TestDatabase.TestUser.UserId }
                         }.AsReadOnly()
                     )
         );
@@ -194,7 +206,7 @@ public class OrderListingMutationsTests
 
     [Fact]
     [Trait("Category", "Unit")]
-    public async Task OrderListingPriceChangedError() 
+    public async Task OrderListingPriceChangedError()
     {
         var result = await TestServices.ExecuteRequestAsync(
             scope =>
@@ -217,7 +229,11 @@ public class OrderListingMutationsTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId,
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId,
                         Price = 100.00M
                     }
                 );
@@ -241,10 +257,10 @@ public class OrderListingMutationsTests
                         "input",
                         new Dictionary<string, object?>
                         {
-                            { "description", "Test Order"},
-                            { "listingId", 1},
-                            { "price", 120.00M},
-                            { "userId", 2}
+                            { "description", "Test Order" },
+                            { "listingId", 1 },
+                            { "price", 120.00M },
+                            { "userId", 2 }
                         }.AsReadOnly()
                     )
         );

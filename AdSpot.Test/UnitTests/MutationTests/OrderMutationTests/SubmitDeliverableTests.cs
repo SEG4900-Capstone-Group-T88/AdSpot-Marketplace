@@ -6,23 +6,23 @@ namespace AdSpot.Test.UnitTests.SubmitDeliverableMutationTests;
 public class SubmitDeliverableMutationsTests
 {
     public const string SubmitDeliverableMutation = """
-        mutation SubmitDeliverable($input: SubmitDeliverableInput!) {
-            submitDeliverable(input: $input) {
-                order {
-                    listingId
-                    userId
-                    orderId
-                    description
-                }
-                errors {
-                    ... on Error {
-                        __typename
-                        message
+            mutation SubmitDeliverable($input: SubmitDeliverableInput!) {
+                submitDeliverable(input: $input) {
+                    order {
+                        listingId
+                        userId
+                        orderId
+                        description
+                    }
+                    errors {
+                        ... on Error {
+                            __typename
+                            message
+                        }
                     }
                 }
             }
-        }
-    """;
+        """;
 
     [Fact]
     [Trait("Category", "Unit")]
@@ -49,7 +49,11 @@ public class SubmitDeliverableMutationsTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId,
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId,
                         Price = 100.00M
                     }
                 );
@@ -87,7 +91,7 @@ public class SubmitDeliverableMutationsTests
                         new Dictionary<string, object?>
                         {
                             { "orderId", 1 },
-                            { "deliverable", "https://www.google.com"}
+                            { "deliverable", "https://www.google.com" }
                         }.AsReadOnly()
                     )
         );
@@ -120,7 +124,11 @@ public class SubmitDeliverableMutationsTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId,
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId,
                         Price = 100.00M
                     }
                 );
@@ -157,7 +165,7 @@ public class SubmitDeliverableMutationsTests
                         new Dictionary<string, object?>
                         {
                             { "orderId", 3 },
-                            { "deliverable", "https://www.google.com"}
+                            { "deliverable", "https://www.google.com" }
                         }.AsReadOnly()
                     )
         );
@@ -190,7 +198,11 @@ public class SubmitDeliverableMutationsTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId,
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId,
                         Price = 100.00M
                     }
                 );
@@ -228,7 +240,7 @@ public class SubmitDeliverableMutationsTests
                         new Dictionary<string, object?>
                         {
                             { "orderId", 1 },
-                            { "deliverable", "Test Deliverable"}
+                            { "deliverable", "Test Deliverable" }
                         }.AsReadOnly()
                     )
         );

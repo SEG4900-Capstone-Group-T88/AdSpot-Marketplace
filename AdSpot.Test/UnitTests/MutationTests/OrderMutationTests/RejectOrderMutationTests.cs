@@ -6,27 +6,28 @@ namespace AdSpot.Test.UnitTests.RejectOrderMutationTests;
 public class RejectOrderMutationsTests
 {
     public const string RejectOrderMutation = """
-        mutation RejectOrder($input: RejectOrderInput!) {
-            rejectOrder(input: $input) {
-                order {
-                    listingId
-                    userId
-                    orderId
-                    description
-                }
-                errors {
-                    ... on Error {
-                        __typename
-                        message
+            mutation RejectOrder($input: RejectOrderInput!) {
+                rejectOrder(input: $input) {
+                    order {
+                        listingId
+                        userId
+                        orderId
+                        description
+                    }
+                    errors {
+                        ... on Error {
+                            __typename
+                            message
+                        }
                     }
                 }
             }
-        }
-    """;
+        """;
 
     [Fact]
     [Trait("Category", "Unit")]
-    public async Task RejectOrderSuccessful() {
+    public async Task RejectOrderSuccessful()
+    {
         var result = await TestServices.ExecuteRequestAsync(
             scope =>
             {
@@ -48,7 +49,11 @@ public class RejectOrderMutationsTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId,
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId,
                         Price = 100.00M
                     }
                 );
@@ -84,8 +89,8 @@ public class RejectOrderMutationsTests
                         "input",
                         new Dictionary<string, object?>
                         {
-                            { "orderId", 1},
-                            { "userId", TestDatabase.TestUser.UserId}
+                            { "orderId", 1 },
+                            { "userId", TestDatabase.TestUser.UserId }
                         }.AsReadOnly()
                     )
         );
@@ -95,7 +100,8 @@ public class RejectOrderMutationsTests
 
     [Fact]
     [Trait("Category", "Unit")]
-    public async Task RejectOrderInvalidOrderIdError() {
+    public async Task RejectOrderInvalidOrderIdError()
+    {
         var result = await TestServices.ExecuteRequestAsync(
             scope =>
             {
@@ -117,7 +123,11 @@ public class RejectOrderMutationsTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId,
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId,
                         Price = 100.00M
                     }
                 );
@@ -153,8 +163,8 @@ public class RejectOrderMutationsTests
                         "input",
                         new Dictionary<string, object?>
                         {
-                            { "orderId", -1},
-                            { "userId", TestDatabase.TestUser.UserId}
+                            { "orderId", -1 },
+                            { "userId", TestDatabase.TestUser.UserId }
                         }.AsReadOnly()
                     )
         );
@@ -164,7 +174,8 @@ public class RejectOrderMutationsTests
 
     [Fact]
     [Trait("Category", "Unit")]
-    public async Task RejectOrderUserIdError() {
+    public async Task RejectOrderUserIdError()
+    {
         var result = await TestServices.ExecuteRequestAsync(
             scope =>
             {
@@ -186,7 +197,11 @@ public class RejectOrderMutationsTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId,
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId,
                         Price = 100.00M
                     }
                 );
@@ -220,11 +235,7 @@ public class RejectOrderMutationsTests
                 b.SetQuery(RejectOrderMutation)
                     .SetVariableValue(
                         "input",
-                        new Dictionary<string, object?>
-                        {
-                            { "orderId", 1},
-                            { "userId", 2}
-                        }.AsReadOnly()
+                        new Dictionary<string, object?> { { "orderId", 1 }, { "userId", 2 } }.AsReadOnly()
                     )
         );
 

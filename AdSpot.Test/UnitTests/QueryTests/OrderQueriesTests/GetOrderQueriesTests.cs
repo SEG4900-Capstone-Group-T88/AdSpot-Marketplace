@@ -6,39 +6,39 @@ namespace AdSpot.Test.UnitTests.OrderQueriesTests;
 public class GetOrderQueriesTests
 {
     public const string GetOrderByIdQuery = """
-        query GetOrderById($orderId: Int!) {
-            orderById(orderId: $orderId) {
-                userId
-                listingId
-                price
-                description
+            query GetOrderById($orderId: Int!) {
+                orderById(orderId: $orderId) {
+                    userId
+                    listingId
+                    price
+                    description
+                }
             }
-        }
-    """;
+        """;
 
     public const string GetOrdersQuery = """
-        query GetOrders($userId: Int!, $pov: OrderPov!) {
-            orders(userId: $userId, pov: $pov) {
-                totalCount
+            query GetOrders($userId: Int!, $pov: OrderPov!) {
+                orders(userId: $userId, pov: $pov) {
+                    totalCount
+                }
             }
-        }
-    """;
+        """;
 
     public const string GetOrdersByStatusQuery = """
-        query GetOrdersByStatus($userId: Int!, $status: OrderStatusEnum!) {
-            ordersByStatus(userId: $userId, status: $status) {
-                totalCount
+            query GetOrdersByStatus($userId: Int!, $status: OrderStatusEnum!) {
+                ordersByStatus(userId: $userId, status: $status) {
+                    totalCount
+                }
             }
-        }
-    """;
+        """;
 
     public const string GetRequestsByStatusQuery = """
-        query GetRequestsByStatus($userId: Int!, $status: OrderStatusEnum!) {
-            requestsByStatus(userId: $userId, status: $status) {
-                totalCount
+            query GetRequestsByStatus($userId: Int!, $status: OrderStatusEnum!) {
+                requestsByStatus(userId: $userId, status: $status) {
+                    totalCount
+                }
             }
-        }
-    """;
+        """;
 
     [Fact]
     [Trait("Category", "Unit")]
@@ -65,7 +65,11 @@ public class GetOrderQueriesTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId
                     }
                 );
                 context.SaveChanges();
@@ -82,12 +86,7 @@ public class GetOrderQueriesTests
                 );
                 context.SaveChanges();
             },
-            b =>
-                b.SetQuery(GetOrderByIdQuery)
-                    .SetVariableValue(
-                        "orderId",
-                        1
-                    )
+            b => b.SetQuery(GetOrderByIdQuery).SetVariableValue("orderId", 1)
         );
 
         result.MatchSnapshot();
@@ -97,13 +96,8 @@ public class GetOrderQueriesTests
     [Trait("Category", "Unit")]
     public async Task GetOrderByOrderIdNoID()
     {
-        var result = await TestServices.ExecuteRequestAsync(
-            b =>
-                b.SetQuery(GetOrderByIdQuery)
-                    .SetVariableValue(
-                        "orderId",
-                        1
-                    )
+        var result = await TestServices.ExecuteRequestAsync(b =>
+            b.SetQuery(GetOrderByIdQuery).SetVariableValue("orderId", 1)
         );
 
         result.MatchSnapshot();
@@ -134,7 +128,11 @@ public class GetOrderQueriesTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId
                     }
                 );
                 context.SaveChanges();
@@ -153,14 +151,8 @@ public class GetOrderQueriesTests
             },
             b =>
                 b.SetQuery(GetOrdersQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
-                    .SetVariableValue(
-                        "pov",
-                        "BUYER"
-                    )
+                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
+                    .SetVariableValue("pov", "BUYER")
         );
 
         result.MatchSnapshot();
@@ -191,7 +183,11 @@ public class GetOrderQueriesTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId
                     }
                 );
                 context.SaveChanges();
@@ -210,19 +206,12 @@ public class GetOrderQueriesTests
             },
             b =>
                 b.SetQuery(GetOrdersQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
-                    .SetVariableValue(
-                        "pov",
-                        "SELLER"
-                    )
+                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
+                    .SetVariableValue("pov", "SELLER")
         );
 
         result.MatchSnapshot();
     }
-
 
     [Fact]
     [Trait("Category", "Unit")]
@@ -249,7 +238,11 @@ public class GetOrderQueriesTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId
                     }
                 );
                 context.SaveChanges();
@@ -268,14 +261,8 @@ public class GetOrderQueriesTests
             },
             b =>
                 b.SetQuery(GetOrdersByStatusQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
-                    .SetVariableValue(
-                        "status",
-                        "PENDING"
-                    )
+                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
+                    .SetVariableValue("status", "PENDING")
         );
 
         result.MatchSnapshot();
@@ -306,7 +293,11 @@ public class GetOrderQueriesTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId
                     }
                 );
                 context.SaveChanges();
@@ -326,14 +317,8 @@ public class GetOrderQueriesTests
             },
             b =>
                 b.SetQuery(GetOrdersByStatusQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
-                    .SetVariableValue(
-                        "status",
-                        "ACCEPTED"
-                    )
+                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
+                    .SetVariableValue("status", "ACCEPTED")
         );
 
         result.MatchSnapshot();
@@ -364,7 +349,11 @@ public class GetOrderQueriesTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId
                     }
                 );
                 context.SaveChanges();
@@ -384,14 +373,8 @@ public class GetOrderQueriesTests
             },
             b =>
                 b.SetQuery(GetOrdersByStatusQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
-                    .SetVariableValue(
-                        "status",
-                        "REJECTED"
-                    )
+                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
+                    .SetVariableValue("status", "REJECTED")
         );
 
         result.MatchSnapshot();
@@ -422,7 +405,11 @@ public class GetOrderQueriesTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId
                     }
                 );
                 context.SaveChanges();
@@ -442,14 +429,8 @@ public class GetOrderQueriesTests
             },
             b =>
                 b.SetQuery(GetOrdersByStatusQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
-                    .SetVariableValue(
-                        "status",
-                        "COMPLETED"
-                    )
+                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
+                    .SetVariableValue("status", "COMPLETED")
         );
 
         result.MatchSnapshot();
@@ -480,7 +461,11 @@ public class GetOrderQueriesTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId
                     }
                 );
                 context.SaveChanges();
@@ -499,14 +484,8 @@ public class GetOrderQueriesTests
             },
             b =>
                 b.SetQuery(GetRequestsByStatusQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
-                    .SetVariableValue(
-                        "status",
-                        "PENDING"
-                    )
+                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
+                    .SetVariableValue("status", "PENDING")
         );
 
         result.MatchSnapshot();
@@ -537,7 +516,11 @@ public class GetOrderQueriesTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId
                     }
                 );
                 context.SaveChanges();
@@ -557,14 +540,8 @@ public class GetOrderQueriesTests
             },
             b =>
                 b.SetQuery(GetRequestsByStatusQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
-                    .SetVariableValue(
-                        "status",
-                        "ACCEPTED"
-                    )
+                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
+                    .SetVariableValue("status", "ACCEPTED")
         );
 
         result.MatchSnapshot();
@@ -595,7 +572,11 @@ public class GetOrderQueriesTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId
                     }
                 );
                 context.SaveChanges();
@@ -615,14 +596,8 @@ public class GetOrderQueriesTests
             },
             b =>
                 b.SetQuery(GetRequestsByStatusQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
-                    .SetVariableValue(
-                        "status",
-                        "REJECTED"
-                    )
+                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
+                    .SetVariableValue("status", "REJECTED")
         );
 
         result.MatchSnapshot();
@@ -653,7 +628,11 @@ public class GetOrderQueriesTests
                         ListingId = 1,
                         PlatformId = TestDatabase.Platforms.First().PlatformId,
                         UserId = TestDatabase.TestUser.UserId,
-                        ListingTypeId = TestDatabase.ListingTypes.First(listingType => listingType.PlatformId == TestDatabase.Platforms.First().PlatformId).PlatformId
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId
                     }
                 );
                 context.SaveChanges();
@@ -673,14 +652,8 @@ public class GetOrderQueriesTests
             },
             b =>
                 b.SetQuery(GetRequestsByStatusQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
-                    .SetVariableValue(
-                        "status",
-                        "COMPLETED"
-                    )
+                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
+                    .SetVariableValue("status", "COMPLETED")
         );
 
         result.MatchSnapshot();

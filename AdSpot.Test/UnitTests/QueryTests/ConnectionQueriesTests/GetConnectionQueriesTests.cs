@@ -44,14 +44,8 @@ public class GetConnectionQueriesTests
             },
             b =>
                 b.SetQuery(GetConnectionQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
-                    .SetVariableValue(
-                        "platformId",
-                        TestDatabase.Platforms.First().PlatformId
-                    )
+                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
+                    .SetVariableValue("platformId", TestDatabase.Platforms.First().PlatformId)
         );
 
         result.MatchSnapshot();
@@ -61,17 +55,10 @@ public class GetConnectionQueriesTests
     [Trait("Category", "Unit")]
     public async Task GetConnectionEmpty()
     {
-        var result = await TestServices.ExecuteRequestAsync(
-            b =>
-                b.SetQuery(GetConnectionQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
-                    .SetVariableValue(
-                        "platformId",
-                        TestDatabase.Platforms.First().PlatformId
-                    )
+        var result = await TestServices.ExecuteRequestAsync(b =>
+            b.SetQuery(GetConnectionQuery)
+                .SetVariableValue("userId", TestDatabase.TestUser.UserId)
+                .SetVariableValue("platformId", TestDatabase.Platforms.First().PlatformId)
         );
 
         result.MatchSnapshot();
@@ -96,12 +83,7 @@ public class GetConnectionQueriesTests
                 );
                 context.SaveChanges();
             },
-            b =>
-                b.SetQuery(GetConnectionsQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
+            b => b.SetQuery(GetConnectionsQuery).SetVariableValue("userId", TestDatabase.TestUser.UserId)
         );
 
         result.MatchSnapshot();
@@ -111,13 +93,8 @@ public class GetConnectionQueriesTests
     [Trait("Category", "Unit")]
     public async Task GetConnectionsEmpty()
     {
-        var result = await TestServices.ExecuteRequestAsync(
-            b =>
-                b.SetQuery(GetConnectionsQuery)
-                    .SetVariableValue(
-                        "userId",
-                        TestDatabase.TestUser.UserId
-                    )
+        var result = await TestServices.ExecuteRequestAsync(b =>
+            b.SetQuery(GetConnectionsQuery).SetVariableValue("userId", TestDatabase.TestUser.UserId)
         );
 
         result.MatchSnapshot();
