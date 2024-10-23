@@ -1,4 +1,4 @@
-using AdSpot.Models;
+﻿using AdSpot.Models;
 
 namespace AdSpot.Test.UnitTests.ListingMutationsTests;
 
@@ -6,22 +6,22 @@ namespace AdSpot.Test.UnitTests.ListingMutationsTests;
 public class UpdateListingPriceMutationTests
 {
     private const string UpdateListingPriceMutation = """
-        mutation UpdateListingPrice($input: UpdateListingPriceInput!) {
-            updateListingPrice(input: $input) {
-                listing {
-                    listingId
-                    price
-                }
-                errors {
-                    ... on Error {
-                        __typename
-                        message
+            mutation UpdateListingPrice($input: UpdateListingPriceInput!) {
+                updateListingPrice(input: $input) {
+                    listing {
+                        listingId
+                        price
+                    }
+                    errors {
+                        ... on Error {
+                            __typename
+                            message
+                        }
                     }
                 }
             }
-        }
-    """;
-    
+        """;
+
     [Fact]
     [Trait("Category", "Unit")]
     public async Task UpdateListingPriceSuccessful()
@@ -30,47 +30,46 @@ public class UpdateListingPriceMutationTests
             scope =>
             {
                 var context = scope.ServiceProvider.GetRequiredService<AdSpotDbContext>();
-                // context.Connections.Add(
-                //     new Connection
-                //     {
-                //         UserId = TestDatabase.TestUser.UserId,
-                //         PlatformId = TestDatabase.Platforms.First().PlatformId,
-                //         Handle = "TestAccountHandle",
-                //         Token = "TestApiToken"
-                //     }
-                // );
-                // context.SaveChanges();
+                context.Connections.Add(
+                    new Connection
+                    {
+                        UserId = TestDatabase.TestUser.UserId,
+                        PlatformId = TestDatabase.Platforms.First().PlatformId,
+                        Handle = "TestAccountHandle",
+                        Token = "TestApiToken",
+                    }
+                );
+                context.SaveChanges();
 
-                // context.Listings.Add(
-                //     new Listing
-                //     {
-                //         ListingId = 1,
-                //         PlatformId = TestDatabase.Platforms.First().PlatformId,
-                //         UserId = TestDatabase.TestUser.UserId,
-                //         ListingTypeId = TestDatabase
-                //             .ListingTypes.First(listingType =>
-                //                 listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
-                //             )
-                //             .PlatformId,
-                //         Price = 100.00M
-                //     }
-                // );
-                // context.SaveChanges();
+                context.Listings.Add(
+                    new Listing
+                    {
+                        ListingId = 1,
+                        PlatformId = TestDatabase.Platforms.First().PlatformId,
+                        UserId = TestDatabase.TestUser.UserId,
+                        ListingTypeId = TestDatabase
+                            .ListingTypes.First(listingType =>
+                                listingType.PlatformId == TestDatabase.Platforms.First().PlatformId
+                            )
+                            .PlatformId,
+                        Price = 100.00M,
+                    }
+                );
+                context.SaveChanges();
             },
-            // b =>
-            //     b.SetQuery(UpdateListingPriceMutation)
-            //         .SetVariableValue(
-            //             "input",
-            //             new Dictionary<string, object?>
-            //             {
-            //                 { "listingId", 1 },
-            //                 { "price", 120.00M },
-            //                 ( "userId", TestDatabase.TestUser.UserId )
-            //             }.AsReadOnly()
-            //         )
+            b =>
+                b.SetQuery(UpdateListingPriceMutation)
+                    .SetVariableValue(
+                        "input",
+                        new Dictionary<string, object?>
+                        {
+                            { "listingId", 1 },
+                            { "price", 120.00M },
+                            { "userId", TestDatabase.TestUser.UserId },
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
     }
-
 }
