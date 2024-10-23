@@ -1,4 +1,4 @@
-using AdSpot.Models;
+﻿using AdSpot.Models;
 
 namespace AdSpot.Test.UnitTests.PlatformQueriesTests;
 
@@ -7,14 +7,14 @@ public class GetPlatformsTests
 {
     public const string GetAllPlatformsQuery = """
         query GetPlatforms{
-            platforms {
+            platforms(order: {platformId: ASC}) {
                 platformId
                 name
             }
         }
         """;
 
-    //[Fact]
+    [Fact]
     [Trait("Category", "Unit")]
     public async Task GetPlatformsSuccessful()
     {
