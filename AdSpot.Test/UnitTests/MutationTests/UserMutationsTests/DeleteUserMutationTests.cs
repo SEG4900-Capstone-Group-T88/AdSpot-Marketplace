@@ -6,24 +6,24 @@ namespace AdSpot.Test.UnitTests.UserMutationsTests;
 public class DeleteUserMutationTests
 {
     private const string DeleteUserMutation = """
-        mutation DeleteUser($input: DeleteUserInput!) {
-            deleteUser(input: $input) {
-                user {
-                    userId
-                    email
-                    firstName
-                    lastName
-                }
+            mutation DeleteUser($input: DeleteUserInput!) {
+                deleteUser(input: $input) {
+                    user {
+                        userId
+                        email
+                        firstName
+                        lastName
+                    }
 
-                errors {
-                    ... on Error {
-                        __typename
-                        message
+                    errors {
+                        ... on Error {
+                            __typename
+                            message
+                        }
                     }
                 }
             }
-        }
-    """;
+        """;
 
     [Fact]
     [Trait("Category", "Unit")]
@@ -47,12 +47,7 @@ public class DeleteUserMutationTests
             },
             b =>
                 b.SetQuery(DeleteUserMutation)
-                    .SetVariableValue(
-                        "input",
-                        new Dictionary<string, object?> { 
-                            { "userId", 2 } 
-                        }.AsReadOnly()
-                    )
+                    .SetVariableValue("input", new Dictionary<string, object?> { { "userId", 2 } }.AsReadOnly())
         );
 
         result.MatchSnapshot();
@@ -62,18 +57,11 @@ public class DeleteUserMutationTests
     [Trait("Category", "Unit")]
     public async Task DeleteUserInvalidUserIdError()
     {
-        var result = await TestServices.ExecuteRequestAsync(
-            b =>
-                b.SetQuery(DeleteUserMutation)
-                    .SetVariableValue(
-                        "input",
-                        new Dictionary<string, object?> { 
-                            { "userId", 2 } 
-                        }.AsReadOnly()
-                    )
+        var result = await TestServices.ExecuteRequestAsync(b =>
+            b.SetQuery(DeleteUserMutation)
+                .SetVariableValue("input", new Dictionary<string, object?> { { "userId", 2 } }.AsReadOnly())
         );
 
         result.MatchSnapshot();
     }
-
 }
