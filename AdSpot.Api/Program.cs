@@ -40,6 +40,22 @@ builder
     .AddAdSpotTypes()
     .AddProjections()
     .AddFiltering()
+    .AddConvention<IFilterConvention>(
+        new FilterConventionExtension(x =>
+            x.AddProviderExtension(
+                new QueryableFilterProviderExtension(y => y.AddFieldHandler<QueryableStringInvariantEqualsHandler>())
+            )
+        )
+    )
+    .AddConvention<IFilterConvention>(
+        new FilterConventionExtension(x =>
+            x.AddProviderExtension(
+                new QueryableFilterProviderExtension(y =>
+                    y.AddFieldHandler<QueryableStringInvariantStartsWithHandler>()
+                )
+            )
+        )
+    )
     .AddSorting()
     .RegisterDbContext<AdSpotDbContext>()
     .RegisterService<IConfiguration>()
@@ -51,7 +67,7 @@ builder
     .RegisterService<OrderRepository>(ServiceKind.Resolver)
     .RegisterService<PlatformRepository>()
     .RegisterService<UserRepository>()
-    .SetPagingOptions(new HotChocolate.Types.Pagination.PagingOptions { IncludeTotalCount = true, });
+    .SetPagingOptions(new HotChocolate.Types.Pagination.PagingOptions { IncludeTotalCount = true });
 
 builder
     .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -63,7 +79,7 @@ builder
             ValidAudience = jwtOptions.Audience,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new RsaSecurityKey(keyManager.RsaKey),
-            ClockSkew = TimeSpan.Zero
+            ClockSkew = TimeSpan.Zero,
         };
     });
 builder.Services.AddAuthorization();
