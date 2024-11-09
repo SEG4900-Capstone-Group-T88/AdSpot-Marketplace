@@ -9,6 +9,7 @@ public class AdSpotDbContext : DbContext
     public DbSet<Listing> Listings { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderStatus> OrderStatuses { get; set; }
+    public DbSet<Flair> Flairs { get; set; }
 
     public AdSpotDbContext(DbContextOptions<AdSpotDbContext> options)
         : base(options) { }
@@ -20,6 +21,7 @@ public class AdSpotDbContext : DbContext
         modelBuilder.Entity<User>().HasAlternateKey(e => e.Email);
         modelBuilder.Entity<User>().HasMany(e => e.Connections).WithOne(e => e.User).HasForeignKey(e => e.UserId);
         modelBuilder.Entity<User>().HasMany(e => e.Listings).WithOne(e => e.User).HasForeignKey(e => e.UserId);
+        modelBuilder.Entity<User>().HasMany(e => e.Flairs).WithOne(e => e.User).HasForeignKey(e => e.UserId);
 
         modelBuilder
             .Entity<Platform>()
@@ -49,5 +51,7 @@ public class AdSpotDbContext : DbContext
             .HasForeignKey(e => e.OrderStatusId);
 
         modelBuilder.Entity<OrderStatus>().Property(e => e.OrderStatusId).ValueGeneratedNever();
+
+        modelBuilder.Entity<Flair>().HasKey(e => new { e.UserId, e.FlairTitle });
     }
 }

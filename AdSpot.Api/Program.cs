@@ -23,6 +23,7 @@ builder
     .AddScoped<OrderRepository>()
     .AddScoped<PlatformRepository>()
     .AddScoped<UserRepository>()
+    .AddScoped<FlairRepository>()
     // Validators
     .AddScoped<AddUserInputValidator>()
     .AddScoped<SubmitDeliverableInputValidator>();
@@ -67,6 +68,7 @@ builder
     .RegisterService<OrderRepository>(ServiceKind.Resolver)
     .RegisterService<PlatformRepository>()
     .RegisterService<UserRepository>()
+    .RegisterService<FlairRepository>()
     .SetPagingOptions(new HotChocolate.Types.Pagination.PagingOptions { IncludeTotalCount = true });
 
 builder

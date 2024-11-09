@@ -11,4 +11,5 @@ public class User
     public ICollection<Connection> Connections { get; set; }
     public ICollection<Listing> Listings { get; set; }
     public ICollection<Order> Orders { get; set; }
+    public ICollection<Flair> Flairs { get; set; }
 }

@@ -56,6 +56,17 @@ public static class DatabaseInitializer
             dbContext.SaveChanges();
         }
 
+        var flairs = new List<Flair>
+        {
+            new Flair { UserId = numUsers+1, FlairTitle = "Test Flair" }
+        };
+
+        if (dbContext.Flairs.FirstOrDefault() is null)
+        {
+            dbContext.Flairs.AddRange(flairs);
+            dbContext.SaveChanges();
+        }
+
         var platforms = new List<Platform>
         {
             new Platform { Name = "Facebook" },
