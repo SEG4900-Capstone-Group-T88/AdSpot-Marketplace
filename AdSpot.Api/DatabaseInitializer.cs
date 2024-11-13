@@ -56,14 +56,32 @@ public static class DatabaseInitializer
             dbContext.SaveChanges();
         }
 
-        var flairs = new List<Flair>
-        {
-            new Flair { UserId = numUsers+1, FlairTitle = "Test Flair" }
-        };
-
+        String[] testFlairs = new string[7] {"Fitness", "Automotive", "Finance", "Education", "Lifestyle", "Health", "Fashion"};
+    
         if (dbContext.Flairs.FirstOrDefault() is null)
         {
-            dbContext.Flairs.AddRange(flairs);
+            var userFlairs = new List<Flair>();
+            int j = 0;
+
+            dbContext
+                .Users.ToList()
+                .ForEach(user => 
+                {
+                    userFlairs.Add(
+                        new Flair { UserId = user.UserId, FlairTitle = testFlairs[j]}
+                    );
+                    j = (j+1) % 7;
+                    userFlairs.Add(
+                        new Flair { UserId = user.UserId, FlairTitle = testFlairs[j]}
+                    );
+                    j = (j+1) % 7;
+                    userFlairs.Add(
+                        new Flair { UserId = user.UserId, FlairTitle = testFlairs[j]}
+                    );
+                    j = (j+1) % 7;
+                });
+
+            dbContext.Flairs.AddRange(userFlairs);
             dbContext.SaveChanges();
         }
 
