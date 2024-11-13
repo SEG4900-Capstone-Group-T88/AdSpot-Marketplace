@@ -1,4 +1,5 @@
 ﻿var builder = WebApplication.CreateBuilder(args);
+var isDevelopment = builder.Environment.IsDevelopment();
 var config = builder.Configuration;
 
 var keyManager = new KeyManager();
@@ -79,6 +80,7 @@ builder
         {
             ValidIssuer = jwtOptions.Issuer,
             ValidAudience = jwtOptions.Audience,
+            ValidateLifetime = !isDevelopment,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new RsaSecurityKey(keyManager.RsaKey),
             ClockSkew = TimeSpan.Zero,
