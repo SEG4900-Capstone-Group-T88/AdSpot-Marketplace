@@ -56,8 +56,17 @@ public static class DatabaseInitializer
             dbContext.SaveChanges();
         }
 
-        String[] testFlairs = new string[7] {"Fitness", "Automotive", "Finance", "Education", "Lifestyle", "Health", "Fashion"};
-    
+        String[] testFlairs = new string[7]
+        {
+            "Fitness",
+            "Automotive",
+            "Finance",
+            "Education",
+            "Lifestyle",
+            "Health",
+            "Fashion"
+        };
+
         if (dbContext.Flairs.FirstOrDefault() is null)
         {
             var userFlairs = new List<Flair>();
@@ -65,20 +74,14 @@ public static class DatabaseInitializer
 
             dbContext
                 .Users.ToList()
-                .ForEach(user => 
+                .ForEach(user =>
                 {
-                    userFlairs.Add(
-                        new Flair { UserId = user.UserId, FlairTitle = testFlairs[j]}
-                    );
-                    j = (j+1) % 7;
-                    userFlairs.Add(
-                        new Flair { UserId = user.UserId, FlairTitle = testFlairs[j]}
-                    );
-                    j = (j+1) % 7;
-                    userFlairs.Add(
-                        new Flair { UserId = user.UserId, FlairTitle = testFlairs[j]}
-                    );
-                    j = (j+1) % 7;
+                    userFlairs.Add(new Flair { UserId = user.UserId, FlairTitle = testFlairs[j] });
+                    j = (j + 1) % 7;
+                    userFlairs.Add(new Flair { UserId = user.UserId, FlairTitle = testFlairs[j] });
+                    j = (j + 1) % 7;
+                    userFlairs.Add(new Flair { UserId = user.UserId, FlairTitle = testFlairs[j] });
+                    j = (j + 1) % 7;
                 });
 
             dbContext.Flairs.AddRange(userFlairs);

@@ -4,10 +4,7 @@ namespace AdSpot.Api.Queries;
 public class FlairQueries
 {
     [Authorize]
-    public IQueryable<Flair> GetFlairs (
-        int userId,
-        FlairRepository flairRepo
-    )
+    public IQueryable<Flair> GetFlairs(int userId, FlairRepository flairRepo)
     {
         return flairRepo.GetFlairs(userId);
     }
