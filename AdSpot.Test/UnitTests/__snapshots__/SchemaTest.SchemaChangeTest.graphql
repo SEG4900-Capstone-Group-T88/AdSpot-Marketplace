@@ -26,6 +26,11 @@ type AddConnectionPayload {
   errors: [AddConnectionError!]
 }
 
+type AddFlairPayload {
+  flair: [Flair!]
+  errors: [AddFlairError!]
+}
+
 type AddListingPayload {
   listing: Listing
   errors: [AddListingError!]
@@ -55,6 +60,10 @@ type ConnectionAlreadyExistsError implements Error {
   message: String!
 }
 
+type DeleteFlairPayload {
+  flair: [Flair!]
+}
+
 type DeleteUserPayload {
   user: User
   errors: [DeleteUserError!]
@@ -63,6 +72,16 @@ type DeleteUserPayload {
 type ExchangeInstagramAuthCodeForTokenPayload {
   connection: Connection
   errors: [ExchangeInstagramAuthCodeForTokenError!]
+}
+
+type Flair {
+  userId: Int!
+  user: User!
+  flairTitle: String!
+}
+
+type FlairAlreadyExistsError implements Error {
+  message: String!
 }
 
 type InstagramOauthError implements Error {
@@ -127,6 +146,8 @@ type LoginPayload {
 type Mutation {
   addConnection(input: AddConnectionInput!): AddConnectionPayload! @authorize
   exchangeInstagramAuthCodeForToken(input: ExchangeInstagramAuthCodeForTokenInput!): ExchangeInstagramAuthCodeForTokenPayload!
+  addFlair(input: AddFlairInput!): AddFlairPayload!
+  deleteFlair(input: DeleteFlairInput!): DeleteFlairPayload!
   addListing(input: AddListingInput!): AddListingPayload! @authorize
   updateListingPrice(input: UpdateListingPriceInput!): UpdateListingPricePayload! @authorize
   orderListing(input: OrderListingInput!): OrderListingPayload! @authorize
@@ -225,6 +246,7 @@ type Platform {
 type Query {
   connection(userId: Int! platformId: Int!): [Connection!]! @authorize
   connections(userId: Int!): [Connection!]! @authorize
+  flairs(userId: Int!): [Flair!]! @authorize
   orderById(orderId: Int!): Order @authorize
   orders(userId: Int! pov: OrderPov! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: OrderFilterInput order: [OrderSortInput!]): OrdersConnection @authorize
   ordersByStatus(userId: Int! status: OrderStatusEnum! "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [OrderSortInput!]): OrdersByStatusConnection @authorize @deprecated(reason: "Use the `orders` field with a filter instead")
@@ -291,6 +313,7 @@ type User {
   connections: [Connection!]!
   listings: [Listing!]!
   orders: [Order!]!
+  flairs: [Flair!]!
 }
 
 type UserInvalidCredentialsError implements Error {
@@ -325,6 +348,8 @@ union AcceptOrderError = InvalidOrderIdError | ListingDoesNotBelongToUserError
 
 union AddConnectionError = ConnectionAlreadyExistsError
 
+union AddFlairError = FlairAlreadyExistsError
+
 union AddListingError = InvalidListingTypeIdError | AccountHasNotBeenConnectedError
 
 union AddUserError = AccountWithEmailAlreadyExistsError
@@ -355,6 +380,11 @@ input AddConnectionInput {
   platformId: Int!
   accountHandle: String!
   apiToken: String!
+}
+
+input AddFlairInput {
+  userId: Int!
+  flairTitle: String!
 }
 
 input AddListingInput {
@@ -422,6 +452,11 @@ input DecimalOperationFilterInput {
   nlte: Decimal
 }
 
+input DeleteFlairInput {
+  userId: Int!
+  flairTitle: String!
+}
+
 input DeleteUserInput {
   userId: Int!
 }
@@ -430,6 +465,14 @@ input ExchangeInstagramAuthCodeForTokenInput {
   userId: Int!
   platformId: Int!
   authCode: String!
+}
+
+input FlairFilterInput {
+  and: [FlairFilterInput!]
+  or: [FlairFilterInput!]
+  userId: IntOperationFilterInput
+  user: UserFilterInput
+  flairTitle: StringOperationFilterInput
 }
 
 input IntOperationFilterInput {
@@ -451,6 +494,13 @@ input ListFilterInputTypeOfConnectionFilterInput {
   all: ConnectionFilterInput
   none: ConnectionFilterInput
   some: ConnectionFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfFlairFilterInput {
+  all: FlairFilterInput
+  none: FlairFilterInput
+  some: FlairFilterInput
   any: Boolean
 }
 
@@ -641,6 +691,7 @@ input UserFilterInput {
   connections: ListFilterInputTypeOfConnectionFilterInput
   listings: ListFilterInputTypeOfListingFilterInput
   orders: ListFilterInputTypeOfOrderFilterInput
+  flairs: ListFilterInputTypeOfFlairFilterInput
 }
 
 input UserSortInput {

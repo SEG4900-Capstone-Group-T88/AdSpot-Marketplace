@@ -31,6 +31,7 @@ public static class TestServices
             .AddScoped<OrderRepository>()
             .AddScoped<PlatformRepository>()
             .AddScoped<UserRepository>()
+            .AddScoped<FlairRepository>()
             // Validators
             .AddScoped<AddUserInputValidator>()
             .AddScoped<SubmitDeliverableInputValidator>()
@@ -55,6 +56,7 @@ public static class TestServices
             .RegisterService<OrderRepository>(ServiceKind.Resolver)
             .RegisterService<PlatformRepository>()
             .RegisterService<UserRepository>()
+            .RegisterService<FlairRepository>()
             .SetPagingOptions(new HotChocolate.Types.Pagination.PagingOptions { IncludeTotalCount = true, })
             .ModifyRequestOptions(options =>
             {
