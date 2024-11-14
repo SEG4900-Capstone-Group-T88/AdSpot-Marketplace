@@ -29,14 +29,38 @@ builder
     .AddScoped<AddUserInputValidator>()
     .AddScoped<SubmitDeliverableInputValidator>();
 
+builder
+    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = jwtOptions.Issuer,
+            ValidAudience = jwtOptions.Audience,
+            ValidateLifetime = !isDevelopment,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new RsaSecurityKey(keyManager.RsaKey),
+            ClockSkew = TimeSpan.Zero,
+        };
+
+        options.MapInboundClaims = false;
+    });
+
+builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("self", policy => policy.AddRequirements(new SelfRequirement()));
+    }
+);
+builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, SelfAuthorizationHandler>();
+
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 
 builder
     .Services.AddGraphQLServer()
     .AddAuthorization()
     .AddFluentValidation()
-    .UsePersistedQueryPipeline()
-    .AddReadOnlyFileSystemQueryStorage("./PersistedQueries")
+    .UsePersistedOperationPipeline()
+    .AddFileSystemOperationDocumentStorage("./PersistedQueries")
     .AddMutationConventions(applyToAllMutations: true)
     .AddInMemorySubscriptions()
     .AddAdSpotTypes()
@@ -59,34 +83,10 @@ builder
         )
     )
     .AddSorting()
-    .RegisterDbContext<AdSpotDbContext>()
-    .RegisterService<IConfiguration>()
-    .RegisterService<IHttpContextAccessor>()
-    .RegisterService<InstagramService>()
-    .RegisterService<ConnectionRepository>()
-    .RegisterService<ListingRepository>()
-    .RegisterService<ListingTypeRepository>()
-    .RegisterService<OrderRepository>(ServiceKind.Resolver)
-    .RegisterService<PlatformRepository>()
-    .RegisterService<UserRepository>()
-    .RegisterService<FlairRepository>()
-    .SetPagingOptions(new HotChocolate.Types.Pagination.PagingOptions { IncludeTotalCount = true });
-
-builder
-    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidIssuer = jwtOptions.Issuer,
-            ValidAudience = jwtOptions.Audience,
-            ValidateLifetime = !isDevelopment,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new RsaSecurityKey(keyManager.RsaKey),
-            ClockSkew = TimeSpan.Zero,
-        };
+    .ModifyPagingOptions(opt => {
+        opt.IncludeTotalCount = true;
     });
-builder.Services.AddAuthorization();
+
 
 builder.Services.AddCors(options =>
 {

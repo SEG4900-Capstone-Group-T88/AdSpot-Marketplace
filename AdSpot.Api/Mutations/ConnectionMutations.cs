@@ -5,7 +5,7 @@ public class ConnectionMutations
 {
     [Authorize]
     [Error<ConnectionAlreadyExistsError>]
-    public MutationResult<Connection> AddConnection(
+    public FieldResult<Connection> AddConnection(
         int userId,
         int platformId,
         string accountHandle,
@@ -33,7 +33,7 @@ public class ConnectionMutations
     }
 
     [Error<InstagramOauthError>]
-    public async Task<MutationResult<Connection?>> ExchangeInstagramAuthCodeForToken(
+    public async Task<FieldResult<Connection?>> ExchangeInstagramAuthCodeForToken(
         int userId,
         int platformId,
         string authCode,

@@ -21,16 +21,13 @@ public class UserQueries
 
     [UseFirstOrDefault]
     [UseProjection]
-    public async Task<IQueryable<User>?> WhoAmI(UserRepository repo, IHttpContextAccessor httpContextAccessor)
+    public IQueryable<User>? WhoAmI(UserRepository repo, ClaimsPrincipal claimsPrincipal)
     {
-        var token = await httpContextAccessor.HttpContext.GetTokenAsync("access_token");
-        if (token is null)
+        var success = int.TryParse(claimsPrincipal.FindFirstValue(JwtRegisteredClaimNames.Sub), out var userId);
+        if (!success)
         {
             return null;
         }
-        var handler = new JwtSecurityTokenHandler();
-        var jwt = handler.ReadJwtToken(token);
-        var userId = int.Parse(jwt.Subject);
         return repo.GetUserById(userId);
     }
 }

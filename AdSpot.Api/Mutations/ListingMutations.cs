@@ -8,7 +8,7 @@ public class ListingMutations
     //[UseProjection]
     [Error<InvalidListingTypeIdError>]
     [Error<AccountHasNotBeenConnectedError>]
-    public async Task<MutationResult<Listing>> AddListing(
+    public async Task<FieldResult<Listing>> AddListing(
         int listingTypeId,
         int userId,
         decimal price,
@@ -50,7 +50,7 @@ public class ListingMutations
     [Error<InvalidPriceError>]
     [Error<InvalidListingIdError>]
     [Error<ListingDoesNotBelongToUserError>]
-    public MutationResult<Listing> UpdateListingPrice(
+    public FieldResult<Listing> UpdateListingPrice(
         int listingId,
         int userId,
         decimal price,
