@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-
 namespace AdSpot.Api.Policies;
 
 public class SelfAuthorizationHandler : AuthorizationHandler<SelfRequirement, IResolverContext>
 {
-    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, SelfRequirement requirement, IResolverContext resource)
+    protected override Task HandleRequirementAsync(
+        AuthorizationHandlerContext context,
+        SelfRequirement requirement,
+        IResolverContext resource
+    )
     {
         var graphqlVariableUserId = resource.Variables.GetVariable<int>("userId");
         if (context.User.HasClaim(claim => claim.Type == "sub"))
@@ -21,4 +24,4 @@ public class SelfAuthorizationHandler : AuthorizationHandler<SelfRequirement, IR
     }
 }
 
-public class SelfRequirement: IAuthorizationRequirement { }
+public class SelfRequirement : IAuthorizationRequirement { }

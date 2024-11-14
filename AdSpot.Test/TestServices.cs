@@ -46,7 +46,8 @@ public static class TestServices
             .AddProjections()
             .AddFiltering()
             .AddSorting()
-            .ModifyPagingOptions(opt => {
+            .ModifyPagingOptions(opt =>
+            {
                 opt.IncludeTotalCount = true;
             })
             .ModifyRequestOptions(options =>

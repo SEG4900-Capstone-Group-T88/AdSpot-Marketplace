@@ -47,10 +47,9 @@ builder
     });
 
 builder.Services.AddAuthorization(options =>
-    {
-        options.AddPolicy("self", policy => policy.AddRequirements(new SelfRequirement()));
-    }
-);
+{
+    options.AddPolicy("self", policy => policy.AddRequirements(new SelfRequirement()));
+});
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, SelfAuthorizationHandler>();
 
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
@@ -83,10 +82,10 @@ builder
         )
     )
     .AddSorting()
-    .ModifyPagingOptions(opt => {
+    .ModifyPagingOptions(opt =>
+    {
         opt.IncludeTotalCount = true;
     });
-
 
 builder.Services.AddCors(options =>
 {

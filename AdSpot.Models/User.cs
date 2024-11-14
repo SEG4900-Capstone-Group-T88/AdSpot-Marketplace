@@ -12,6 +12,6 @@ public class User
     public ICollection<Listing> Listings { get; set; }
     public ICollection<Order> Orders { get; set; }
 
-    [Authorize(Policy="self")]
+    [Authorize(Policy = "self")]
     public ICollection<Flair> Flairs { get; set; }
 }
