@@ -11,5 +11,7 @@ public class User
     public ICollection<Connection> Connections { get; set; }
     public ICollection<Listing> Listings { get; set; }
     public ICollection<Order> Orders { get; set; }
+
+    [Authorize(Policy = "self")]
     public ICollection<Flair> Flairs { get; set; }
 }

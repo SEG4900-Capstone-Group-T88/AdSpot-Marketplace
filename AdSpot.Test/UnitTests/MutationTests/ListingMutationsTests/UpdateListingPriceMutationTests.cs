@@ -58,14 +58,19 @@ public class UpdateListingPriceMutationTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(UpdateListingPriceMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(UpdateListingPriceMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "listingId", 1 },
-                            { "price", 120.00M },
-                            { "userId", TestDatabase.TestUser.UserId },
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "listingId", 1 },
+                                    { "price", 120.00M },
+                                    { "userId", TestDatabase.TestUser.UserId },
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );
@@ -109,14 +114,19 @@ public class UpdateListingPriceMutationTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(UpdateListingPriceMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(UpdateListingPriceMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "listingId", 1 },
-                            { "price", -1.00M },
-                            { "userId", TestDatabase.TestUser.UserId },
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "listingId", 1 },
+                                    { "price", -1.00M },
+                                    { "userId", TestDatabase.TestUser.UserId },
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );
@@ -160,14 +170,19 @@ public class UpdateListingPriceMutationTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(UpdateListingPriceMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(UpdateListingPriceMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "listingId", 2 },
-                            { "price", 120.00M },
-                            { "userId", TestDatabase.TestUser.UserId },
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "listingId", 2 },
+                                    { "price", 120.00M },
+                                    { "userId", TestDatabase.TestUser.UserId },
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );
@@ -211,14 +226,19 @@ public class UpdateListingPriceMutationTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(UpdateListingPriceMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(UpdateListingPriceMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "listingId", 1 },
-                            { "price", 120.00M },
-                            { "userId", TestDatabase.TestUser.UserId },
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "listingId", 1 },
+                                    { "price", 120.00M },
+                                    { "userId", TestDatabase.TestUser.UserId },
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );

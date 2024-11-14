@@ -1,4 +1,4 @@
-using AdSpot.Models;
+﻿using AdSpot.Models;
 
 namespace AdSpot.Test.UnitTests.ConnectionQueriesTests;
 
@@ -43,9 +43,14 @@ public class GetConnectionQueriesTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(GetConnectionQuery)
-                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
-                    .SetVariableValue("platformId", TestDatabase.Platforms.First().PlatformId)
+                b.SetDocument(GetConnectionQuery)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            { "userId", TestDatabase.TestUser.UserId },
+                            { "platformId", TestDatabase.Platforms.First().PlatformId }
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
@@ -56,9 +61,14 @@ public class GetConnectionQueriesTests
     public async Task GetConnectionEmpty()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(GetConnectionQuery)
-                .SetVariableValue("userId", TestDatabase.TestUser.UserId)
-                .SetVariableValue("platformId", TestDatabase.Platforms.First().PlatformId)
+            b.SetDocument(GetConnectionQuery)
+                .SetVariableValues(
+                    new Dictionary<string, object?>
+                    {
+                        { "userId", TestDatabase.TestUser.UserId },
+                        { "platformId", TestDatabase.Platforms.First().PlatformId }
+                    }.AsReadOnly()
+                )
         );
 
         result.MatchSnapshot();
@@ -83,7 +93,11 @@ public class GetConnectionQueriesTests
                 );
                 context.SaveChanges();
             },
-            b => b.SetQuery(GetConnectionsQuery).SetVariableValue("userId", TestDatabase.TestUser.UserId)
+            b =>
+                b.SetDocument(GetConnectionsQuery)
+                    .SetVariableValues(
+                        new Dictionary<string, object?> { { "userId", TestDatabase.TestUser.UserId } }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
@@ -94,7 +108,10 @@ public class GetConnectionQueriesTests
     public async Task GetConnectionsEmpty()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(GetConnectionsQuery).SetVariableValue("userId", TestDatabase.TestUser.UserId)
+            b.SetDocument(GetConnectionsQuery)
+                .SetVariableValues(
+                    new Dictionary<string, object?> { { "userId", TestDatabase.TestUser.UserId } }.AsReadOnly()
+                )
         );
 
         result.MatchSnapshot();

@@ -1,6 +1,4 @@
-using AdSpot.Models;
-
-namespace AdSpot.Test.UnitTests.UserQueriesTests;
+﻿namespace AdSpot.Test.UnitTests.UserQueriesTests;
 
 [Collection("adspot-inmemory-db")]
 public class GetUserTests
@@ -21,7 +19,10 @@ public class GetUserTests
     public async Task GetUserSuccessful()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(GetUserQuery).SetVariableValue("userId", TestDatabase.TestUser.UserId)
+            b.SetDocument(GetUserQuery)
+                .SetVariableValues(
+                    new Dictionary<string, object?> { { "userId", TestDatabase.TestUser.UserId } }.AsReadOnly()
+                )
         );
 
         result.MatchSnapshot();
@@ -32,7 +33,8 @@ public class GetUserTests
     public async Task GetUserNotFound()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(GetUserQuery).SetVariableValue("userId", -1)
+            b.SetDocument(GetUserQuery)
+                .SetVariableValues(new Dictionary<string, object?> { { "userId", -1 } }.AsReadOnly())
         );
 
         result.MatchSnapshot();

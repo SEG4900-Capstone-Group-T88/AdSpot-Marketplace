@@ -1,6 +1,4 @@
-﻿using AdSpot.Models;
-
-namespace AdSpot.Test.UnitTests.PlatformQueriesTests;
+﻿namespace AdSpot.Test.UnitTests.PlatformQueriesTests;
 
 [Collection("adspot-inmemory-db")]
 public class GetPlatformsTests
@@ -18,7 +16,7 @@ public class GetPlatformsTests
     [Trait("Category", "Unit")]
     public async Task GetPlatformsSuccessful()
     {
-        var result = await TestServices.ExecuteRequestAsync(b => b.SetQuery(GetAllPlatformsQuery));
+        var result = await TestServices.ExecuteRequestAsync(b => b.SetDocument(GetAllPlatformsQuery));
 
         result.MatchSnapshot();
     }

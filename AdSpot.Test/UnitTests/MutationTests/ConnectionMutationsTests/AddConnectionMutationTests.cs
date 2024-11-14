@@ -27,15 +27,20 @@ public class AddConnectionMutationTests
     public async Task AddConnectionSuccessful()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(AddConnectionMutation)
-                .SetVariableValue(
-                    "input",
+            b.SetDocument(AddConnectionMutation)
+                .SetVariableValues(
                     new Dictionary<string, object?>
                     {
-                        { "userId", TestDatabase.TestUser.UserId },
-                        { "platformId", TestDatabase.Platforms.First().PlatformId },
-                        { "accountHandle", "TestAccountHandle" },
-                        { "apiToken", "TestApiToken" }
+                        {
+                            "input",
+                            new Dictionary<string, object?>
+                            {
+                                { "userId", TestDatabase.TestUser.UserId },
+                                { "platformId", TestDatabase.Platforms.First().PlatformId },
+                                { "accountHandle", "TestAccountHandle" },
+                                { "apiToken", "TestApiToken" }
+                            }
+                        }
                     }.AsReadOnly()
                 )
         );
@@ -63,15 +68,20 @@ public class AddConnectionMutationTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(AddConnectionMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(AddConnectionMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "userId", TestDatabase.TestUser.UserId },
-                            { "platformId", TestDatabase.Platforms.First().PlatformId },
-                            { "accountHandle", "TestAccountHandle" },
-                            { "apiToken", "TestApiToken" }
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "userId", TestDatabase.TestUser.UserId },
+                                    { "platformId", TestDatabase.Platforms.First().PlatformId },
+                                    { "accountHandle", "TestAccountHandle" },
+                                    { "apiToken", "TestApiToken" }
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );

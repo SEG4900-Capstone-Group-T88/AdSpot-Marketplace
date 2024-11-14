@@ -1,6 +1,4 @@
-using AdSpot.Models;
-
-namespace AdSpot.Test.UnitTests.UserMutationsTests;
+﻿namespace AdSpot.Test.UnitTests.UserMutationsTests;
 
 [Collection("adspot-inmemory-db")]
 public class UpdatePasswordMutationTests
@@ -30,13 +28,18 @@ public class UpdatePasswordMutationTests
     public async Task UpdatePasswordSuccessful()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(UpdatePasswordMutation)
-                .SetVariableValue(
-                    "input",
+            b.SetDocument(UpdatePasswordMutation)
+                .SetVariableValues(
                     new Dictionary<string, object?>
                     {
-                        { "userId", TestDatabase.TestUser.UserId },
-                        { "password", "UpdatedTestPassword" }
+                        {
+                            "input",
+                            new Dictionary<string, object?>
+                            {
+                                { "userId", TestDatabase.TestUser.UserId },
+                                { "password", "UpdatedTestPassword" }
+                            }
+                        }
                     }.AsReadOnly()
                 )
         );
@@ -49,13 +52,14 @@ public class UpdatePasswordMutationTests
     public async Task UpdatePasswordInvalidUserIdError()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(UpdatePasswordMutation)
-                .SetVariableValue(
-                    "input",
+            b.SetDocument(UpdatePasswordMutation)
+                .SetVariableValues(
                     new Dictionary<string, object?>
                     {
-                        { "userId", 2 },
-                        { "password", "UpdatedTestPassword" }
+                        {
+                            "input",
+                            new Dictionary<string, object?> { { "userId", 2 }, { "password", "UpdatedTestPassword" } }
+                        }
                     }.AsReadOnly()
                 )
         );

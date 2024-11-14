@@ -1,10 +1,10 @@
-namespace AdSpot.Api.Mutations;
+﻿namespace AdSpot.Api.Mutations;
 
 [MutationType]
 public class FlairMutations
 {
     [Error<FlairAlreadyExistsError>]
-    public MutationResult<IQueryable<Flair>> AddFlair(int userId, string flairTitle, FlairRepository flairRepo)
+    public FieldResult<IQueryable<Flair>> AddFlair(int userId, string flairTitle, FlairRepository flairRepo)
     {
         var flairExists = flairRepo.GetFlair(userId, flairTitle).Any();
         if (flairExists)
@@ -17,7 +17,7 @@ public class FlairMutations
         return new(flair);
     }
 
-    public MutationResult<IQueryable<Flair>> DeleteFlair(int userId, string flairTitle, FlairRepository flairRepo)
+    public FieldResult<IQueryable<Flair>> DeleteFlair(int userId, string flairTitle, FlairRepository flairRepo)
     {
         var flairs = flairRepo.GetFlair(userId, flairTitle);
         if (flairs.Any())

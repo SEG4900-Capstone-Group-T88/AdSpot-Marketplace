@@ -1,4 +1,4 @@
-using AdSpot.Models;
+﻿using AdSpot.Models;
 
 namespace AdSpot.Test.UnitTests.OrderMutationsTests;
 
@@ -85,13 +85,18 @@ public class SubmitDeliverableMutationsTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(SubmitDeliverableMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(SubmitDeliverableMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "orderId", 1 },
-                            { "deliverable", "https://www.google.com" }
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "orderId", 1 },
+                                    { "deliverable", "https://www.google.com" }
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );
@@ -159,13 +164,18 @@ public class SubmitDeliverableMutationsTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(SubmitDeliverableMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(SubmitDeliverableMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "orderId", 3 },
-                            { "deliverable", "https://www.google.com" }
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "orderId", 3 },
+                                    { "deliverable", "https://www.google.com" }
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );
@@ -234,13 +244,18 @@ public class SubmitDeliverableMutationsTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(SubmitDeliverableMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(SubmitDeliverableMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "orderId", 1 },
-                            { "deliverable", "Test Deliverable" }
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "orderId", 1 },
+                                    { "deliverable", "Test Deliverable" }
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );

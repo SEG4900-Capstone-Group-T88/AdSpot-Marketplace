@@ -1,4 +1,4 @@
-using AdSpot.Models;
+﻿using AdSpot.Models;
 
 namespace AdSpot.Test.UnitTests.UserMutationsTests;
 
@@ -46,8 +46,16 @@ public class DeleteUserMutationTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(DeleteUserMutation)
-                    .SetVariableValue("input", new Dictionary<string, object?> { { "userId", 2 } }.AsReadOnly())
+                b.SetDocument(DeleteUserMutation)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            {
+                                "input",
+                                new Dictionary<string, object?> { { "userId", 2 } }
+                            }
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
@@ -58,8 +66,16 @@ public class DeleteUserMutationTests
     public async Task DeleteUserInvalidUserIdError()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(DeleteUserMutation)
-                .SetVariableValue("input", new Dictionary<string, object?> { { "userId", 2 } }.AsReadOnly())
+            b.SetDocument(DeleteUserMutation)
+                .SetVariableValues(
+                    new Dictionary<string, object?>
+                    {
+                        {
+                            "input",
+                            new Dictionary<string, object?> { { "userId", 2 } }
+                        }
+                    }.AsReadOnly()
+                )
         );
 
         result.MatchSnapshot();

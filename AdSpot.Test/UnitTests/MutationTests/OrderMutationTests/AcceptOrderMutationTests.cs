@@ -1,4 +1,4 @@
-using AdSpot.Models;
+﻿using AdSpot.Models;
 
 namespace AdSpot.Test.UnitTests.OrderMutationsTests;
 
@@ -84,13 +84,18 @@ public class AcceptOrderMutationsTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(AcceptOrderMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(AcceptOrderMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "orderId", 1 },
-                            { "userId", TestDatabase.TestUser.UserId }
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "orderId", 1 },
+                                    { "userId", TestDatabase.TestUser.UserId }
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );
@@ -158,13 +163,18 @@ public class AcceptOrderMutationsTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(AcceptOrderMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(AcceptOrderMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "orderId", -1 },
-                            { "userId", TestDatabase.TestUser.UserId }
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "orderId", -1 },
+                                    { "userId", TestDatabase.TestUser.UserId }
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );
@@ -232,10 +242,15 @@ public class AcceptOrderMutationsTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(AcceptOrderMutation)
-                    .SetVariableValue(
-                        "input",
-                        new Dictionary<string, object?> { { "orderId", 1 }, { "userId", 2 } }.AsReadOnly()
+                b.SetDocument(AcceptOrderMutation)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            {
+                                "input",
+                                new Dictionary<string, object?> { { "orderId", 1 }, { "userId", 2 } }
+                            }
+                        }.AsReadOnly()
                     )
         );
 

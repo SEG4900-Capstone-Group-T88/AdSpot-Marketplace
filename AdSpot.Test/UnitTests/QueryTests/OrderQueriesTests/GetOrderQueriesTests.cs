@@ -1,4 +1,4 @@
-using AdSpot.Models;
+﻿using AdSpot.Models;
 
 namespace AdSpot.Test.UnitTests.OrderQueriesTests;
 
@@ -86,7 +86,9 @@ public class GetOrderQueriesTests
                 );
                 context.SaveChanges();
             },
-            b => b.SetQuery(GetOrderByIdQuery).SetVariableValue("orderId", 1)
+            b =>
+                b.SetDocument(GetOrderByIdQuery)
+                    .SetVariableValues(new Dictionary<string, object?> { { "orderId", 1 } }.AsReadOnly())
         );
 
         result.MatchSnapshot();
@@ -97,7 +99,8 @@ public class GetOrderQueriesTests
     public async Task GetOrderByOrderIdNoID()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(GetOrderByIdQuery).SetVariableValue("orderId", 1)
+            b.SetDocument(GetOrderByIdQuery)
+                .SetVariableValues(new Dictionary<string, object?> { { "orderId", 1 } }.AsReadOnly())
         );
 
         result.MatchSnapshot();
@@ -150,9 +153,14 @@ public class GetOrderQueriesTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(GetOrdersQuery)
-                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
-                    .SetVariableValue("pov", "BUYER")
+                b.SetDocument(GetOrdersQuery)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            { "userId", TestDatabase.TestUser.UserId },
+                            { "pov", "BUYER" }
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
@@ -205,9 +213,14 @@ public class GetOrderQueriesTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(GetOrdersQuery)
-                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
-                    .SetVariableValue("pov", "SELLER")
+                b.SetDocument(GetOrdersQuery)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            { "userId", TestDatabase.TestUser.UserId },
+                            { "pov", "SELLER" }
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
@@ -260,9 +273,14 @@ public class GetOrderQueriesTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(GetOrdersByStatusQuery)
-                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
-                    .SetVariableValue("status", "PENDING")
+                b.SetDocument(GetOrdersByStatusQuery)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            { "userId", TestDatabase.TestUser.UserId },
+                            { "status", "PENDING" }
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
@@ -316,9 +334,14 @@ public class GetOrderQueriesTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(GetOrdersByStatusQuery)
-                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
-                    .SetVariableValue("status", "ACCEPTED")
+                b.SetDocument(GetOrdersByStatusQuery)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            { "userId", TestDatabase.TestUser.UserId },
+                            { "status", "ACCEPTED" }
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
@@ -372,9 +395,14 @@ public class GetOrderQueriesTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(GetOrdersByStatusQuery)
-                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
-                    .SetVariableValue("status", "REJECTED")
+                b.SetDocument(GetOrdersByStatusQuery)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            { "userId", TestDatabase.TestUser.UserId },
+                            { "status", "REJECTED" }
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
@@ -428,9 +456,14 @@ public class GetOrderQueriesTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(GetOrdersByStatusQuery)
-                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
-                    .SetVariableValue("status", "COMPLETED")
+                b.SetDocument(GetOrdersByStatusQuery)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            { "userId", TestDatabase.TestUser.UserId },
+                            { "status", "COMPLETED" }
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
@@ -483,9 +516,14 @@ public class GetOrderQueriesTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(GetRequestsByStatusQuery)
-                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
-                    .SetVariableValue("status", "PENDING")
+                b.SetDocument(GetRequestsByStatusQuery)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            { "userId", TestDatabase.TestUser.UserId },
+                            { "status", "PENDING" }
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
@@ -539,9 +577,14 @@ public class GetOrderQueriesTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(GetRequestsByStatusQuery)
-                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
-                    .SetVariableValue("status", "ACCEPTED")
+                b.SetDocument(GetRequestsByStatusQuery)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            { "userId", TestDatabase.TestUser.UserId },
+                            { "status", "ACCEPTED" }
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
@@ -595,9 +638,14 @@ public class GetOrderQueriesTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(GetRequestsByStatusQuery)
-                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
-                    .SetVariableValue("status", "REJECTED")
+                b.SetDocument(GetRequestsByStatusQuery)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            { "userId", TestDatabase.TestUser.UserId },
+                            { "status", "REJECTED" }
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();
@@ -651,9 +699,14 @@ public class GetOrderQueriesTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(GetRequestsByStatusQuery)
-                    .SetVariableValue("userId", TestDatabase.TestUser.UserId)
-                    .SetVariableValue("status", "COMPLETED")
+                b.SetDocument(GetRequestsByStatusQuery)
+                    .SetVariableValues(
+                        new Dictionary<string, object?>
+                        {
+                            { "userId", TestDatabase.TestUser.UserId },
+                            { "status", "COMPLETED" }
+                        }.AsReadOnly()
+                    )
         );
 
         result.MatchSnapshot();

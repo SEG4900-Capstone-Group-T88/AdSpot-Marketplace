@@ -9,7 +9,7 @@ public class OrderMutations
     [Error<InvalidListingIdError>]
     [Error<CannotOrderOwnListingError>]
     [Error<ListingPriceHasChangedError>]
-    public async Task<MutationResult<Order>> OrderListing(
+    public async Task<FieldResult<Order>> OrderListing(
         int listingId,
         int userId,
         decimal price,
@@ -55,7 +55,7 @@ public class OrderMutations
     [Authorize]
     [Error<InvalidOrderIdError>]
     [Error<ListingDoesNotBelongToUserError>]
-    public MutationResult<Order> AcceptOrder(int userId, int orderId, OrderRepository orderRepo)
+    public FieldResult<Order> AcceptOrder(int userId, int orderId, OrderRepository orderRepo)
     {
         var order = orderRepo.GetOrderById(orderId).Include(o => o.Listing).FirstOrDefault();
 
@@ -77,7 +77,7 @@ public class OrderMutations
     [Authorize]
     [Error<InvalidOrderIdError>]
     [Error<ListingDoesNotBelongToUserError>]
-    public MutationResult<Order> RejectOrder(int userId, int orderId, OrderRepository orderRepo)
+    public FieldResult<Order> RejectOrder(int userId, int orderId, OrderRepository orderRepo)
     {
         var order = orderRepo.GetOrderById(orderId).Include(o => o.Listing).FirstOrDefault();
 
@@ -97,7 +97,7 @@ public class OrderMutations
     }
 
     [Error<InvalidOrderIdError>]
-    public MutationResult<Order> SubmitDeliverable(
+    public FieldResult<Order> SubmitDeliverable(
         [UseFluentValidation, UseValidator<SubmitDeliverableInputValidator>] SubmitDeliverableInput input,
         OrderRepository orderRepo
     )

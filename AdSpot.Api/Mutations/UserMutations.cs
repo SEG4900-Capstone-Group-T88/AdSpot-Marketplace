@@ -4,7 +4,7 @@
 public class UserMutations
 {
     [Error<AccountWithEmailAlreadyExistsError>]
-    public MutationResult<AddUserPayload> AddUser(
+    public FieldResult<AddUserPayload> AddUser(
         [UseFluentValidation, UseValidator<AddUserInputValidator>] AddUserInput input,
         UserRepository repo,
         [Service] IOptions<JwtOptions> jwtOptions,
@@ -33,7 +33,7 @@ public class UserMutations
     }
 
     [Error<InvalidUserIdError>]
-    public MutationResult<User> DeleteUser(int userId, UserRepository repo)
+    public FieldResult<User> DeleteUser(int userId, UserRepository repo)
     {
         var user = repo.GetUserById(userId).FirstOrDefault();
 
@@ -47,7 +47,7 @@ public class UserMutations
     }
 
     [Error<InvalidUserIdError>]
-    public MutationResult<User> UpdatePassword(int userId, string password, UserRepository repo)
+    public FieldResult<User> UpdatePassword(int userId, string password, UserRepository repo)
     {
         var user = repo.GetUserById(userId).FirstOrDefault();
 
@@ -62,7 +62,7 @@ public class UserMutations
 
     [Error<UserNotFoundError>]
     [Error<UserInvalidCredentialsError>]
-    public MutationResult<LoginPayload> Login(
+    public FieldResult<LoginPayload> Login(
         string email,
         string password,
         UserRepository repo,

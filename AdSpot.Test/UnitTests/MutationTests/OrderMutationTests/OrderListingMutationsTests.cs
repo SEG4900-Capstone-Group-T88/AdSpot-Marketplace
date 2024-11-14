@@ -1,4 +1,4 @@
-using AdSpot.Models;
+﻿using AdSpot.Models;
 
 namespace AdSpot.Test.UnitTests.OrderMutationsTests;
 
@@ -72,15 +72,20 @@ public class OrderListingMutationsTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(OrderListingMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(OrderListingMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "description", "Test Order" },
-                            { "listingId", 1 },
-                            { "price", 100.00M },
-                            { "userId", 2 }
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "description", "Test Order" },
+                                    { "listingId", 1 },
+                                    { "price", 100.00M },
+                                    { "userId", 2 }
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );
@@ -136,15 +141,20 @@ public class OrderListingMutationsTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(OrderListingMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(OrderListingMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "description", "Test Order" },
-                            { "listingId", -1 },
-                            { "price", 100.00M },
-                            { "userId", 2 }
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "description", "Test Order" },
+                                    { "listingId", -1 },
+                                    { "price", 100.00M },
+                                    { "userId", 2 }
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );
@@ -188,15 +198,20 @@ public class OrderListingMutationsTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(OrderListingMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(OrderListingMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "description", "Test Order" },
-                            { "listingId", 1 },
-                            { "price", 100.00M },
-                            { "userId", TestDatabase.TestUser.UserId }
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "description", "Test Order" },
+                                    { "listingId", 1 },
+                                    { "price", 100.00M },
+                                    { "userId", TestDatabase.TestUser.UserId }
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );
@@ -252,15 +267,20 @@ public class OrderListingMutationsTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(OrderListingMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(OrderListingMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "description", "Test Order" },
-                            { "listingId", 1 },
-                            { "price", 120.00M },
-                            { "userId", 2 }
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "description", "Test Order" },
+                                    { "listingId", 1 },
+                                    { "price", 120.00M },
+                                    { "userId", 2 }
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );
