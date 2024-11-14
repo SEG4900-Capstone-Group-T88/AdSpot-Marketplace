@@ -28,13 +28,18 @@ public class LoginMutationTests
     public async Task LoginSuccessful()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(LoginMutation)
-                .SetVariableValue(
-                    "input",
+            b.SetDocument(LoginMutation)
+                .SetVariableValues(
                     new Dictionary<string, object?>
                     {
-                        { "email", TestDatabase.TestUser.Email },
-                        { "password", TestDatabase.TestUser.Password },
+                        {
+                            "input",
+                            new Dictionary<string, object?>
+                            {
+                                { "email", TestDatabase.TestUser.Email },
+                                { "password", TestDatabase.TestUser.Password },
+                            }
+                        }
                     }.AsReadOnly()
                 )
         );
@@ -47,13 +52,18 @@ public class LoginMutationTests
     public async Task LoginInvalidCredentials()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(LoginMutation)
-                .SetVariableValue(
-                    "input",
+            b.SetDocument(LoginMutation)
+                .SetVariableValues(
                     new Dictionary<string, object?>
                     {
-                        { "email", TestDatabase.TestUser.Email },
-                        { "password", TestDatabase.TestUser.Password + "invalid" },
+                        {
+                            "input",
+                            new Dictionary<string, object?>
+                            {
+                                { "email", TestDatabase.TestUser.Email },
+                                { "password", TestDatabase.TestUser.Password + "invalid" },
+                            }
+                        }
                     }.AsReadOnly()
                 )
         );
@@ -66,13 +76,18 @@ public class LoginMutationTests
     public async Task LoginUserDoesNotExist()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(LoginMutation)
-                .SetVariableValue(
-                    "input",
+            b.SetDocument(LoginMutation)
+                .SetVariableValues(
                     new Dictionary<string, object?>
                     {
-                        { "email", "userdoesnotexist" },
-                        { "password", "userdoesnotexist" },
+                        {
+                            "input",
+                            new Dictionary<string, object?>
+                            {
+                                { "email", "userdoesnotexist" },
+                                { "password", "userdoesnotexist" },
+                            }
+                        }
                     }.AsReadOnly()
                 )
         );

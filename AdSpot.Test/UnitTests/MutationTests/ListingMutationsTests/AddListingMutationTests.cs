@@ -41,14 +41,19 @@ public class AddListingMutationTests
                 context.SaveChanges();
             },
             b =>
-                b.SetQuery(AddListingMutation)
-                    .SetVariableValue(
-                        "input",
+                b.SetDocument(AddListingMutation)
+                    .SetVariableValues(
                         new Dictionary<string, object?>
                         {
-                            { "listingTypeId", 1 },
-                            { "userId", TestDatabase.TestUser.UserId },
-                            { "price", (decimal)9.99 }
+                            {
+                                "input",
+                                new Dictionary<string, object?>
+                                {
+                                    { "listingTypeId", 1 },
+                                    { "userId", TestDatabase.TestUser.UserId },
+                                    { "price", (decimal)9.99 }
+                                }
+                            }
                         }.AsReadOnly()
                     )
         );
@@ -61,14 +66,19 @@ public class AddListingMutationTests
     public async Task AddListingInvalidListingTypeId()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(AddListingMutation)
-                .SetVariableValue(
-                    "input",
+            b.SetDocument(AddListingMutation)
+                .SetVariableValues(
                     new Dictionary<string, object?>
                     {
-                        { "listingTypeId", -1 },
-                        { "userId", TestDatabase.TestUser.UserId },
-                        { "price", (decimal)9.99 }
+                        {
+                            "input",
+                            new Dictionary<string, object?>
+                            {
+                                { "listingTypeId", -1 },
+                                { "userId", TestDatabase.TestUser.UserId },
+                                { "price", (decimal)9.99 }
+                            }
+                        }
                     }.AsReadOnly()
                 )
         );
@@ -81,14 +91,19 @@ public class AddListingMutationTests
     public async Task AddListingAccountHasNotBeenConnected()
     {
         var result = await TestServices.ExecuteRequestAsync(b =>
-            b.SetQuery(AddListingMutation)
-                .SetVariableValue(
-                    "input",
+            b.SetDocument(AddListingMutation)
+                .SetVariableValues(
                     new Dictionary<string, object?>
                     {
-                        { "listingTypeId", TestDatabase.ListingTypes.Last().ListingTypeId },
-                        { "userId", TestDatabase.TestUser.UserId },
-                        { "price", (decimal)9.99 }
+                        {
+                            "input",
+                            new Dictionary<string, object?>
+                            {
+                                { "listingTypeId", TestDatabase.ListingTypes.Last().ListingTypeId },
+                                { "userId", TestDatabase.TestUser.UserId },
+                                { "price", (decimal)9.99 }
+                            }
+                        }
                     }.AsReadOnly()
                 )
         );

@@ -46,18 +46,9 @@ public static class TestServices
             .AddProjections()
             .AddFiltering()
             .AddSorting()
-            .RegisterDbContext<AdSpotDbContext>()
-            .RegisterService<IConfiguration>()
-            .RegisterService<IHttpContextAccessor>()
-            .RegisterService<InstagramService>()
-            .RegisterService<ConnectionRepository>()
-            .RegisterService<ListingRepository>()
-            .RegisterService<ListingTypeRepository>()
-            .RegisterService<OrderRepository>(ServiceKind.Resolver)
-            .RegisterService<PlatformRepository>()
-            .RegisterService<UserRepository>()
-            .RegisterService<FlairRepository>()
-            .SetPagingOptions(new HotChocolate.Types.Pagination.PagingOptions { IncludeTotalCount = true, })
+            .ModifyPagingOptions(opt => {
+                opt.IncludeTotalCount = true;
+            })
             .ModifyRequestOptions(options =>
             {
                 options.IncludeExceptionDetails = true;
@@ -88,17 +79,17 @@ public static class TestServices
     }
 
     public static async Task<IExecutionResult> ExecuteRequestAsync(
-        Action<IQueryRequestBuilder> configureRequest,
+        Action<OperationRequestBuilder> configureRequest,
         CancellationToken cancellationToken = default
     )
     {
         var scope = ServiceProvider.CreateAsyncScope();
 
-        var requestBuilder = new QueryRequestBuilder();
+        var requestBuilder = new OperationRequestBuilder();
         requestBuilder.SetServices(scope.ServiceProvider);
         configureRequest(requestBuilder);
         requestBuilder.AddGlobalState(nameof(ClaimsPrincipal), CreateClaimsPrincipal());
-        var request = requestBuilder.Create();
+        var request = requestBuilder.Build();
 
         var context = ServiceProvider.GetRequiredService<AdSpotDbContext>();
         context.Database.EnsureDeleted();
@@ -112,17 +103,17 @@ public static class TestServices
 
     public static async Task<IExecutionResult> ExecuteRequestAsync(
         Action<AsyncServiceScope> arrangeData,
-        Action<IQueryRequestBuilder> configureRequest,
+        Action<OperationRequestBuilder> configureRequest,
         CancellationToken cancellationToken = default
     )
     {
         var scope = ServiceProvider.CreateAsyncScope();
 
-        var requestBuilder = new QueryRequestBuilder();
+        var requestBuilder = new OperationRequestBuilder();
         requestBuilder.SetServices(scope.ServiceProvider);
         configureRequest(requestBuilder);
         requestBuilder.AddGlobalState(nameof(ClaimsPrincipal), CreateClaimsPrincipal());
-        var request = requestBuilder.Create();
+        var request = requestBuilder.Build();
 
         var context = ServiceProvider.GetRequiredService<AdSpotDbContext>();
         context.Database.EnsureDeleted();
