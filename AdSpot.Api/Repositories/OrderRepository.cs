@@ -69,7 +69,7 @@ public class OrderRepository
 
     public Order SubmitDeliverable(int orderId, string deliverable)
     {
-        var order = context.Orders.Single(o => o.OrderId == orderId);
+        var order = context.Orders.Include(o => o.Listing).Single(o => o.OrderId == orderId);
         order.Deliverable = deliverable;
         order.OrderStatusId = OrderStatusEnum.Completed;
         context.SaveChanges();

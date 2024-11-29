@@ -6,6 +6,9 @@
 # Coverage
 coverage/
 
+# Mismatch
+__MISMATCH__/
+
 # User-specific files
 *.rsuser
 *.suo

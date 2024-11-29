@@ -48,6 +48,9 @@ public class OrderMutations
         // Notify seller
         var topicName = $"{listing.UserId}_{nameof(NewOrderSubscription.OnNewOrder)}";
         await topicEventSender.SendAsync(topicName, order);
+        // Temp Fix: Notify Buyer
+        topicName = $"{userId}_{nameof(NewOrderSubscription.OnNewOrder)}";
+        await topicEventSender.SendAsync(topicName, order);
 
         return new(order);
     }
@@ -55,7 +58,12 @@ public class OrderMutations
     [Authorize]
     [Error<InvalidOrderIdError>]
     [Error<ListingDoesNotBelongToUserError>]
-    public MutationResult<Order> AcceptOrder(int userId, int orderId, OrderRepository orderRepo)
+    public async Task<MutationResult<Order>> AcceptOrder(
+        int userId,
+        int orderId,
+        OrderRepository orderRepo,
+        [Service] ITopicEventSender topicEventSender
+    )
     {
         var order = orderRepo.GetOrderById(orderId).Include(o => o.Listing).FirstOrDefault();
 
@@ -71,13 +79,25 @@ public class OrderMutations
 
         var result = orderRepo.AcceptOrder(orderId);
 
+        // Temp Fix: Notify Seller
+        var topicName = $"{userId}_{nameof(NewOrderSubscription.OnNewOrder)}";
+        await topicEventSender.SendAsync(topicName, order);
+        // Temp Fix: Notify Buyer
+        topicName = $"{order.UserId}_{nameof(NewOrderSubscription.OnNewOrder)}";
+        await topicEventSender.SendAsync(topicName, order);
+
         return new(result);
     }
 
     [Authorize]
     [Error<InvalidOrderIdError>]
     [Error<ListingDoesNotBelongToUserError>]
-    public MutationResult<Order> RejectOrder(int userId, int orderId, OrderRepository orderRepo)
+    public async Task<MutationResult<Order>> RejectOrder(
+        int userId,
+        int orderId,
+        OrderRepository orderRepo,
+        [Service] ITopicEventSender topicEventSender
+    )
     {
         var order = orderRepo.GetOrderById(orderId).Include(o => o.Listing).FirstOrDefault();
 
@@ -93,13 +113,21 @@ public class OrderMutations
 
         var result = orderRepo.RejectOrder(orderId);
 
+        // Temp Fix: Notify Seller
+        var topicName = $"{userId}_{nameof(NewOrderSubscription.OnNewOrder)}";
+        await topicEventSender.SendAsync(topicName, order);
+        // Temp Fix: Notify Buyer
+        topicName = $"{order.UserId}_{nameof(NewOrderSubscription.OnNewOrder)}";
+        await topicEventSender.SendAsync(topicName, order);
+
         return new(result);
     }
 
     [Error<InvalidOrderIdError>]
-    public MutationResult<Order> SubmitDeliverable(
+    public async Task<MutationResult<Order>> SubmitDeliverable(
         [UseFluentValidation, UseValidator<SubmitDeliverableInputValidator>] SubmitDeliverableInput input,
-        OrderRepository orderRepo
+        OrderRepository orderRepo,
+        [Service] ITopicEventSender topicEventSender
     )
     {
         var order = orderRepo.GetOrderById(input.OrderId).FirstOrDefault();
@@ -110,6 +138,14 @@ public class OrderMutations
         }
 
         order = orderRepo.SubmitDeliverable(input.OrderId, input.Deliverable);
+
+        // Temp Fix: Notify Seller
+        var topicName = $"{order.Listing.UserId}_{nameof(NewOrderSubscription.OnNewOrder)}";
+        await topicEventSender.SendAsync(topicName, order);
+        // Temp Fix: Notify Buyer
+        topicName = $"{order.UserId}_{nameof(NewOrderSubscription.OnNewOrder)}";
+        await topicEventSender.SendAsync(topicName, order);
+
         return new(order);
     }
 }
